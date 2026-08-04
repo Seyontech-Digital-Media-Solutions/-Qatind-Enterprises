@@ -1,0 +1,115 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.navbar {
+  background-color: $bg-primary;
+  box-shadow: $shadow-md;
+  position: sticky;
+  top: 0;
+  z-index: $z-sticky;
+
+  &__container {
+    @include container;
+    @include flex-between;
+    height: 70px;
+    padding-top: $spacing-md;
+    padding-bottom: $spacing-md;
+  }
+
+  &__logo {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    text-decoration: none;
+    transition: color $transition-base;
+
+    &:hover {
+      color: $color-accent;
+    }
+  }
+
+  &__menu {
+    @include flex-start;
+    gap: $spacing-lg;
+
+    @include mobile {
+      position: absolute;
+      top: 70px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      background-color: $bg-primary;
+      padding: $spacing-lg;
+      box-shadow: $shadow-lg;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height $transition-base;
+
+      &--active {
+        max-height: 400px;
+      }
+    }
+  }
+
+  &__link {
+    position: relative;
+    color: $text-primary;
+    text-decoration: none;
+    font-weight: $font-weight-semibold;
+    transition: color $transition-base;
+    white-space: nowrap;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 2px;
+      background-color: $color-secondary;
+      transition: width $transition-base;
+    }
+
+    &:hover {
+      color: $color-primary;
+
+      &::after {
+        width: 100%;
+      }
+    }
+
+    @include mobile {
+      width: 100%;
+      padding: $spacing-sm 0;
+    }
+  }
+
+  &__cta {
+    @include button-primary;
+    gap: $spacing-sm;
+
+    @include mobile {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  &__icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  &__toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $text-primary;
+
+    @include mobile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

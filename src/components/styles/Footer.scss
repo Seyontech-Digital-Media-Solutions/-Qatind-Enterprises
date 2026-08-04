@@ -1,0 +1,107 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.footer {
+  background-color: $color-primary;
+  color: $color-light;
+  margin-top: $spacing-3xl;
+
+  &__content {
+    padding: $spacing-3xl $spacing-md;
+
+    @include md {
+      padding: $spacing-3xl $spacing-lg;
+    }
+  }
+
+  &__section {
+    margin-bottom: $spacing-2xl;
+
+    @include md {
+      margin-bottom: 0;
+    }
+  }
+
+  &__title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-secondary;
+    margin-bottom: $spacing-md;
+  }
+
+  &__heading {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-md;
+  }
+
+  &__description {
+    font-size: $font-size-sm;
+    line-height: $line-height-relaxed;
+    margin-bottom: $spacing-md;
+    opacity: 0.9;
+  }
+
+  &__social {
+    @include flex-start;
+    gap: $spacing-md;
+  }
+
+  &__social-link {
+    color: $color-secondary;
+    transition: color $transition-base, transform $transition-base;
+
+    &:hover {
+      color: $color-red;
+      transform: translateY(-2px);
+    }
+  }
+
+  &__links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: $spacing-sm;
+
+      a {
+        color: $color-light;
+        transition: color $transition-base;
+
+        &:hover {
+          color: $color-secondary;
+        }
+      }
+    }
+  }
+
+  &__contact {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  &__contact-item {
+    @include flex-start;
+    gap: $spacing-sm;
+    font-size: $font-size-sm;
+
+    a {
+      color: $color-light;
+      transition: color $transition-base;
+
+      &:hover {
+        color: $color-secondary;
+      }
+    }
+  }
+
+  &__bottom {
+    background-color: darken($color-primary, 8%);
+    padding: $spacing-lg;
+    text-align: center;
+    font-size: $font-size-sm;
+    opacity: 0.8;
+  }
+}

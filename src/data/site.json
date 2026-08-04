@@ -1,0 +1,17 @@
+{
+  "siteName": "Qatind Cloud Kitchen",
+  "tagline": "Premium Food, Fast Delivery",
+  "description": "Discover authentic and premium food from Qatind Cloud Kitchen. We deliver fresh, delicious meals right to your door.",
+  "phone": "+1 (555) 123-4567",
+  "email": "info@qatind.com",
+  "address": "123 Food Street, Culinary City, CC 12345",
+  "socialMedia": {
+    "facebook": "https://facebook.com/qatind",
+    "instagram": "https://instagram.com/qatind",
+    "twitter": "https://twitter.com/qatind"
+  },
+  "hours": {
+    "weekdays": "10:00 AM - 10:00 PM",
+    "weekends": "11:00 AM - 11:00 PM"
+  }
+}

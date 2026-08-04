@@ -1,0 +1,110 @@
+{
+  "categories": [
+    {
+      "id": "rice-biryani",
+      "name": "Rice & Biryani",
+      "items": [
+        {
+          "id": "biryani-chicken",
+          "name": "Chicken Biryani",
+          "price": 12.99,
+          "description": "Fragrant basmati rice cooked with tender chicken",
+          "image": "https://via.placeholder.com/300x200?text=Chicken+Biryani"
+        },
+        {
+          "id": "biryani-lamb",
+          "name": "Lamb Biryani",
+          "price": 14.99,
+          "description": "Succulent lamb with aromatic spices and rice",
+          "image": "https://via.placeholder.com/300x200?text=Lamb+Biryani"
+        },
+        {
+          "id": "biryani-veg",
+          "name": "Vegetable Biryani",
+          "price": 10.99,
+          "description": "Mixed vegetables with aromatic basmati rice",
+          "image": "https://via.placeholder.com/300x200?text=Veg+Biryani"
+        }
+      ]
+    },
+    {
+      "id": "starters",
+      "name": "Starters",
+      "items": [
+        {
+          "id": "samosa",
+          "name": "Samosa (3 pcs)",
+          "price": 4.99,
+          "description": "Crispy pastry with savory filling",
+          "image": "https://via.placeholder.com/300x200?text=Samosa"
+        },
+        {
+          "id": "pakora",
+          "name": "Vegetable Pakora",
+          "price": 5.99,
+          "description": "Crispy battered vegetables",
+          "image": "https://via.placeholder.com/300x200?text=Pakora"
+        }
+      ]
+    },
+    {
+      "id": "gravy",
+      "name": "Gravy",
+      "items": [
+        {
+          "id": "butter-chicken",
+          "name": "Butter Chicken",
+          "price": 11.99,
+          "description": "Tender chicken in creamy tomato sauce",
+          "image": "https://via.placeholder.com/300x200?text=Butter+Chicken"
+        },
+        {
+          "id": "paneer-tikka",
+          "name": "Paneer Tikka Masala",
+          "price": 10.99,
+          "description": "Cottage cheese in aromatic gravy",
+          "image": "https://via.placeholder.com/300x200?text=Paneer+Tikka"
+        }
+      ]
+    },
+    {
+      "id": "breakfast",
+      "name": "Breakfast",
+      "items": [
+        {
+          "id": "paratha",
+          "name": "Butter Paratha",
+          "price": 3.99,
+          "description": "Flaky Indian bread with butter",
+          "image": "https://via.placeholder.com/300x200?text=Paratha"
+        }
+      ]
+    },
+    {
+      "id": "snacks",
+      "name": "Snacks",
+      "items": [
+        {
+          "id": "chips",
+          "name": "Spiced Chips",
+          "price": 2.99,
+          "description": "Crispy snack with Indian spices",
+          "image": "https://via.placeholder.com/300x200?text=Spiced+Chips"
+        }
+      ]
+    },
+    {
+      "id": "confectionery",
+      "name": "Confectionery",
+      "items": [
+        {
+          "id": "gulab-jamun",
+          "name": "Gulab Jamun",
+          "price": 5.99,
+          "description": "Sweet milk solid dumplings in syrup",
+          "image": "https://via.placeholder.com/300x200?text=Gulab+Jamun"
+        }
+      ]
+    }
+  ]
+}

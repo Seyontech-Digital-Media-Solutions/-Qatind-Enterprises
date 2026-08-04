@@ -1,0 +1,25 @@
+{
+  "testimonials": [
+    {
+      "id": "testimonial-1",
+      "name": "Sarah Johnson",
+      "role": "Food Blogger",
+      "text": "Qatind delivers authentic flavors with incredible quality. Every meal feels homemade!",
+      "rating": 5
+    },
+    {
+      "id": "testimonial-2",
+      "name": "Michael Chen",
+      "role": "Regular Customer",
+      "text": "Fast delivery, hot food, and amazing taste. This is my go-to for weeknight dinners.",
+      "rating": 5
+    },
+    {
+      "id": "testimonial-3",
+      "name": "Priya Patel",
+      "role": "Family",
+      "text": "The variety is incredible. We order from Qatind at least 3 times a week!",
+      "rating": 5
+    }
+  ]
+}

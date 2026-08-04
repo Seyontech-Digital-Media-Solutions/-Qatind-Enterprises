@@ -1,0 +1,40 @@
+{
+  "features": [
+    {
+      "id": "feature-1",
+      "title": "Fresh Ingredients",
+      "description": "We source only the finest, freshest ingredients daily",
+      "icon": "FiShoppingCart"
+    },
+    {
+      "id": "feature-2",
+      "title": "Fast Delivery",
+      "description": "Hot meals delivered to your door in 30 minutes",
+      "icon": "FiTruck"
+    },
+    {
+      "id": "feature-3",
+      "title": "Expert Chefs",
+      "description": "Prepared by experienced culinary professionals",
+      "icon": "FiUsers"
+    },
+    {
+      "id": "feature-4",
+      "title": "Premium Quality",
+      "description": "Every dish meets our high-quality standards",
+      "icon": "FiStar"
+    },
+    {
+      "id": "feature-5",
+      "title": "Easy Ordering",
+      "description": "Simple, fast, and secure online ordering",
+      "icon": "FiZap"
+    },
+    {
+      "id": "feature-6",
+      "title": "24/7 Support",
+      "description": "Customer support available round the clock",
+      "icon": "FiHeadphones"
+    }
+  ]
+}
