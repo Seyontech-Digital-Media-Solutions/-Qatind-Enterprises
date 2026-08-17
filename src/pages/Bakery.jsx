@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom'
 import '../components/styles/Bakery.scss'
 import PlumCakeHeroLayer from './PlumCakeHeroLayer'
 
+
 // ─────────────────────────────────────────────────────────
 import placeholder1 from '../assets/plum-cake.png'
 import placeholder2 from '../assets/gift-humber.png'
@@ -341,11 +342,7 @@ export default function Bakery() {
           ))}
         </div>
 
-        {/* Plum cake centerpiece. NOTE: to make this replay in sync with
-            the text block on every scroll-into-view, PlumCakeHeroLayer.jsx
-            itself needs its internal animation switched from initial/animate
-            to whileInView + viewport={{ once: false }}. Send that file and
-            I'll wire it up so both animate together. */}
+        
         <PlumCakeHeroLayer startDelay={0.6} heroRef={heroRef} />
 
         <div className="container">
