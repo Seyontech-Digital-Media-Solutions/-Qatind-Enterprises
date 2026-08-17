@@ -1,0 +1,1339 @@
+@use './variables' as *;
+@use './mixins' as *;
+
+// ---------------------------------------------------------------------
+// Qatind Enterprises — Services page (v2 redesign)
+// "From home kitchen to big occasions" — editorial food-magazine layout.
+// Cream base, white working sections, one deliberate dark-green accent
+// section (Quality + Final CTA). Tricolor used as accents only.
+// ---------------------------------------------------------------------
+
+.services-page {
+  position: relative;
+  min-height: 100vh;
+  background: #fbf2e3;
+  color: #241608;
+  overflow-x: hidden;
+  font-family: 'Inter', $font-family-sans, Arial, sans-serif;
+
+  // -----------------------------------------------------------------
+  // Shared
+  // -----------------------------------------------------------------
+  &__scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, $color-red 0%, $color-saffron 50%, $color-green 100%);
+    transform-origin: 0%;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  &__container {
+    width: 100%;
+    max-width: $breakpoint-2xl;
+    margin: 0 auto;
+    padding: 0 $spacing-md;
+
+    @include md {
+      padding: 0 $spacing-xl;
+    }
+  }
+
+  &__eyebrow {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: $color-red;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__heading {
+    font-weight: $font-weight-extrabold;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: #241608;
+
+    &--xl {
+      font-size: clamp(2rem, 4.4vw, 3.4rem);
+    }
+
+    &.text-white {
+      color: #ffffff;
+    }
+  }
+
+  // Grain texture, reused on hero + quality section
+  &__grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1rem 1.85rem;
+    border-radius: $border-radius-full;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    text-decoration: none;
+    transition: transform $transition-base, box-shadow $transition-base, background $transition-base;
+    cursor: pointer;
+
+    &--primary {
+      background: linear-gradient(120deg, $color-saffron 0%, #e8871e 50%, $color-red 100%);
+      color: #241608;
+      box-shadow: 0 20px 50px -20px rgba(242, 146, 26, 0.65);
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+    }
+
+    &--ghost {
+      background: #ffffff;
+      color: #241608;
+      border: 1px solid rgba(36, 22, 8, 0.15);
+
+      &:hover {
+        border-color: rgba(20, 108, 54, 0.4);
+        background: rgba(20, 108, 54, 0.05);
+      }
+    }
+
+    &--outline-dark {
+      background: rgba(0, 0, 0, 0.2);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+
+  // -----------------------------------------------------------------
+  // 1. Hero
+  // -----------------------------------------------------------------
+  &__hero {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(5rem, 8vw, 7.5rem) $spacing-md clamp(3.5rem, 6vw, 5rem);
+
+    @include md {
+      padding-left: $spacing-xl;
+      padding-right: $spacing-xl;
+    }
+
+    &-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at top left, rgba(242, 146, 26, 0.18), transparent 40%),
+        radial-gradient(circle at bottom right, rgba(20, 108, 54, 0.15), transparent 42%);
+    }
+
+    &-aura {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+
+      &--red {
+        top: 1.5rem;
+        left: -6rem;
+        width: 380px;
+        height: 380px;
+        background: rgba(192, 57, 43, 0.1);
+      }
+
+      &--green {
+        top: 8rem;
+        right: -4rem;
+        width: 360px;
+        height: 360px;
+        background: rgba(20, 108, 54, 0.12);
+      }
+    }
+
+    &-inner {
+      position: relative;
+      z-index: 2;
+      max-width: $breakpoint-2xl;
+      margin: 0 auto;
+    }
+
+    &-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.1rem;
+      background: #ffffff;
+      border: 1px solid rgba(36, 22, 8, 0.1);
+      border-radius: $border-radius-full;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-bold;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: $color-red;
+      box-shadow: $shadow-sm;
+
+      svg {
+        color: $color-saffron;
+      }
+    }
+
+    &-grid {
+      margin-top: $spacing-2xl;
+      display: grid;
+      gap: $spacing-2xl;
+      align-items: end;
+
+      @include lg-up {
+        grid-template-columns: 1.05fr 0.95fr;
+      }
+    }
+
+    &-title {
+      font-size: clamp(2.6rem, 6.4vw, 5.4rem);
+      font-weight: $font-weight-extrabold;
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+      color: #241608;
+
+      span {
+        display: block;
+      }
+    }
+
+    &-copy {
+      max-width: 28rem;
+      font-size: $font-size-lg;
+      line-height: $line-height-relaxed;
+      color: #5b4636;
+      margin-bottom: $spacing-lg;
+    }
+
+    &-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $spacing-md;
+    }
+
+    // Floating image composition
+    &-media {
+      position: relative;
+      margin-top: $spacing-3xl;
+      display: grid;
+      gap: $spacing-lg;
+      grid-template-columns: 1fr;
+
+      @include sm-up {
+        grid-template-columns: 1.4fr 1fr;
+      }
+    }
+
+    &-media-main {
+      position: relative;
+      overflow: hidden;
+      border-radius: 2rem;
+      box-shadow: 0 40px 90px -40px rgba(43, 27, 14, 0.4);
+
+      img {
+        width: 100%;
+        height: 420px;
+        object-fit: cover;
+
+        @include sm-up {
+          height: 520px;
+        }
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(36, 22, 8, 0.55), transparent 55%);
+      }
+    }
+
+    &-media-caption {
+      position: absolute;
+      left: 1.5rem;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 1rem;
+      padding: 0.85rem 1.25rem;
+      box-shadow: $shadow-lg;
+      backdrop-filter: blur(6px);
+
+      strong {
+        display: block;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-bold;
+        color: #241608;
+      }
+
+      small {
+        font-size: $font-size-xs;
+        color: #5b4636;
+      }
+    }
+
+    &-media-stack {
+      position: relative;
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: $spacing-lg;
+    }
+
+    &-media-float {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1.5rem;
+      box-shadow: 0 30px 70px -35px rgba(43, 27, 14, 0.35);
+      transition: transform 0.35s ease-out;
+
+      img {
+        width: 100%;
+        height: 100%;
+        max-height: 240px;
+        object-fit: cover;
+      }
+
+      &--stat {
+        background: #0a331a;
+
+        img {
+          opacity: 0.8;
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to top, rgba(10, 51, 26, 0.9), transparent 60%);
+        }
+      }
+    }
+
+    &-stat {
+      position: absolute;
+      left: 1.25rem;
+      bottom: 1rem;
+      z-index: 2;
+
+      strong {
+        display: block;
+        font-size: $font-size-2xl;
+        font-weight: $font-weight-extrabold;
+        color: #ffffff;
+      }
+
+      span {
+        font-size: $font-size-xs;
+        font-weight: $font-weight-semibold;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: rgba(255, 255, 255, 0.7);
+      }
+    }
+  }
+
+  // Steam animation on hero caption
+  &__steam {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.25rem;
+    height: 1.5rem;
+    width: 2.5rem;
+
+    span {
+      width: 3px;
+      border-radius: $border-radius-full;
+      background: rgba(242, 146, 26, 0.7);
+      animation: services-steam 3.2s ease-in infinite;
+
+      &:nth-child(1) {
+        height: 0.75rem;
+      }
+
+      &:nth-child(2) {
+        height: 1rem;
+        animation-delay: 0.8s;
+      }
+
+      &:nth-child(3) {
+        height: 0.75rem;
+        animation-delay: 1.6s;
+      }
+    }
+  }
+
+  @keyframes services-steam {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 0.5;
+    }
+
+    100% {
+      transform: translateY(-46px) scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  // -----------------------------------------------------------------
+  // 2. Marquee (dual direction)
+  // -----------------------------------------------------------------
+  &__ticker {
+    position: relative;
+    overflow: hidden;
+    background: #241608;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    &-row {
+      display: flex;
+      width: max-content;
+      padding: 0.6rem 0;
+
+      &--a {
+        animation: services-marquee 30s linear infinite;
+      }
+
+      &--b {
+        animation: services-marquee-rev 34s linear infinite;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        animation: none;
+      }
+    }
+
+    &-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 0 1.25rem;
+      white-space: nowrap;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-bold;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: rgba(255, 255, 255, 0.9);
+
+      &::after {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: $color-saffron;
+      }
+    }
+  }
+
+  @keyframes services-marquee {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes services-marquee-rev {
+    from {
+      transform: translateX(-50%);
+    }
+
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  // -----------------------------------------------------------------
+  // 3. Food journey — "One Kitchen. Many Occasions."
+  // -----------------------------------------------------------------
+  &__journey {
+    padding: clamp(4rem, 6vw, 6rem) 0;
+
+    &-grid {
+      margin-top: $spacing-3xl;
+      display: grid;
+      gap: 1px;
+      overflow: hidden;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(36, 22, 8, 0.1);
+      background: rgba(36, 22, 8, 0.1);
+
+      @include sm-up {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @include md {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    &-card {
+      position: relative;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #fbf2e3;
+      padding: $spacing-xl;
+      transition: background $transition-base;
+
+      &:hover {
+        background: #ffffff;
+      }
+
+      &-num {
+        font-size: 3rem;
+        font-weight: $font-weight-extrabold;
+        color: rgba(36, 22, 8, 0.1);
+        transition: color $transition-base;
+      }
+
+      &:hover &-num {
+        color: rgba(242, 146, 26, 0.3);
+      }
+
+      &-label {
+        margin-top: 0.5rem;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-bold;
+        text-transform: uppercase;
+        letter-spacing: 0.25em;
+        color: $color-red;
+      }
+
+      h3 {
+        margin-top: $spacing-md;
+        font-size: $font-size-xl;
+        font-weight: $font-weight-extrabold;
+        color: #241608;
+      }
+
+      p {
+        margin-top: 0.5rem;
+        font-size: $font-size-sm;
+        line-height: $line-height-relaxed;
+        color: #5b4636;
+      }
+    }
+  }
+
+  // -----------------------------------------------------------------
+  // 4. Interactive service menu (signature element)
+  // -----------------------------------------------------------------
+  &__menu {
+    padding: clamp(4rem, 6vw, 6rem) 0;
+    background: #ffffff;
+
+    &-layout {
+      margin-top: $spacing-3xl;
+      display: grid;
+      gap: $spacing-2xl;
+
+      @include lg-up {
+        grid-template-columns: 0.34fr 0.66fr;
+        align-items: stretch;
+      }
+    }
+
+    &-nav {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid rgba(36, 22, 8, 0.1);
+      border-bottom: 1px solid rgba(36, 22, 8, 0.1);
+
+      @include lg-up {
+        border: none;
+      }
+    }
+
+    &-nav-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: $spacing-md;
+      padding: $spacing-lg 0;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(36, 22, 8, 0.1);
+      text-align: left;
+      cursor: pointer;
+
+      @include lg-up {
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+
+      &-num {
+        font-size: $font-size-xs;
+        font-weight: $font-weight-bold;
+        letter-spacing: 0.1em;
+        color: #5b4636;
+        margin-right: $spacing-md;
+      }
+
+      &-label {
+        font-size: $font-size-xl;
+        font-weight: $font-weight-extrabold;
+        color: rgba(91, 70, 54, 0.7);
+        transition: color $transition-fast;
+
+        @include sm-up {
+          font-size: $font-size-2xl;
+        }
+      }
+
+      &:hover &-label {
+        color: #241608;
+      }
+
+      &.is-active &-label {
+        color: #241608;
+      }
+
+      &-arrow {
+        font-size: $font-size-2xl;
+        opacity: 0;
+        transform: translateX(-8px);
+        transition: all $transition-fast;
+      }
+
+      &:hover &-arrow,
+      &.is-active &-arrow {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      &-indicator {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 3px;
+      }
+    }
+
+    &-panel {
+      position: relative;
+      min-height: 520px;
+      overflow: hidden;
+      border-radius: 2rem;
+      background: #241608;
+
+      &-media {
+        position: absolute;
+        inset: 0;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to top, #241608, rgba(36, 22, 8, 0.55) 55%, transparent);
+        }
+      }
+
+      &-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        min-height: 520px;
+        padding: $spacing-2xl;
+
+        @include sm-up {
+          padding: $spacing-3xl;
+        }
+      }
+
+      &-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        width: fit-content;
+        padding: 0.4rem 0.9rem;
+        border-radius: $border-radius-full;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-bold;
+        color: #241608;
+        margin-bottom: $spacing-md;
+      }
+
+      h3 {
+        max-width: 32rem;
+        font-size: $font-size-2xl;
+        font-weight: $font-weight-extrabold;
+        line-height: 1.15;
+        color: #ffffff;
+
+        @include sm-up {
+          font-size: 1.9rem;
+        }
+      }
+
+      p {
+        margin-top: $spacing-sm;
+        max-width: 32rem;
+        font-size: $font-size-sm;
+        line-height: $line-height-relaxed;
+        color: rgba(255, 255, 255, 0.75);
+      }
+
+      &-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: $spacing-lg;
+
+        span {
+          padding: 0.4rem 0.9rem;
+          border-radius: $border-radius-full;
+          font-size: $font-size-xs;
+          font-weight: $font-weight-semibold;
+          color: #ffffff;
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(6px);
+        }
+      }
+    }
+  }
+
+  // -----------------------------------------------------------------
+  // 5. "What are you planning?" — occasion directory
+  // -----------------------------------------------------------------
+  &__occasions {
+    padding: clamp(4rem, 6vw, 6rem) 0;
+
+    &-list {
+      margin-top: $spacing-2xl;
+      border-top: 1px solid rgba(36, 22, 8, 0.1);
+      border-bottom: 1px solid rgba(36, 22, 8, 0.1);
+    }
+
+    &-row {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+      padding: $spacing-lg 0;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(36, 22, 8, 0.1);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &-label {
+        display: flex;
+        align-items: center;
+        gap: $spacing-md;
+        font-size: $font-size-2xl;
+        font-weight: $font-weight-extrabold;
+        letter-spacing: -0.01em;
+        color: #241608;
+        transition: color $transition-fast;
+
+        @include sm-up {
+          font-size: $font-size-3xl;
+        }
+
+        svg {
+          color: $color-green;
+        }
+      }
+
+      &:hover &-label {
+        color: $color-red;
+      }
+
+      &-arrow {
+        position: relative;
+        z-index: 2;
+        font-size: $font-size-2xl;
+        color: rgba(36, 22, 8, 0.4);
+        transition: all $transition-fast;
+      }
+
+      &:hover &-arrow {
+        color: $color-red;
+        transform: translate(4px, -4px);
+      }
+
+      &-preview {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 12rem;
+        height: 7rem;
+        border-radius: 1rem;
+        object-fit: cover;
+        box-shadow: $shadow-xl;
+        pointer-events: none;
+      }
+    }
+  }
+
+  // -----------------------------------------------------------------
+  // 6. Immersive full-bleed story section
+  // -----------------------------------------------------------------
+  &__story {
+    position: relative;
+    height: 70vh;
+    min-height: 480px;
+    overflow: hidden;
+
+    &-media {
+      position: absolute;
+      inset: -8% 0;
+      height: 116%;
+      width: 100%;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    &-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(36, 22, 8, 0.85), rgba(36, 22, 8, 0.3) 60%, rgba(36, 22, 8, 0.5));
+    }
+
+    &-inner {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: $spacing-2xl $spacing-md;
+
+      @include md {
+        padding-left: $spacing-xl;
+        padding-right: $spacing-xl;
+      }
+    }
+
+    &-title {
+      max-width: 46rem;
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      font-weight: $font-weight-extrabold;
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+
+    &-labels {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    &-label {
+      padding: 0.5rem 1rem;
+      border-radius: $border-radius-full;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.1);
+      font-size: $font-size-xs;
+      font-weight: $font-weight-bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #ffffff;
+      backdrop-filter: blur(6px);
+    }
+  }
+
+  // -----------------------------------------------------------------
+  // 7. Process — vertical "behind the plate" timeline
+  // -----------------------------------------------------------------
+  &__process {
+    padding: clamp(4rem, 6vw, 6rem) 0;
+    background: #ffffff;
+
+    &-timeline {
+      position: relative;
+      margin-top: $spacing-2xl;
+      padding-left: 2.5rem;
+
+      @include sm-up {
+        padding-left: 3.5rem;
+      }
+    }
+
+    &-rail {
+      position: absolute;
+      top: 0;
+      left: 0.75rem;
+      width: 2px;
+      height: 100%;
+      background: rgba(36, 22, 8, 0.1);
+
+      @include sm-up {
+        left: 1.25rem;
+      }
+    }
+
+    &-rail-fill {
+      position: absolute;
+      top: 0;
+      left: 0.75rem;
+      width: 2px;
+      background: linear-gradient(to bottom, $color-red, $color-saffron, $color-green);
+      transform-origin: top;
+
+      @include sm-up {
+        left: 1.25rem;
+      }
+    }
+
+    &-steps {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-2xl;
+    }
+
+    &-step {
+      position: relative;
+      display: grid;
+      gap: $spacing-md;
+      align-items: center;
+
+      @include sm-up {
+        grid-template-columns: auto 1fr 180px;
+      }
+
+      &-dot {
+        position: absolute;
+        top: 0.25rem;
+        left: -2.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
+        border: 4px solid #fbf2e3;
+        background: $color-green;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 0.6rem;
+
+        @include sm-up {
+          left: -3.5rem;
+        }
+      }
+
+      &-num {
+        font-size: 2.5rem;
+        font-weight: $font-weight-extrabold;
+        color: rgba(36, 22, 8, 0.1);
+
+        @include sm-up {
+          font-size: 3rem;
+        }
+      }
+
+      h3 {
+        font-size: $font-size-xl;
+        font-weight: $font-weight-extrabold;
+        color: #241608;
+
+        @include sm-up {
+          font-size: $font-size-2xl;
+        }
+      }
+
+      p {
+        margin-top: 0.5rem;
+        max-width: 26rem;
+        font-size: $font-size-sm;
+        line-height: $line-height-relaxed;
+        color: #5b4636;
+      }
+
+      &-media {
+        display: none;
+        border-radius: 1rem;
+        overflow: hidden;
+
+        @include sm-up {
+          display: block;
+        }
+
+        img {
+          width: 100%;
+          height: 7rem;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+
+  // -----------------------------------------------------------------
+  // 8. Quality — dark editorial section (numbered pillars)
+  // -----------------------------------------------------------------
+  &__quality {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(4rem, 6vw, 6rem) 0;
+    background: linear-gradient(150deg, #0a331a 0%, #146c36 55%, #184228 100%);
+    color: #ffffff;
+
+    &-glow {
+      position: absolute;
+      top: 0;
+      right: -5rem;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: rgba(242, 146, 26, 0.2);
+      filter: blur(130px);
+      pointer-events: none;
+    }
+
+    &-grid {
+      position: relative;
+      z-index: 2;
+      margin-top: $spacing-3xl;
+      display: grid;
+      gap: $spacing-2xl $spacing-xl;
+
+      @include sm-up {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @include lg-up {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    &-pillar {
+      padding-top: $spacing-lg;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+
+      &-top {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+      }
+
+      &-num {
+        font-size: $font-size-2xl;
+        font-weight: $font-weight-extrabold;
+        color: rgba(255, 255, 255, 0.2);
+      }
+
+      &-icon {
+        font-size: $font-size-xl;
+        color: $color-saffron;
+      }
+
+      &-label {
+        margin-top: $spacing-md;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-bold;
+        text-transform: uppercase;
+        letter-spacing: 0.25em;
+        color: $color-saffron;
+      }
+
+      h3 {
+        margin-top: 0.25rem;
+        font-size: $font-size-lg;
+        font-weight: $font-weight-extrabold;
+        color: #ffffff;
+      }
+
+      p {
+        margin-top: 0.5rem;
+        font-size: $font-size-sm;
+        line-height: $line-height-relaxed;
+        color: rgba(255, 255, 255, 0.7);
+      }
+    }
+  }
+
+  // -----------------------------------------------------------------
+  // 9. FAQ — two-column editorial
+  // -----------------------------------------------------------------
+  &__faq {
+    padding: clamp(4rem, 6vw, 6rem) 0;
+    background: #ffffff;
+
+    &-layout {
+      display: grid;
+      gap: $spacing-2xl;
+
+      @include lg-up {
+        grid-template-columns: 0.4fr 0.6fr;
+      }
+    }
+
+    &-intro {
+      p.services-page__faq-note {
+        margin-top: $spacing-md;
+        max-width: 22rem;
+        font-size: $font-size-sm;
+        line-height: $line-height-relaxed;
+        color: #5b4636;
+      }
+
+      &-call {
+        margin-top: $spacing-lg;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-bold;
+        color: $color-red;
+        text-decoration: none;
+      }
+    }
+
+    &-list {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+    }
+
+    &-item {
+      overflow: hidden;
+      border-radius: $border-radius-lg;
+      border: 1px solid rgba(36, 22, 8, 0.1);
+      background: #fbf2e3;
+      transition: border-color $transition-fast;
+
+      &:hover {
+        border-color: rgba(242, 146, 26, 0.4);
+      }
+
+      &-question {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: $spacing-md;
+        padding: $spacing-lg $spacing-xl;
+        background: transparent;
+        border: none;
+        text-align: left;
+        font-size: $font-size-base;
+        font-weight: $font-weight-bold;
+        color: #241608;
+        cursor: pointer;
+
+        .plus-icon {
+          flex-shrink: 0;
+          font-size: 1.4rem;
+          line-height: 1;
+          color: $color-red;
+          transition: transform $transition-base;
+        }
+
+        &.is-open .plus-icon {
+          transform: rotate(45deg);
+        }
+      }
+
+      &-answer {
+        padding: 0 $spacing-xl $spacing-lg;
+        font-size: $font-size-sm;
+        line-height: $line-height-relaxed;
+        color: #5b4636;
+      }
+    }
+  }
+
+  // -----------------------------------------------------------------
+  // 10. Final CTA
+  // -----------------------------------------------------------------
+  &__cta {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(4rem, 6vw, 6rem) $spacing-md;
+    background: linear-gradient(150deg, #0a331a 0%, #146c36 55%, #184228 100%);
+    color: #ffffff;
+
+    @include md {
+      padding-left: $spacing-xl;
+      padding-right: $spacing-xl;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, $color-red 0%, $color-saffron 50%, $color-green 100%);
+    }
+
+    &-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(130px);
+      pointer-events: none;
+
+      &--saffron {
+        left: 25%;
+        top: 0;
+        width: 280px;
+        height: 280px;
+        background: rgba(242, 146, 26, 0.18);
+      }
+
+      &--red {
+        bottom: 0;
+        right: 2.5rem;
+        width: 240px;
+        height: 240px;
+        background: rgba(192, 57, 43, 0.18);
+      }
+    }
+
+    &-layout {
+      position: relative;
+      z-index: 2;
+      max-width: $breakpoint-xl;
+      margin: 0 auto;
+      display: grid;
+      gap: $spacing-2xl;
+      align-items: center;
+
+      @include lg-up {
+        grid-template-columns: 0.6fr 0.4fr;
+      }
+    }
+
+    &-tag {
+      font-size: $font-size-xs;
+      font-weight: $font-weight-bold;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: $color-saffron;
+    }
+
+    h2 {
+      margin-top: $spacing-md;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: $font-weight-extrabold;
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+
+    p {
+      margin-top: $spacing-md;
+      max-width: 32rem;
+      font-size: $font-size-base;
+      line-height: $line-height-relaxed;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    &-actions {
+      margin-top: $spacing-xl;
+      display: flex;
+      flex-wrap: wrap;
+      gap: $spacing-md;
+    }
+
+    &-media {
+      position: relative;
+
+      &-frame {
+        overflow: hidden;
+        border-radius: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: $shadow-xl;
+
+        img {
+          width: 100%;
+          height: 18rem;
+          object-fit: cover;
+        }
+      }
+
+      &-badge {
+        position: absolute;
+        bottom: -1.25rem;
+        left: -1.25rem;
+        border-radius: $border-radius-lg;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(14px);
+        padding: 1rem 1.25rem;
+
+        @include mobile {
+          display: none;
+        }
+
+        span {
+          display: block;
+          font-size: $font-size-xs;
+          font-weight: $font-weight-semibold;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          color: rgba(255, 255, 255, 0.6);
+        }
+
+        strong {
+          display: block;
+          font-size: $font-size-sm;
+          font-weight: $font-weight-bold;
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
+  // -----------------------------------------------------------------
+  // Reduced motion
+  // -----------------------------------------------------------------
+  @media (prefers-reduced-motion: reduce) {
+
+    &__ticker-row,
+    &__steam span {
+      animation: none !important;
+    }
+
+    &__hero-media-float {
+      transform: none !important;
+    }
+  }
+}
