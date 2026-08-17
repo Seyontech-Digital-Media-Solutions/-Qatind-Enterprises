@@ -2,13 +2,13 @@
   "faqs": [
     {
       "id": "faq-1",
-      "question": "What are your delivery times?",
-      "answer": "We deliver within 30-45 minutes during peak hours and 20-30 minutes during off-peak hours."
+      "question": "What catering services does Qatind Restaurant provide?",
+      "answer": "We provide catering solutions for educational institutions, corporate offices, industries, healthcare environments, parties and outdoor events."
     },
     {
       "id": "faq-2",
-      "question": "Do you offer catering services?",
-      "answer": "Yes! We offer bulk orders and catering for events. Contact us for special orders."
+      "question": "Do you provide institutional catering?",
+      "answer": "Yes. We provide catering solutions for schools, colleges and universities, subject to specific requirements. "
     },
     {
       "id": "faq-3",
@@ -17,18 +17,24 @@
     },
     {
       "id": "faq-4",
-      "question": "Can I customize my order?",
-      "answer": "Yes, most items can be customized. Let us know your preferences during checkout."
+      "question": "Do you provide corporate catering?",
+      "answer": "Yes. We offer food and catering solutions suitable for corporate offices and industrial environments."
     },
     {
       "id": "faq-5",
-      "question": "What payment methods do you accept?",
-      "answer": "We accept all major credit cards, digital wallets, and cash on delivery."
+      "question": "Do you offer bakery products?",
+      "answer": "Yes. Our bakery section includes premium and traditional plum cake options, including gift-wrapped options."
     },
     {
       "id": "faq-6",
-      "question": "Is there a minimum order value?",
-      "answer": "The minimum order is $15. Orders below this may have a small delivery surcharge."
+      "question": "Can I request a customised menu?",
+      "answer": "Menu customisation can be discussed based on your event, guest requirements and catering needs."
+    },
+
+    {
+      "id": "faq-7",
+      "question": "How can I contact Qatind Restaurant?",
+      "answer": "You can contact our team through the enquiry form or the contact details provided on our website."
     }
   ]
 }

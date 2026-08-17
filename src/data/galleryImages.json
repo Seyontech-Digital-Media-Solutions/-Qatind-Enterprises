@@ -1,0 +1,18 @@
+[
+  { "id": "g1", "title": "Delivery", "category": "delivery", "image": "gallery-1.png" },
+  { "id": "g2", "title": "Mutton Biryani", "category": "biryani", "image": "gallery-2.png" },
+  { "id": "g3", "title": "Paneer Tikka", "category": "veg", "image": "gallery-3.png" },
+  { "id": "g4", "title": "Chicken 65", "category": "non-veg", "image": "gallery-4.png" },
+  { "id": "g5", "title": "Masala Dosa", "category": "breakfast", "image": "gallery-5.png" },
+  { "id": "g6", "title": "Idly Sambar", "category": "breakfast", "image": "gallery-6.png" },
+  { "id": "g7", "title": "Samosa", "category": "snacks", "image": "gallery-7.png" },
+  { "id": "g8", "title": "Onion Pakora", "category": "snacks", "image": "gallery-8.jpg" },
+  { "id": "g9", "title": "Fish Fry", "category": "starters", "image": "gallery-9.jpg" },
+  { "id": "g10", "title": "Prawn Fry", "category": "starters", "image": "gallery-10.jpg" },
+  { "id": "g11", "title": "Dal Tadka", "category": "veg", "image": "gallery-11.jpg" },
+  { "id": "g12", "title": "Butter Chicken", "category": "non-veg", "image": "gallery-12.jpg" },
+  { "id": "g13", "title": "Veg Pulao", "category": "biryani", "image": "gallery-13.jpg" },
+  { "id": "g14", "title": "Gulab Jamun", "category": "snacks", "image": "gallery-14.jpg" },
+  { "id": "g15", "title": "Chettinad Chicken", "category": "non-veg", "image": "gallery-15.jpg" },
+  { "id": "g16", "title": "Palak Paneer", "category": "veg", "image": "gallery-16.jpg" }
+]

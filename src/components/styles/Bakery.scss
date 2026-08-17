@@ -1,0 +1,1391 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.bakery {
+  overflow-x: hidden;
+}
+
+// Shared section title (mirrors Home's .section__title)
+.bakery-section__title {
+  position: relative;
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-bold;
+  text-align: center;
+  margin-bottom: $spacing-3xl;
+  color: $text-primary;
+  padding-bottom: $spacing-lg;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 72px;
+    height: 4px;
+    border-radius: $border-radius-full;
+    background: linear-gradient(90deg, $color-red 0%, $color-saffron 50%, $color-primary 100%);
+  }
+
+  &--left {
+    text-align: left;
+    margin-bottom: $spacing-md;
+
+    &::after {
+      left: 0;
+      transform: none;
+    }
+
+    @include mobile {
+      text-align: center;
+
+      &::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+  }
+
+  @include mobile {
+    font-size: $font-size-2xl;
+    margin-bottom: $spacing-2xl;
+  }
+}
+
+// Shared buttons
+.bakery-btn {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+  height: 54px;
+  padding: 0 $spacing-2xl;
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.02em;
+  border-radius: $border-radius-full;
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease, background 0.35s ease, border-color 0.35s ease;
+
+  @include mobile {
+    height: 48px;
+    min-width: 140px;
+    font-size: $font-size-sm;
+    padding: 0 $spacing-xl;
+  }
+
+  &--primary {
+    @include button-primary;
+    border: none;
+    box-shadow: 0 8px 24px -8px rgba($color-red, 0.55);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba($color-light, 0.35), transparent);
+      transform: translateX(-120%);
+      transition: transform 0.6s ease;
+    }
+
+    &:hover {
+      transform: translateY(-3px) scale(1.045);
+      box-shadow: 0 14px 32px -8px rgba($color-red, 0.65);
+    }
+    &:hover::after {
+      transform: translateX(120%);
+    }
+    &:active {
+      transform: translateY(-1px) scale(0.98);
+    }
+  }
+
+  &--outline {
+    background-color: rgba($color-light, 0.06);
+    color: $color-light;
+    border: 2px solid rgba($color-light, 0.55);
+    backdrop-filter: blur(4px);
+
+    &:hover {
+      background-color: rgba($color-light, 0.14);
+      border-color: $color-light;
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 10px 26px -10px rgba(0, 0, 0, 0.5);
+    }
+    &:active {
+      transform: translateY(-1px) scale(0.98);
+    }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Hero — cinematic, layered
+// ─────────────────────────────────────────────
+.bakery-hero {
+  position: relative;
+  overflow: hidden;
+  color: $color-light;
+  padding: $spacing-3xl $spacing-md;
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  isolation: isolate; // keep blend-mode layers contained
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    z-index: 4;
+    background: linear-gradient(
+      90deg,
+      $color-red 0%, $color-red 33.33%,
+      $color-saffron 33.33%, $color-saffron 66.66%,
+      $color-primary 66.66%, $color-primary 100%
+    );
+  }
+
+  // force-visible fix — put this right after your .bakery-hero block, or anywhere in Bakery.scss
+.bakery-hero__title {
+  color: $color-light !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.bakery-hero__title-line {
+  color: $color-light !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.6);
+}
+
+.bakery-hero__highlight {
+  display: inline-block;
+  background: linear-gradient(90deg, $color-saffron 0%, $color-red 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+  @include mobile {
+    min-height: auto;
+    padding: $spacing-2xl $spacing-md;
+  }
+
+  // Scene 1: background wash — brightens in, drifts with mouse + scroll
+  &__bg {
+    position: absolute;
+    inset: -20px; // overscan so parallax drift never reveals an edge
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    will-change: transform, filter;
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(180deg, rgba(#1a0f08, 0.55) 0%, rgba(#1a0f08, 0.35) 45%, rgba(#1a0f08, 0.65) 100%);
+    pointer-events: none;
+  }
+
+  // Slowly rotating warm light rays, screened over the scene
+  &__rays {
+    position: absolute;
+    inset: -40%;
+    z-index: 1;
+    background: conic-gradient(
+      from 0deg,
+      rgba($color-saffron, 0) 0deg,
+      rgba($color-saffron, 0.16) 12deg,
+      rgba($color-saffron, 0) 30deg,
+      rgba($color-saffron, 0) 200deg,
+      rgba($color-saffron, 0.1) 214deg,
+      rgba($color-saffron, 0) 234deg,
+      rgba($color-saffron, 0) 360deg
+    );
+    mix-blend-mode: screen;
+    pointer-events: none;
+    animation: bakery-rays-spin 40s linear infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+  }
+
+  // Scene 5: floating flour dust
+  &__flour {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  &__flour-dot {
+    position: absolute;
+    bottom: -10px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba($color-light, 0.9) 0%, rgba($color-light, 0) 70%);
+    opacity: 0;
+    animation: bakery-flour-drift linear infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+      display: none;
+    }
+  }
+
+  // Scene 5: tiny golden sparkles
+  &__sparkles {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  &__sparkle {
+    position: absolute;
+    border-radius: 50%;
+    background: $color-saffron;
+    box-shadow: 0 0 6px 1px rgba($color-saffron, 0.9);
+    opacity: 0;
+    animation: bakery-sparkle-twinkle ease-in-out infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+      display: none;
+    }
+  }
+
+  &__grid {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: $spacing-2xl;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $spacing-2xl;
+    }
+  }
+
+  &__content {
+    text-align: left;
+
+    @include mobile {
+      text-align: center;
+    }
+  }
+
+  &__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $color-light;
+  border: 1.5px solid rgba($color-light, 0.5);
+  border-radius: $border-radius-full;
+  margin-bottom: $spacing-lg;
+  backdrop-filter: blur(4px);
+
+  &::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: $color-red;
+    box-shadow: 0 0 8px 2px rgba($color-red, 0.7);
+    flex-shrink: 0;
+  }
+}
+
+&__title {
+  font-size: clamp(2.6rem, 5vw + 1rem, 4.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: $spacing-lg;
+  line-height: 1.05;
+  color: $color-light; // base color for the whole heading
+
+  @include mobile {
+    font-size: clamp(2rem, 8vw, 2.75rem);
+  }
+}
+&__title {
+  font-size: clamp(2.6rem, 5vw + 1rem, 4.75rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+  margin-bottom: $spacing-lg !important;
+  line-height: 1.05 !important;
+  color: $color-light !important;
+
+  @include mobile {
+    font-size: clamp(2rem, 8vw, 2.75rem) !important;
+  }
+}
+
+&__title-line {
+  display: inline-block !important;
+  color: $color-light !important;
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.6) !important;
+}
+
+&__highlight {
+  display: inline-block !important;
+  background: linear-gradient(90deg, $color-saffron 0%, $color-red 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  text-shadow: none !important;
+}
+
+  &__subtitle {
+  font-size: $font-size-xl;
+  line-height: 1.6;
+  margin-bottom: $spacing-2xl;
+  opacity: 0.95;
+  max-width: 520px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+  
+
+    @include mobile {
+      font-size: $font-size-base;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    flex-wrap: wrap;
+
+    @include mobile {
+      justify-content: center;
+    }
+  }
+
+  // Scene 2/3: the floating bread + tools composition
+  &__visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 420px;
+    will-change: transform;
+
+    @include mobile {
+      min-height: 320px;
+    }
+  }
+
+  &__stack {
+    position: relative;
+    width: 340px;
+    height: 400px;
+
+    @include mobile {
+      width: 260px;
+      height: 320px;
+    }
+  }
+
+  &-img__stack {
+    position: absolute;
+    object-fit: cover;
+    border-radius: $border-radius-lg;
+    border: 6px solid rgba($color-light, 0.9);
+    box-shadow: $shadow-xl;
+
+    &--main {
+      z-index: 1;
+      top: 0;
+      left: 0;
+      width: 280px;
+      height: 340px;
+
+      @include mobile {
+        width: 220px;
+        height: 260px;
+      }
+    }
+
+    &--top {
+      z-index: 2;
+      top: -24px;
+      right: -20px;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+
+      @include mobile {
+        width: 100px;
+        height: 100px;
+        top: -16px;
+        right: -12px;
+      }
+    }
+
+    &--bottom {
+      z-index: 2;
+      bottom: -28px;
+      left: -24px;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+
+      @include mobile {
+        width: 96px;
+        height: 96px;
+        bottom: -16px;
+        left: -12px;
+      }
+    }
+  }
+
+  // Scene 3: baking tools, positioned around the bread stack
+  &__tool {
+    position: absolute;
+    z-index: 3;
+    font-size: 34px;
+    line-height: 1;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
+    transform-origin: bottom center;
+    user-select: none;
+
+    &--whisk {
+      top: 18px;
+      left: -34px;
+      font-size: 30px;
+
+      @include mobile {
+        left: -18px;
+        font-size: 22px;
+      }
+    }
+
+    &--pin {
+      bottom: 30px;
+      right: -30px;
+      font-size: 28px;
+
+      @include mobile {
+        right: -14px;
+        font-size: 20px;
+      }
+    }
+
+    &--wheat {
+      bottom: -18px;
+      right: 60px;
+      font-size: 26px;
+
+      @include mobile {
+        right: 30px;
+        font-size: 18px;
+      }
+    }
+
+    &--bag {
+      top: -30px;
+      left: 60px;
+      font-size: 24px;
+
+      @include mobile {
+        left: 30px;
+        font-size: 16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none !important;
+    }
+  }
+
+  // Scene 5: steam rising behind the main bread photo
+  &__steam {
+    position: absolute;
+    z-index: 0;
+    top: -20px;
+    left: 40px;
+    width: 200px;
+    height: 140px;
+    pointer-events: none;
+
+    @include mobile {
+      left: 20px;
+      width: 150px;
+    }
+  }
+
+  &__steam-wisp {
+    position: absolute;
+    bottom: 0;
+    width: 26px;
+    height: 70px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba($color-light, 0.35) 0%, rgba($color-light, 0) 75%);
+    filter: blur(4px);
+    animation: bakery-steam-rise 4s ease-in infinite;
+
+    &:nth-child(1) {
+      left: 30px;
+      animation-delay: 0s;
+    }
+    &:nth-child(2) {
+      left: 80px;
+      animation-delay: 1.3s;
+    }
+    &:nth-child(3) {
+      left: 130px;
+      animation-delay: 2.6s;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+      display: none;
+    }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Hero ambient keyframes
+// ─────────────────────────────────────────────
+@keyframes bakery-rays-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bakery-flour-drift {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  10% {
+    opacity: 0.7;
+  }
+  90% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(12px, -260px);
+  }
+}
+
+@keyframes bakery-sparkle-twinkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+}
+
+@keyframes bakery-steam-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scaleX(1);
+  }
+  20% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-90px) scaleX(1.6);
+  }
+}
+
+// ─────────────────────────────────────────────
+// Story / Reveal Section
+// ─────────────────────────────────────────────
+.bakery-story {
+  padding: $spacing-3xl $spacing-md;
+  background-color: $bg-primary;
+
+  @include mobile {
+    padding: $spacing-2xl $spacing-md;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: $spacing-2xl;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $spacing-xl;
+    }
+  }
+
+  &__visual {
+    width: 100%;
+  }
+
+  &__image {
+    width: 100%;
+    height: auto;
+    max-height: 460px;
+    object-fit: cover;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-lg;
+    display: block;
+  }
+
+  &__content {
+    text-align: left;
+
+    @include mobile {
+      text-align: center;
+    }
+  }
+
+  &__eyebrow {
+    display: inline-block;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-primary;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__title {
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-bold;
+    line-height: $line-height-tight;
+    color: $text-primary;
+    margin-bottom: $spacing-lg;
+
+    @include mobile {
+      font-size: $font-size-2xl;
+    }
+  }
+
+  &__text {
+    @include body-text;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__points {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  &__point {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-sm;
+    cursor: default;
+
+    p {
+      @include body-text;
+      margin: 0;
+      font-weight: $font-weight-semibold;
+      color: $text-primary;
+    }
+
+    @include mobile {
+      justify-content: center;
+    }
+  }
+
+  &__point-dot {
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    margin-top: 6px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $color-saffron 0%, $color-red 100%);
+  }
+}
+
+// ─────────────────────────────────────────────
+// Festive / Gift Hampers — alternating service rows
+// ─────────────────────────────────────────────
+.bakery-festive {
+  padding: $spacing-3xl $spacing-md;
+  background-color: $bg-secondary;
+
+  @include mobile {
+    padding: $spacing-2xl $spacing-md;
+  }
+
+  &__head {
+    margin-bottom: $spacing-2xl;
+  }
+
+  &__head-eyebrow {
+    display: inline-block;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-red;
+    margin-bottom: $spacing-xs;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-3xl;
+
+    @include mobile {
+      gap: $spacing-2xl;
+    }
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: $spacing-3xl;
+
+    &--reverse {
+      .bakery-festive__media {
+        order: 2;
+      }
+      .bakery-festive__content {
+        order: 1;
+      }
+    }
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $spacing-lg;
+
+      &--reverse {
+        .bakery-festive__media {
+          order: 1;
+        }
+        .bakery-festive__content {
+          order: 2;
+        }
+      }
+    }
+  }
+
+  &__media {
+    position: relative;
+  }
+
+  &__media-frame {
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    box-shadow: $shadow-lg;
+  }
+
+  &__image {
+    width: 100%;
+    height: 340px;
+    object-fit: cover;
+    display: block;
+    transition: transform $transition-base;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    @include mobile {
+      height: 240px;
+    }
+  }
+
+  &__ticket {
+    position: absolute;
+    bottom: $spacing-md;
+    left: $spacing-md;
+    z-index: 2;
+    padding: 6px $spacing-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.04em;
+    color: $color-dark;
+    background-color: $color-light;
+    border-radius: $border-radius-full;
+    box-shadow: $shadow-md;
+  }
+
+  &__content {
+    text-align: left;
+
+    @include mobile {
+      text-align: center;
+    }
+  }
+
+  &__eyebrow {
+    display: inline-block;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-primary;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__title {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    margin-bottom: $spacing-sm;
+
+    @include mobile {
+      font-size: $font-size-2xl;
+    }
+  }
+
+  &__pill {
+    display: inline-block;
+    padding: 4px $spacing-md;
+    border-radius: $border-radius-full;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-light;
+    background: linear-gradient(135deg, $color-red 0%, $color-saffron 100%);
+    margin-bottom: $spacing-md;
+  }
+
+  &__text {
+    @include body-text;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__cta {
+    @include mobile {
+      display: inline-block;
+    }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Menu / Products — ticket list (services-page style)
+// ─────────────────────────────────────────────
+.bakery-products {
+  padding: $spacing-3xl $spacing-md;
+  background-color: $bg-primary;
+
+  @include mobile {
+    padding: $spacing-2xl $spacing-md;
+  }
+
+  &__filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-2xl;
+  }
+
+  &__filter {
+    padding: $spacing-sm $spacing-lg;
+    border-radius: $border-radius-full;
+    border: 2px solid rgba($color-primary, 0.25);
+    background-color: $bg-secondary;
+    color: $text-primary;
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-sm;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+      border-color: $color-primary;
+      transform: translateY(-2px);
+    }
+
+    &--active {
+      background: linear-gradient(135deg, $color-primary 0%, darken($color-primary, 10%) 100%);
+      border-color: $color-primary;
+      color: $color-light;
+      box-shadow: $shadow-md;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+}
+
+.bakery-ticket {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 88px 1fr auto auto;
+  align-items: center;
+  gap: $spacing-lg;
+  padding: $spacing-md $spacing-lg;
+  background-color: $bg-secondary;
+  border-radius: $border-radius-lg;
+  border: 1px dashed rgba($color-primary, 0.25);
+  transition: border-color $transition-base, box-shadow $transition-base, transform $transition-base;
+
+  &:hover {
+    border-color: $color-saffron;
+    box-shadow: $shadow-md;
+    transform: translateX(4px);
+  }
+
+  @include mobile {
+    grid-template-columns: 56px 1fr;
+    grid-template-areas:
+      'thumb body'
+      'thumb side';
+    row-gap: $spacing-xs;
+  }
+
+  &__code {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.06em;
+    color: rgba($text-primary, 0.35);
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  &__thumb {
+    position: relative;
+    width: 88px;
+    height: 88px;
+    border-radius: $border-radius-md;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    @include mobile {
+      grid-area: thumb;
+      width: 56px;
+      height: 56px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    z-index: 1;
+    padding: 2px $spacing-xs;
+    font-size: 10px;
+    font-weight: $font-weight-semibold;
+    color: $color-light;
+    border-radius: $border-radius-full;
+    background: linear-gradient(135deg, $color-red 0%, $color-saffron 100%);
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  &__body {
+    min-width: 0;
+
+    @include mobile {
+      grid-area: body;
+    }
+  }
+
+  &__title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    margin: 0 0 4px;
+  }
+
+  &__description {
+    @include small-text;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @include mobile {
+      white-space: normal;
+    }
+  }
+
+  &__divider {
+    display: block;
+    width: 0;
+    height: 32px;
+    border-left: 1px dashed rgba($color-primary, 0.25);
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  &__side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: $spacing-xs;
+
+    @include mobile {
+      grid-area: side;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  &__price {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-red;
+    white-space: nowrap;
+  }
+
+  &__add {
+    padding: 4px $spacing-md;
+    border-radius: $border-radius-full;
+    border: 1px solid rgba($color-primary, 0.3);
+    background: transparent;
+    color: $color-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+      background: linear-gradient(135deg, $color-primary 0%, darken($color-primary, 10%) 100%);
+      border-color: $color-primary;
+      color: $color-light;
+    }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Why Choose Us — horizontal strip
+// ─────────────────────────────────────────────
+.bakery-features {
+  padding: $spacing-3xl $spacing-md;
+  background-color: $bg-secondary;
+
+  @include mobile {
+    padding: $spacing-2xl $spacing-md;
+  }
+
+  &__strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $spacing-lg;
+    }
+  }
+}
+
+.bakery-feature {
+  position: relative;
+  padding: 0 $spacing-lg;
+  text-align: left;
+
+  &:first-child {
+    padding-left: 0;
+  }
+
+  &:last-child {
+    padding-right: 0;
+  }
+
+  @include mobile {
+    padding: 0 0 $spacing-lg;
+    border-bottom: 1px solid rgba($color-primary, 0.12);
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+  }
+
+  &__rule {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    width: 1px;
+    height: calc(100% - 8px);
+    background: rgba($color-primary, 0.15);
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  &__title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-sm;
+    color: $text-primary;
+  }
+
+  &__description {
+    @include small-text;
+    margin: 0;
+  }
+}
+
+// ─────────────────────────────────────────────
+// CTA
+// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// CTA
+// ─────────────────────────────────────────────
+.bakery-cta {
+  position: relative;
+  overflow: hidden;
+  color: $color-light;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  isolation: isolate;
+
+  @include mobile {
+    min-height: 320px;
+    text-align: center;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(
+      100deg,
+      rgba(26, 15, 8, 0.92) 0%,
+      rgba(26, 15, 8, 0.75) 45%,
+      rgba(26, 15, 8, 0.35) 100%
+    );
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    z-index: 2;
+    background: linear-gradient(
+      90deg,
+      $color-red 0%, $color-red 33.33%,
+      $color-saffron 33.33%, $color-saffron 66.66%,
+      $color-primary 66.66%, $color-primary 100%
+    );
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    max-width: 560px;
+    padding: $spacing-3xl 0;
+
+    @include mobile {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: $spacing-2xl 0;
+    }
+
+    h2 {
+      font-size: $font-size-4xl;
+      font-weight: $font-weight-bold;
+      line-height: 1.15;
+      margin-bottom: $spacing-md;
+      text-shadow: 0 3px 14px rgba(0, 0, 0, 0.6);
+
+      @include mobile {
+        font-size: $font-size-2xl;
+      }
+    }
+
+    p {
+      font-size: $font-size-lg;
+      line-height: 1.6;
+      opacity: 0.92;
+      margin-bottom: $spacing-2xl;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+
+      @include mobile {
+        font-size: $font-size-base;
+        margin-bottom: $spacing-xl;
+      }
+    }
+  }
+}
+// ── now top-level, NOT nested inside anything ──
+.bakery-hero__cake-layer {
+  position: absolute;
+  z-index: 2;
+  top: 42%;
+  left: 70%;
+  width: 460px;
+   height: 460px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+
+  @include mobile { display: none; }
+}
+
+.bakery-hero__cake-glow {
+  position: absolute;
+  inset: -20%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba($color-saffron, 0.45) 0%, rgba($color-saffron, 0) 70%);
+  z-index: 1;
+}
+
+.bakery-hero__cake-orbit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  transform-origin: 50% 50%;
+}
+
+.bakery-hero__cake-ingredient {
+  position: absolute;
+  z-index: 2;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.35));
+}
+
+.bakery-hero__cake-main {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  width:500%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.45));
+}
+
+.bakery-hero__cake-shadow {
+  position: absolute;
+  bottom: 6%;
+  left: 50%;
+  width: 58%;
+  height: 8%;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 72%);
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.bakery-hero__cake-steam {
+  position: absolute;
+  top: -18%;
+  left: 50%;
+  width: 55%;
+  transform: translateX(-50%);
+  z-index: 4;
+  mix-blend-mode: screen;
+}
+
+.bakery-hero__cake-crumb {
+  position: absolute;
+  z-index: 3;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+  opacity: 0.9;
+}
+
+.bakery-hero__cake-sparkles {
+  position: absolute;
+  inset: -30%;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.bakery-hero__cake-sparkle-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: $color-saffron;
+  box-shadow: 0 0 6px 1px rgba($color-saffron, 0.9);
+  opacity: 0;
+}
+
+.bakery-hero__word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(24px);
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.6);
+}
+
+.bakery-hero__cake-light {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 250, 230, 0.5) 0%, rgba(255, 250, 230, 0) 70%);
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.bakery-hero__cake-flash {
+  position: absolute;
+  inset: -60%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 65%);
+  z-index: 6;
+  pointer-events: none;
+}
+
+// bump the steam back down in size/opacity so it doesn't
+// duplicate the steam already baked into the cake photo
+.bakery-hero__cake-steam {
+  position: absolute;
+  top: -12%;
+  left: 50%;
+  width: 32%;
+  transform: translateX(-50%);
+  z-index: 4;
+  mix-blend-mode: screen;
+  opacity: 0;
+}
