@@ -19,7 +19,7 @@ import header from '../assets/banner-backery.png'
 import placeholder4 from '../assets/Festive Gift Boxes.png'
 import placeholder5 from '../assets/imge-ab.png'
 import placeholder6 from '../assets/bakerycta.png'
-import placeholder3 from '../assets/Traditional-Cake.png'
+import placeholder3 from '../assets/Traditional-cake.png'
 
 const categories = [
   { id: 'all', name: 'All Bakes' },
