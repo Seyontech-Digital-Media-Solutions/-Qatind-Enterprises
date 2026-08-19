@@ -20,7 +20,7 @@ export default function Navbar() {
   const navLinks = [
     { path: '/', label: 'Home' },
     // { path: '/about', label: 'About Us' },
-    // { path: '/ServicesPage', label: 'Services' },
+   
 
     {
       label: 'Menu',
@@ -29,9 +29,10 @@ export default function Navbar() {
         { path: '/daily-menu', label: 'Weekly Menu' }
       ]
     },
+     { path: '/ServicesPage', label: 'Services' },
     { path: '/gallery', label: 'Gallery' },
     { path: '/bakery', label: 'Bakery' },
-    // { path: '/ContactPage', label: 'Contact' }
+    { path: '/ContactPage', label: 'Contact' }
   ]
 
   return (

@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Navbar from './components/common/Navbar'
 import Footer from './components/common/Footer'
 import Home from './pages/Home'
-// import Service from './pages/ServicesPage'
+import Service from './pages/ServicesPage'
 import ContactPage from './pages/ContactPage'
 import useLenis from './hooks/useLenis'
 import Menu from './pages/Menu'
@@ -24,10 +24,10 @@ function App() {
           <Route path="/menu" element={<Menu />} />
           
           <Route path="/daily-menu" element={<DailyMenu />} />
-          {/* <Route path="/ServicesPage" element={<Service/>} /> */}
+          <Route path="/ServicesPage" element={<Service/>} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/bakery" element={<Bakery />} />
-          {/* <Route path="/ContactPage" element={<ContactPage />} /> */}
+          <Route path="/ContactPage" element={<ContactPage />} />
         </Routes>
       </main>
       <Footer />

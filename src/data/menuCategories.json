@@ -33,15 +33,15 @@
     "name": "Veg Starters",
     "icon": "FiFeather",
     "items": [
-      { "name": "Mint Gobi Fry", "image": "mint-gobi-fry.jpg" },
+      { "name": "Mint Gobi Fry", "image": "mint-gobi-fry.png" },
       { "name": "Schezwan Yam", "image": "schezwan-yam.jpg" },
-      { "name": "Chilly Potato", "image": "chilly-potato.jpg" },
-      { "name": "Mushroom 65", "image": "mushroom-65.jpg" },
-      { "name": "Paneer 65", "image": "paneer-65.jpg" },
-      { "name": "Paneer Tikka", "image": "paneer-tikka.jpg" },
-      { "name": "Chilly Sweet Potato", "image": "chilly-sweet-potato.jpg" },
-      { "name": "Tandoori Potato", "image": "tandoori-potato.jpg" },
-      { "name": "Grilled Mushroom", "image": "grilled-mushroom.jpg" }
+      { "name": "Chilly Potato", "image": "chilly-potato.png" },
+      { "name": "Mushroom 65", "image": "Mushroom-65.png" },
+      { "name": "Paneer 65", "image": "paneer-65.png" },
+      { "name": "Paneer Tikka", "image": "paneer-tikka.png" },
+      { "name": "Chilly Sweet Potato", "image": "chilly-sweet-potato.png" },
+      { "name": "Tandoori Potato", "image": "tandoori-potato.png" },
+      { "name": "Grilled Mushroom", "image": "grilled-mushroom.png" }
     ]
   },
   {
@@ -49,11 +49,11 @@
     "name": "Non-Veg Starters",
     "icon": "FiTarget",
     "items": [
-      { "name": "Chicken 65", "image": "chicken-65.jpg" },
-      { "name": "Fish Fry", "image": "fish-fry.jpg" },
+      { "name": "Chicken 65", "image": "chicken-65.png" },
+      { "name": "Fish Fry", "image": "fish-fry.png" },
       { "name": "Prawn Fry", "image": "prawn-fry.jpg" },
-      { "name": "Garlic Prawn", "image": "garlic-prawn.jpg" },
-      { "name": "Orange Chicken", "image": "orange-chicken.jpg" }
+      { "name": "Garlic Prawn", "image": "garlic-prawn.png" },
+      { "name": "Orange Chicken", "image": "orange-chicken.png" }
     ]
   },
   {
@@ -61,15 +61,15 @@
     "name": "Gravy Veg",
     "icon": "FiCircle",
     "items": [
-      { "name": "Chettinadu Karunai", "image": "chettinadu-karunai.jpg" },
-      { "name": "Paneer Tikka Masala", "image": "paneer-tikka-masala.jpg" },
-      { "name": "Mushroom Masala", "image": "mushroom-masala.jpg" },
-      { "name": "Paneer Butter Masala", "image": "paneer-butter-masala.jpg" },
+      { "name": "Chettinadu Karunai", "image": "chettinadu-karunai.png" },
+      { "name": "Paneer Tikka Masala", "image": "paneer-tikka-masala.png" },
+      { "name": "Mushroom Masala", "image": "mushroom-masala.png" },
+      { "name": "Paneer Butter Masala", "image": "paneer-butter-masala.png" },
       { "name": "Dal Fry", "image": "dal-fry.jpg" },
-      { "name": "Mix Veg Masala", "image": "mix-veg-masala.jpg" },
-      { "name": "White Kurma", "image": "white-kurma.jpg" },
-      { "name": "Kathrika Andhra Thokku", "image": "kathrika-andhra-thokku.jpg" },
-      { "name": "Konda Kadala Masala", "image": "konda-kadala-masala.jpg" }
+      { "name": "Mix Veg Masala", "image": "mix-veg-masala.png" },
+      { "name": "White Kurma", "image": "white-kurma.png" },
+      { "name": "Kathrika Andhra Thokku", "image": "kathrika-andhra-thokku.png" },
+      { "name": "Konda Kadala Masala", "image": "konda-kadala-masala.png" }
     ]
   },
   {
@@ -77,14 +77,14 @@
     "name": "Gravy Non-Veg",
     "icon": "FiCircle",
     "items": [
-      { "name": "Chicken Tikka Masala", "image": "chicken-tikka-masala.jpg" },
-      { "name": "Chicken Thokku", "image": "chicken-thokku.jpg" },
-      { "name": "Mutton Curry", "image": "mutton-curry.jpg" },
-      { "name": "Prawn Masala", "image": "prawn-masala.jpg" },
-      { "name": "Cashew Chicken Masala", "image": "cashew-chicken-masala.jpg" },
-      { "name": "Mutton Stew", "image": "mutton-stew.jpg" },
-      { "name": "Chicken Kurma", "image": "chicken-kurma.jpg" },
-      { "name": "Meen Kuzhambu", "image": "meen-kuzhambu.jpg" }
+      { "name": "Chicken Tikka Masala", "image": "chicken-tikka-masala.png" },
+      { "name": "Chicken Thokku", "image": "chicken-thokku.png" },
+      { "name": "Mutton Curry", "image": "mutton-curry.png" },
+      { "name": "Prawn Masala", "image": "prawn-masala.png" },
+      { "name": "Cashew Chicken Masala", "image": "cashew-chicken-masala.png" },
+      { "name": "Mutton Stew", "image": "mutton-stew.png" },
+      { "name": "Chicken Kurma", "image": "chicken-kurma.png" },
+      { "name": "Meen Kuzhambu", "image": "meen-kuzhambu.png" }
     ]
   },
   {

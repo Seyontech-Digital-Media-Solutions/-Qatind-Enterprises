@@ -11,7 +11,7 @@ gsap.registerPlugin(MotionPathPlugin, ScrollTrigger, CustomEase, SplitText)
 CustomEase.create('luxeOut', '0.16, 1, 0.3, 1')
 CustomEase.create('luxeInOut', '0.45, 0, 0.2, 1')
 
-import cakeMain from '../assets/plumcake/plum-cake-main.png'
+import cakeMain from '../assets/plumcake/plum-cake-org.png'
 import overlaySteam from '../assets/plumcake/steam-overlay1.png'
 import ingRaisins from '../assets/plumcake/raisins.png'
 import ingCashews from '../assets/plumcake/cashews.png'
