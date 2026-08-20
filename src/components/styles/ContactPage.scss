@@ -1,0 +1,1354 @@
+// =====================================================================
+// ContactPage.scss
+// Qatind Enterprises — Contact Page styles
+// Plain (non-module) SCSS — lives in src/components/styles/, imports
+// shared tokens from src/styles/_variables.scss and _mixins.scss.
+//
+// IMPORTANT: every class below is nested inside .contact-page so that
+// generic names like .badge, .hero, .form, .field etc. can never leak
+// out and collide with same-named classes in other page stylesheets
+// (Home.scss, Navbar.scss, etc). Do not add any new top-level class
+// selectors to this file — always nest them under .contact-page.
+// =====================================================================
+@use 'sass:color';
+@use '../../styles/variables' as vars;
+@use '../../styles/mixins' as mixins;
+
+// ---------------------------------------------------------------------
+// Local design tokens derived from the brand variables (kept here so the
+// whole file stays self-contained and easy to re-theme)
+// ---------------------------------------------------------------------
+$weight-black: 900; // "font-black" isn't in the shared scale, closest is extrabold
+
+// Reusable placeholders — %placeholders never emit CSS on their own
+// (only via @extend), so they're safe to keep outside the scoping block.
+%section-wrap {
+  position: relative;
+  z-index: 10;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 80rem; // 1280px
+  padding-left: vars.$spacing-lg;
+  padding-right: vars.$spacing-lg;
+
+  @include mixins.lg {
+    padding-left: vars.$spacing-2xl;
+    padding-right: vars.$spacing-2xl;
+  }
+}
+
+// Reusable hover-shine sweep (was .qatind-shine)
+%shine {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.7s ease;
+    pointer-events: none;
+  }
+
+  &:hover::after {
+    left: 130%;
+  }
+}
+
+// Reusable mouse-tilt (was .qatind-tilt)
+%tilt {
+  transform: perspective(900px) rotateX(calc(var(--ty, 0) * -6deg)) rotateY(calc(var(--tx, 0) * 6deg)) translateZ(0);
+  transition: transform 0.25s ease-out;
+}
+
+%btn-base {
+  display: inline-flex;
+  align-items: center;
+  gap: vars.$spacing-sm + 0.25rem;
+  border-radius: vars.$border-radius-full;
+  padding: vars.$spacing-md vars.$spacing-xl - 0.25rem;
+  font-size: vars.$font-size-sm;
+  font-weight: vars.$font-weight-bold;
+  text-decoration: none;
+  transition: transform vars.$transition-base, box-shadow vars.$transition-base, background-color vars.$transition-base;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
+// accent modifiers shared by icon background + badge + footer text
+$channel-accents: (
+  (red, vars.$color-red, vars.$color-red-light),
+  (saffron, vars.$color-saffron, vars.$color-saffron-light),
+  (green, vars.$color-green, vars.$color-green-light)
+);
+
+// ============================= PAGE SHELL =============================
+// Everything from here down is nested inside .contact-page so nothing
+// leaks globally.
+
+.contact-page {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: vars.$color-light;
+  color: vars.$text-primary;
+  font-family: vars.$font-family-sans;
+
+  ::selection {
+    background-color: vars.$color-saffron;
+    color: vars.$color-dark;
+  }
+
+  .grain {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    opacity: 0.4;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+
+  .progressBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: 3.5px;
+    transform-origin: left;
+    background: linear-gradient(90deg, vars.$color-red, vars.$color-saffron, vars.$color-green);
+  }
+
+  .eyebrow {
+    font-size: vars.$font-size-xs;
+    font-weight: vars.$font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: vars.$color-red;
+  }
+
+  .sectionTitle {
+    margin-top: vars.$spacing-md;
+    font-weight: $weight-black;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: vars.$text-primary;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+  }
+
+  .sectionHeader {
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .channelCard {
+      transform: none !important;
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  // ============================== BUTTONS ===============================
+
+  .btnWhatsapp {
+    @extend %btn-base;
+    color: vars.$text-light;
+    background: linear-gradient(90deg, vars.$color-green, vars.$color-dark);
+    box-shadow: vars.$shadow-green-glow;
+
+    svg {
+      color: #2ecc71;
+      font-size: 1.25rem;
+    }
+  }
+
+  .btnCallOutline {
+    @extend %btn-base;
+    color: vars.$text-primary;
+    background-color: #ffffff;
+    border: 1px solid rgba(18, 24, 20, 0.15);
+    box-shadow: vars.$shadow-sm;
+
+    svg {
+      color: vars.$color-red;
+      font-size: 1.1rem;
+    }
+
+    &:hover {
+      border-color: rgba(178, 34, 34, 0.4);
+      background-color: vars.$color-red-light;
+    }
+  }
+
+  .btnCtaPrimary {
+    @extend %btn-base;
+    color: vars.$color-dark;
+    background: linear-gradient(90deg, vars.$color-saffron, color.adjust(vars.$color-saffron, $lightness: -6%), vars.$color-red);
+    box-shadow: vars.$shadow-lg;
+    padding: vars.$spacing-md vars.$spacing-xl;
+  }
+
+  .btnCtaOutline {
+    @extend %btn-base;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(0, 0, 0, 0.2);
+
+    svg {
+      color: #2ecc71;
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  // ================================ HERO =================================
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 7rem vars.$spacing-lg 5rem;
+
+    @include mixins.lg {
+      padding: 9rem vars.$spacing-2xl 7rem;
+    }
+  }
+
+  .heroBgRadial {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at top left, rgba(217, 138, 0, 0.22), transparent 42%),
+      radial-gradient(circle at bottom right, rgba(20, 107, 69, 0.18), transparent 45%);
+  }
+
+  .heroGlowRed {
+    pointer-events: none;
+    position: absolute;
+    top: 2.5rem;
+    left: -7rem;
+    height: 420px;
+    width: 420px;
+    border-radius: vars.$border-radius-full;
+    background: rgba(178, 34, 34, 0.12);
+    filter: blur(140px);
+  }
+
+  .heroGlowSaffron {
+    pointer-events: none;
+    position: absolute;
+    top: 10rem;
+    right: -5rem;
+    height: 400px;
+    width: 400px;
+    border-radius: vars.$border-radius-full;
+    background: rgba(217, 138, 0, 0.15);
+    filter: blur(150px);
+  }
+
+  .heroInner {
+    @extend %section-wrap;
+    display: grid;
+    gap: vars.$spacing-3xl;
+
+    @include mixins.lg {
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+    }
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: vars.$spacing-sm;
+    border-radius: vars.$border-radius-full;
+    border: 1px solid rgba(178, 34, 34, 0.2);
+    background-color: #ffffff;
+    padding: vars.$spacing-sm vars.$spacing-md;
+    font-size: vars.$font-size-xs;
+    font-weight: vars.$font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: vars.$color-red;
+    box-shadow: vars.$shadow-sm;
+
+    svg {
+      font-size: 1rem;
+      color: vars.$color-saffron;
+    }
+  }
+
+  .heroTitle {
+    margin-top: vars.$spacing-lg;
+    font-weight: $weight-black;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    color: vars.$text-primary;
+    font-size: clamp(2.5rem, 6vw, 5.2rem);
+  }
+
+  .heroTitleGradient {
+    background: vars.$gradient-brand-tricolor;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .heroSubtitle {
+    margin-top: vars.$spacing-lg;
+    max-width: 32rem;
+    font-size: vars.$font-size-lg;
+    line-height: 2rem;
+    color: vars.$text-secondary;
+  }
+
+  .heroActions {
+    margin-top: vars.$spacing-xl;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: vars.$spacing-md;
+  }
+
+  .heroVisual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .heroVisualInner {
+    position: relative;
+    width: 100%;
+    max-width: 28rem;
+  }
+
+  .heroVisualGlow {
+    position: absolute;
+    inset: 0;
+    border-radius: vars.$border-radius-xl + 0.75rem;
+    background: linear-gradient(90deg, rgba(217, 138, 0, 0.3), rgba(178, 34, 34, 0.3));
+    filter: blur(40px);
+    transform: rotate(3deg);
+  }
+
+  .heroCard {
+    position: relative;
+    overflow: hidden;
+    border-radius: vars.$border-radius-xl + 0.65rem;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.6);
+    padding: vars.$spacing-md;
+    box-shadow: vars.$shadow-xl;
+    backdrop-filter: blur(24px);
+  }
+
+  .heroImage {
+    height: 20rem;
+    width: 100%;
+    border-radius: vars.$border-radius-xl;
+    object-fit: cover;
+    box-shadow: vars.$shadow-md;
+  }
+
+  .liveBadge {
+    position: absolute;
+    bottom: vars.$spacing-xl;
+    left: vars.$spacing-xl;
+    right: vars.$spacing-xl;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: vars.$border-radius-lg;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(18, 24, 20, 0.85);
+    padding: vars.$spacing-md;
+    color: #ffffff;
+    backdrop-filter: blur(24px);
+    box-shadow: vars.$shadow-lg;
+  }
+
+  .liveBadgeLeft {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacing-sm;
+  }
+
+  .liveBadgeIcon {
+    display: flex;
+    height: 1.5rem;
+    width: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: vars.$border-radius-md;
+    background-color: vars.$color-saffron;
+    color: vars.$color-dark;
+    font-size: vars.$font-size-lg;
+    font-weight: vars.$font-weight-bold;
+  }
+
+  .liveBadgeEyebrow {
+    font-size: vars.$font-size-xs;
+    font-weight: vars.$font-weight-semibold;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .liveBadgeTitle {
+    font-size: vars.$font-size-sm;
+    font-weight: vars.$font-weight-bold;
+    color: #ffffff;
+  }
+
+  .liveDot {
+    height: 0.75rem;
+    width: 0.75rem;
+    border-radius: vars.$border-radius-full;
+    background-color: #2ecc71;
+    animation: qatind-ping 1.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  // =============================== STATS =================================
+
+  .statsSection {
+    position: relative;
+    padding: vars.$spacing-3xl vars.$spacing-lg;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-bottom: 1px solid rgba(18, 24, 20, 0.05);
+
+    @include mixins.lg {
+      padding-left: vars.$spacing-2xl;
+      padding-right: vars.$spacing-2xl;
+    }
+  }
+
+  .statsInner {
+    @extend %section-wrap;
+  }
+
+  .statsGrid {
+    @include mixins.grid-responsive(1, 2, 4);
+  }
+
+  .statCard {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacing-md;
+    border-radius: vars.$border-radius-lg;
+    border: 1px solid rgba(18, 24, 20, 0.08);
+    background-color: #ffffff;
+    padding: vars.$spacing-lg - 0.25rem;
+    box-shadow: vars.$shadow-sm;
+    transition: box-shadow vars.$transition-base, border-color vars.$transition-base;
+
+    &:hover {
+      box-shadow: vars.$shadow-md;
+      border-color: rgba(217, 138, 0, 0.4);
+    }
+
+    &--red .statIcon {
+      background-color: vars.$color-red-light;
+      color: vars.$color-red;
+    }
+
+    &--saffron .statIcon {
+      background-color: vars.$color-saffron-light;
+      color: vars.$color-saffron;
+    }
+
+    &--green .statIcon {
+      background-color: vars.$color-green-light;
+      color: vars.$color-green;
+    }
+  }
+
+  .statIcon {
+    display: flex;
+    height: 3rem;
+    width: 3rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: vars.$border-radius-md;
+    font-size: vars.$font-size-xl;
+  }
+
+  .statValue {
+    font-size: vars.$font-size-2xl;
+    font-weight: $weight-black;
+    color: vars.$text-primary;
+  }
+
+  .statLabel {
+    font-size: vars.$font-size-xs;
+    font-weight: vars.$font-weight-semibold;
+    color: vars.$text-secondary;
+  }
+
+  // ============================= CHANNELS =================================
+
+  .channelsSection {
+    position: relative;
+    padding: vars.$spacing-3xl + 1.5rem vars.$spacing-lg;
+
+    @include mixins.lg {
+      padding-left: vars.$spacing-2xl;
+      padding-right: vars.$spacing-2xl;
+    }
+  }
+
+  .channelsInner {
+    @extend %section-wrap;
+  }
+
+  .channelsGrid {
+    margin-top: vars.$spacing-3xl - 0.5rem;
+    @include mixins.grid-responsive(1, 2, 4);
+  }
+
+  .channelCard {
+    @extend %shine;
+    @extend %tilt;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    border-radius: vars.$border-radius-xl;
+    border: 1px solid rgba(18, 24, 20, 0.1);
+    background-color: #ffffff;
+    padding: vars.$spacing-xl - 0.25rem;
+    box-shadow: vars.$shadow-lg;
+    text-decoration: none;
+    color: inherit;
+    transition: transform vars.$transition-base, box-shadow vars.$transition-base, border-color vars.$transition-base;
+
+    &:hover {
+      box-shadow: vars.$shadow-xl;
+      border-color: rgba(217, 138, 0, 0.5);
+
+      .channelTitle {
+        color: vars.$color-red;
+      }
+
+      .channelIcon {
+        transform: scale(1.1);
+      }
+
+      .channelFooterArrow {
+        transform: translateX(4px);
+      }
+    }
+  }
+
+  .channelTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .channelIcon {
+    display: flex;
+    height: 3rem;
+    width: 3rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: vars.$border-radius-lg;
+    font-size: vars.$font-size-xl;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: transform vars.$transition-base;
+  }
+
+  .channelBadge {
+    border-radius: vars.$border-radius-full;
+    padding: 0.25rem vars.$spacing-sm + 0.25rem;
+    font-size: 0.625rem;
+    font-weight: vars.$font-weight-extrabold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .channelTitle {
+    margin-top: vars.$spacing-lg;
+    font-size: vars.$font-size-xl;
+    font-weight: $weight-black;
+    color: vars.$text-primary;
+    transition: color vars.$transition-base;
+  }
+
+  .channelValue {
+    margin-top: vars.$spacing-xs;
+    font-size: vars.$font-size-base;
+    font-weight: vars.$font-weight-bold;
+    color: vars.$text-secondary;
+  }
+
+  .channelSub {
+    margin-top: vars.$spacing-sm;
+    font-size: vars.$font-size-xs;
+    color: rgba(75, 85, 99, 0.8);
+  }
+
+  .channelFooter {
+    margin-top: vars.$spacing-2xl;
+    display: flex;
+    align-items: center;
+    gap: vars.$spacing-sm;
+    font-size: vars.$font-size-xs;
+    font-weight: vars.$font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .channelFooterArrow {
+    font-size: vars.$font-size-sm;
+    transition: transform vars.$transition-base;
+  }
+
+  @each $name, $color, $tint in $channel-accents {
+    .accent-#{$name} {
+      .channelIcon {
+        background-color: $tint;
+        color: $color;
+      }
+
+      .channelBadge {
+        background-color: $tint;
+        color: $color;
+      }
+
+      .channelFooter {
+        color: $color;
+      }
+    }
+  }
+
+  // ================================ FORM ==================================
+
+  .formSection {
+    position: relative;
+    background-color: #ffffff;
+    padding: vars.$spacing-3xl + 1.5rem vars.$spacing-lg;
+
+    @include mixins.lg {
+      padding-left: vars.$spacing-2xl;
+      padding-right: vars.$spacing-2xl;
+    }
+  }
+
+  .formSectionInner {
+    @extend %section-wrap;
+  }
+
+  .formSectionHeader {
+    max-width: 42rem;
+  }
+
+  .formSectionTitle {
+    margin-top: vars.$spacing-md;
+    font-weight: $weight-black;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: vars.$text-primary;
+    font-size: clamp(2rem, 4.2vw, 3.2rem);
+  }
+
+  .formLayout {
+    margin-top: vars.$spacing-3xl - 0.5rem;
+    display: grid;
+    gap: vars.$spacing-2xl + 0.5rem;
+
+    @include mixins.lg {
+      grid-template-columns: 0.58fr 0.42fr;
+      align-items: stretch;
+    }
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: vars.$border-radius-xl + 0.75rem;
+    border: 1px solid rgba(18, 24, 20, 0.1);
+    background-color: vars.$color-light;
+    padding: vars.$spacing-xl - 0.25rem;
+    box-shadow: vars.$shadow-xl;
+
+    @include mixins.sm {
+      padding: vars.$spacing-2xl + 0.5rem;
+    }
+  }
+
+  .formTitle {
+    margin-bottom: vars.$spacing-lg;
+    display: flex;
+    align-items: center;
+    gap: vars.$spacing-sm;
+    font-size: vars.$font-size-xl;
+    font-weight: $weight-black;
+    color: vars.$text-primary;
+
+    svg {
+      color: vars.$color-red;
+    }
+  }
+
+  .fieldGrid {
+    display: grid;
+    gap: vars.$spacing-lg - 0.25rem;
+
+    @include mixins.sm {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  // spacing helper for a field row/label that follows another block
+  .formRowSpaced {
+    margin-top: vars.$spacing-lg + 0.25rem;
+  }
+
+  .fieldLabel {
+    display: block;
+  }
+
+  .fieldCaption {
+    margin-bottom: vars.$spacing-sm;
+    display: block;
+    font-size: vars.$font-size-xs;
+    font-weight: vars.$font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: vars.$text-secondary;
+  }
+
+  .field {
+    width: 100%;
+    background-color: #ffffff;
+    border: 1.5px solid rgba(18, 24, 20, 0.12);
+    border-radius: vars.$border-radius-lg;
+    padding: vars.$spacing-md + 0.15rem vars.$spacing-lg - 0.3rem;
+    font-size: vars.$font-size-sm + 0.05rem;
+    color: vars.$text-primary;
+    font-family: vars.$font-family-sans;
+    transition: border-color vars.$transition-fast, box-shadow vars.$transition-fast;
+
+    &::placeholder {
+      color: vars.$text-secondary;
+      opacity: 0.6;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: vars.$color-saffron;
+      box-shadow: 0 0 0 4px rgba(217, 138, 0, 0.18);
+    }
+  }
+
+  .textarea {
+    resize: none;
+  }
+
+  .occasionBlock {
+    margin-top: vars.$spacing-lg + 0.25rem;
+  }
+
+  .occasionChips {
+    margin-top: vars.$spacing-sm + 0.25rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: vars.$spacing-sm;
+
+    @include mixins.sm {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacing-sm;
+    border-radius: vars.$border-radius-md + 0.05rem;
+    padding: vars.$spacing-sm + 0.25rem;
+    font-size: vars.$font-size-xs;
+    font-weight: vars.$font-weight-bold;
+    text-align: left;
+    border: 1px solid rgba(18, 24, 20, 0.1);
+    background-color: #ffffff;
+    color: vars.$text-secondary;
+    cursor: pointer;
+    transition: all vars.$transition-fast;
+
+    svg {
+      flex-shrink: 0;
+      font-size: 1rem;
+      color: vars.$color-saffron;
+    }
+
+    span {
+      @include mixins.text-truncate;
+    }
+
+    &:hover {
+      border-color: vars.$color-saffron;
+    }
+
+    &.chipActive {
+      background-color: vars.$color-dark;
+      border-color: vars.$color-dark;
+      color: #ffffff;
+      box-shadow: vars.$shadow-md;
+    }
+  }
+
+  .formSubmitRow {
+    margin-top: vars.$spacing-xl;
+  }
+
+  .submitBtn {
+    display: inline-flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: vars.$spacing-sm + 0.25rem;
+    border: none;
+    cursor: pointer;
+    border-radius: vars.$border-radius-full;
+    padding: vars.$spacing-md + 0.15rem vars.$spacing-xl;
+    font-size: vars.$font-size-base;
+    font-weight: vars.$font-weight-extrabold;
+    color: vars.$color-dark;
+    background: linear-gradient(90deg, vars.$color-saffron, color.adjust(vars.$color-saffron, $lightness: -4%), vars.$color-red);
+    box-shadow: vars.$shadow-saffron-glow;
+    transition: transform vars.$transition-base, box-shadow vars.$transition-base, opacity vars.$transition-base;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+  .submitBtnInner {
+    display: inline-flex;
+    align-items: center;
+    gap: vars.$spacing-sm;
+  }
+
+  .submitNote {
+    margin-top: vars.$spacing-md - 0.25rem;
+    text-align: center;
+    font-size: vars.$font-size-xs;
+    line-height: 1.25rem;
+    color: vars.$text-secondary;
+  }
+
+  // --------------------------- info panel ---------------------------
+
+  .infoPanel {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: vars.$border-radius-xl + 0.75rem;
+    background-color: vars.$color-dark;
+    padding: vars.$spacing-xl;
+    color: #ffffff;
+    box-shadow: vars.$shadow-xl;
+
+    @include mixins.sm {
+      padding: vars.$spacing-2xl + 0.5rem;
+    }
+  }
+
+  .infoPanelGlowSaffron {
+    pointer-events: none;
+    position: absolute;
+    right: -4rem;
+    top: -4rem;
+    height: 15rem;
+    width: 15rem;
+    border-radius: vars.$border-radius-full;
+    background: rgba(217, 138, 0, 0.2);
+    filter: blur(100px);
+  }
+
+  .infoPanelGlowRed {
+    pointer-events: none;
+    position: absolute;
+    left: -4rem;
+    bottom: -4rem;
+    height: 15rem;
+    width: 15rem;
+    border-radius: vars.$border-radius-full;
+    background: rgba(178, 34, 34, 0.2);
+    filter: blur(100px);
+  }
+
+  .infoPanelBody {
+    position: relative;
+    z-index: 10;
+  }
+
+  .infoBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: vars.$spacing-sm;
+    border-radius: vars.$border-radius-full;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: vars.$spacing-sm vars.$spacing-md;
+    font-size: vars.$font-size-xs;
+    font-weight: vars.$font-weight-bold;
+    color: vars.$color-saffron;
+    backdrop-filter: blur(24px);
+  }
+
+  .infoTitle {
+    margin-top: vars.$spacing-lg;
+    font-size: vars.$font-size-2xl;
+    font-weight: $weight-black;
+    color: #ffffff;
+  }
+
+  .hoursList {
+    margin-top: vars.$spacing-lg - 0.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .hoursRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.9rem;
+    font-size: vars.$font-size-sm;
+  }
+
+  .hoursDay {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacing-sm + 0.15rem;
+    color: rgba(255, 255, 255, 0.8);
+
+    svg {
+      color: vars.$color-saffron;
+    }
+  }
+
+  .hoursTime {
+    font-weight: vars.$font-weight-bold;
+    color: #ffffff;
+  }
+
+  .addressText {
+    margin-top: vars.$spacing-md - 0.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: vars.$spacing-sm + 0.25rem;
+    font-size: vars.$font-size-sm;
+    line-height: 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+
+    svg {
+      margin-top: 0.25rem;
+      flex-shrink: 0;
+      font-size: vars.$font-size-xl;
+      color: vars.$color-saffron;
+    }
+  }
+
+  .infoImageWrap {
+    margin-top: vars.$spacing-lg - 0.25rem;
+    overflow: hidden;
+    border-radius: vars.$border-radius-lg;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: vars.$shadow-md;
+  }
+
+  .infoImage {
+    height: 9rem;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .socialRow {
+    position: relative;
+    z-index: 10;
+    margin-top: vars.$spacing-xl;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: vars.$spacing-lg - 0.25rem;
+  }
+
+  .socialLabel {
+    font-size: vars.$font-size-xs;
+    font-weight: vars.$font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .socialIcons {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacing-md - 0.25rem;
+  }
+
+  .socialIcon {
+    display: flex;
+    height: 2.75rem;
+    width: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: vars.$border-radius-full;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: vars.$font-size-xl;
+    color: #ffffff;
+    transition: all vars.$transition-fast;
+
+    &:hover {
+      border-color: vars.$color-saffron;
+      color: vars.$color-saffron;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+  }
+
+  // ============================= SHOWCASE =================================
+
+  .showcaseSection {
+    position: relative;
+    padding: vars.$spacing-3xl + 1.5rem vars.$spacing-lg;
+    background-color: vars.$color-light;
+
+    @include mixins.lg {
+      padding-left: vars.$spacing-2xl;
+      padding-right: vars.$spacing-2xl;
+    }
+  }
+
+  .showcaseInner {
+    @extend %section-wrap;
+  }
+
+  .showcaseGrid {
+    margin-top: vars.$spacing-3xl - 0.5rem;
+    display: grid;
+    gap: vars.$spacing-2xl - 0.5rem;
+
+    @include mixins.tablet {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include mixins.desktop {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .showcaseCard {
+    position: relative;
+    overflow: hidden;
+    border-radius: vars.$border-radius-xl - 0.25rem;
+    border: 1px solid rgba(18, 24, 20, 0.1);
+    background-color: #ffffff;
+    box-shadow: vars.$shadow-lg;
+    transition: transform vars.$transition-base;
+
+    &:hover {
+      .showcaseImage {
+        transform: scale(1.05);
+      }
+
+      .showcaseTitle {
+        color: vars.$color-red;
+      }
+    }
+  }
+
+  .showcaseImageWrap {
+    position: relative;
+    height: 15rem;
+    overflow: hidden;
+  }
+
+  .showcaseImage {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .showcaseOverlay {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(18, 24, 20, 0.8), transparent 60%);
+  }
+
+  .showcaseTag {
+    position: absolute;
+    top: vars.$spacing-md;
+    left: vars.$spacing-md;
+    border-radius: vars.$border-radius-full;
+    padding: 0.25rem vars.$spacing-md - 0.1rem;
+    font-size: vars.$font-size-xs;
+    font-weight: vars.$font-weight-extrabold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+    backdrop-filter: blur(12px);
+
+    &--red {
+      background-color: vars.$color-red;
+    }
+
+    &--saffron {
+      background-color: vars.$color-saffron;
+    }
+
+    &--green {
+      background-color: vars.$color-green;
+    }
+  }
+
+  .showcaseBody {
+    padding: vars.$spacing-lg - 0.25rem;
+  }
+
+  .showcaseTitle {
+    font-size: vars.$font-size-xl;
+    font-weight: $weight-black;
+    color: vars.$text-primary;
+    transition: color vars.$transition-base;
+  }
+
+  .showcaseDesc {
+    margin-top: vars.$spacing-sm;
+    font-size: vars.$font-size-xs;
+    font-weight: vars.$font-weight-medium;
+    color: vars.$text-secondary;
+  }
+
+  // ================================ FAQ ===================================
+
+  .faqSection {
+    position: relative;
+    background-color: #ffffff;
+    padding: vars.$spacing-3xl + 1.5rem vars.$spacing-lg;
+
+    @include mixins.lg {
+      padding-left: vars.$spacing-2xl;
+      padding-right: vars.$spacing-2xl;
+    }
+  }
+
+  .faqInner {
+    @extend %section-wrap;
+    display: grid;
+    gap: vars.$spacing-2xl + 0.5rem;
+
+    @include mixins.lg {
+      grid-template-columns: 0.4fr 0.6fr;
+    }
+  }
+
+  .faqTitle {
+    margin-top: vars.$spacing-md + 0.25rem;
+    font-weight: $weight-black;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: vars.$text-primary;
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .faqDesc {
+    margin-top: vars.$spacing-lg - 0.25rem;
+    max-width: 24rem;
+    font-size: vars.$font-size-sm;
+    line-height: 1.75rem;
+    color: vars.$text-secondary;
+  }
+
+  .faqPhoneLink {
+    margin-top: vars.$spacing-lg - 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    gap: vars.$spacing-sm;
+    font-size: vars.$font-size-sm;
+    font-weight: vars.$font-weight-bold;
+    color: vars.$color-red;
+    text-decoration: none;
+  }
+
+  .faqList {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacing-md;
+  }
+
+  .faqItem {
+    overflow: hidden;
+    border-radius: vars.$border-radius-lg;
+    border: 1px solid rgba(18, 24, 20, 0.1);
+    background-color: vars.$color-light;
+    transition: border-color vars.$transition-fast;
+
+    &:hover {
+      border-color: rgba(217, 138, 0, 0.5);
+    }
+  }
+
+  .faqButton {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: vars.$spacing-md;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: vars.$spacing-lg - 0.25rem vars.$spacing-xl - 0.25rem;
+    text-align: left;
+    font-size: vars.$font-size-base;
+    font-weight: vars.$font-weight-bold;
+    color: vars.$text-primary;
+  }
+
+  .faqIcon {
+    flex-shrink: 0;
+    font-size: vars.$font-size-2xl;
+    line-height: 1;
+    color: vars.$color-red;
+  }
+
+  .faqAnswerWrap {
+    padding-left: vars.$spacing-xl - 0.25rem;
+    padding-right: vars.$spacing-xl - 0.25rem;
+    overflow: hidden;
+  }
+
+  .faqAnswer {
+    padding-bottom: vars.$spacing-lg - 0.25rem;
+    font-size: vars.$font-size-sm;
+    line-height: 1.75rem;
+    color: vars.$text-secondary;
+  }
+
+  // ================================ CTA ===================================
+
+  .ctaSection {
+    position: relative;
+    overflow: hidden;
+    padding: vars.$spacing-3xl + 1.5rem vars.$spacing-lg;
+    background: vars.$gradient-hero;
+
+    @include mixins.lg {
+      padding-left: vars.$spacing-2xl;
+      padding-right: vars.$spacing-2xl;
+    }
+  }
+
+  .ctaTopBar {
+    pointer-events: none;
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 5px;
+    background: linear-gradient(90deg, vars.$color-red, vars.$color-saffron, vars.$color-green);
+  }
+
+  .ctaGlowSaffron {
+    pointer-events: none;
+    position: absolute;
+    left: 25%;
+    top: 0;
+    height: 280px;
+    width: 280px;
+    border-radius: vars.$border-radius-full;
+    background: rgba(217, 138, 0, 0.18);
+    filter: blur(130px);
+  }
+
+  .ctaGlowRed {
+    pointer-events: none;
+    position: absolute;
+    bottom: 0;
+    right: 2.5rem;
+    height: 240px;
+    width: 240px;
+    border-radius: vars.$border-radius-full;
+    background: rgba(178, 34, 34, 0.18);
+    filter: blur(120px);
+  }
+
+  .ctaInner {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 48rem;
+    text-align: center;
+  }
+
+  .ctaEyebrow {
+    font-size: vars.$font-size-xs;
+    font-weight: vars.$font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: vars.$color-saffron;
+  }
+
+  .ctaTitle {
+    margin-top: vars.$spacing-md + 0.25rem;
+    font-weight: $weight-black;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+  }
+
+  .ctaDesc {
+    margin: vars.$spacing-lg - 0.25rem auto 0;
+    max-width: 28rem;
+    font-size: vars.$font-size-base;
+    line-height: 2rem;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .ctaActions {
+    margin-top: vars.$spacing-xl;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: vars.$spacing-md;
+  }
+} // END .contact-page
+
+// -----------------------------------------------------------------------
+// Keyframes — kept global on purpose. Keyframe names are unique
+// (qatind-ping) so they don't collide, and @keyframes blocks aren't
+// selectors, so scoping them doesn't add any protection anyway.
+// -----------------------------------------------------------------------
+@keyframes qatind-ping {
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}

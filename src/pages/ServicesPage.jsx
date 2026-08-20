@@ -35,6 +35,7 @@ import { AiOutlineSafetyCertificate } from 'react-icons/ai'
 import MouseGlowCursor from '../components/common/MouseGlowCursor'
 import MagneticButton from '../components/animations/MagneticButton'
 
+
 import '../styles/ServicesPage.scss'
 
 /* =====================================================================
@@ -51,6 +52,9 @@ import '../styles/ServicesPage.scss'
    --color-cocoa / --color-cream, declared in _variables.scss) is used
    directly in the SCSS classes instead.
 ===================================================================== */
+
+const img = (path) => `${import.meta.env.BASE_URL}${path}`
+
 const BRAND = {
   red: '#C0392B',
   saffron: '#F2921A',
@@ -75,7 +79,7 @@ const serviceMenu = [
     description: 'Fresh home-style meals for offices, meetings, team lunches and corporate gatherings — planned around your schedule and served with consistency.',
     highlights: ['Daily meal programs', 'Meeting lunches', 'Bulk orders', 'Veg & non-veg options'],
     icon: FiBriefcase,
-    image: '/Services/CorporateEvents.jpg',
+    image: img('Services/CorporateEvents.jpg'),
     accent: BRAND.red,
   },
 
@@ -86,7 +90,7 @@ const serviceMenu = [
     description: 'Freshly prepared food designed around the needs of hospitals, patients, attendants and staff.',
     highlights: ['Custom meal requirements', 'Fresh preparation', 'Scheduled delivery', 'Separate food handling'],
     icon: RiHospitalLine,
-    image: '/Services/Hospitalcatering.png',
+    image: img('Services/Hospitalcatering.png'),
     accent: BRAND.green,
   },
 
@@ -97,7 +101,7 @@ const serviceMenu = [
     description: 'Reliable meal solutions for schools, colleges, students, staff and campus events.',
     highlights: ['Daily meal programs', 'Student-friendly menus', 'Bulk serving', 'Flexible schedules'],
     icon: RiSchoolLine,
-    image: '/Services/Schools&Colleges.png',
+    image: img('Services/Schools&Colleges.png'),
     accent: BRAND.saffron,
   },
 
@@ -108,7 +112,7 @@ const serviceMenu = [
     description: 'From traditional favourites to live counters, Qatind creates memorable wedding food experiences for every guest.',
     highlights: ['Wedding menus', 'Live counters', 'Buffet service', 'On-site catering'],
     icon: RiHeartsLine,
-    image: '/Services/WeddingCatering.png',
+    image: img('Services/WeddingCatering.png'),
     accent: BRAND.red,
   },
 
@@ -119,9 +123,10 @@ const serviceMenu = [
     description: 'Birthdays, family gatherings, housewarmings and celebrations deserve food people remember.',
     highlights: ['Custom menus', 'Small & large gatherings', 'Setup support', 'Veg & non-veg options'],
     icon: RiCake3Line,
-    image: '/Services/Partycatering.jpg',
+    image: img('Services/Partycatering.jpg'),
     accent: BRAND.saffron,
   },
+
   {
     id: 'hampers',
     label: 'Gift Hampers',
@@ -129,17 +134,17 @@ const serviceMenu = [
     description: 'Curated hampers with bakery favourites, sweets and savouries — perfect for gifting, festivals and corporate giving.',
     highlights: ['Custom curation', 'Festive hampers', 'Corporate gifting', 'Eggless & veg options'],
     icon: RiGiftLine,
-    image: '/Services/GiftHampers.jpg',
+    image: img('Services/GiftHampers.jpg'),
     accent: BRAND.green,
   },
 ]
 
 const plateSteps = [
-  { num: '01', title: 'Order Home Food', copy: 'Headcount, occasion, dietary notes — a five-minute conversation to start.', icon: HiOutlineClipboardList, image: '/Services/foodorderonline.jpg' },
-  { num: '02', title: 'Build Your Menu', copy: 'We shape a menu around your taste, your budget and your guests.', icon: LuUtensilsCrossed, image: '/Services/BuildMenu.jpg' },
-  { num: '03', title: 'Prepare Fresh', copy: 'Cooked in small batches, close to serving time, the way home food should be.', icon: LuChefHat, image: '/Services/prepareFood.webp' },
-  { num: '04', title: 'Deliver / Set Up', copy: 'Sealed, insulated delivery — or a full on-site setup for bigger events.', icon: MdDeliveryDining, image: '/Services/FoodDelivery.png' },
-  { num: '05', title: 'Serve & Enjoy', copy: 'Hot food, well-timed service, and one less thing for you to manage.', icon: RiSparklingLine, image: '/Services/serve&enjoy.webp' },
+  { num: '01', title: 'Order Home Food', copy: 'Headcount, occasion, dietary notes — a five-minute conversation to start.', icon: HiOutlineClipboardList, image: img('Services/foodorderonline.jpg'), },
+  { num: '02', title: 'Build Your Menu', copy: 'We shape a menu around your taste, your budget and your guests.', icon: LuUtensilsCrossed, image: img('Services/BuildMenu.jpg'), },
+  { num: '03', title: 'Prepare Fresh', copy: 'Cooked in small batches, close to serving time, the way home food should be.', icon: LuChefHat, image: img('Services/prepareFood.webp') },
+  { num: '04', title: 'Deliver / Set Up', copy: 'Sealed, insulated delivery — or a full on-site setup for bigger events.', icon: MdDeliveryDining, image: img('Services/FoodDelivery.png') },
+  { num: '05', title: 'Serve & Enjoy', copy: 'Hot food, well-timed service, and one less thing for you to manage.', icon: RiSparklingLine, image: img('Services/serve&enjoy.webp') },
 ]
 
 const qualityPillars = [
@@ -152,11 +157,11 @@ const qualityPillars = [
 ]
 
 const showcasePlates = [
-  { id: 'thali', name: 'Chicken Curry', tag: 'Everyday', image: '/Services/chickencurry.jpg' },
-  { id: 'biryani', name: 'Kaarakulambhu', tag: 'Weekend Special', image: '/Services/Kaarakulambhu.jpg' },
-  { id: 'chaat', name: 'RiceSambar', tag: 'Chaat & Drinks', image: '/Services/RiceSambar.jpg' },
-  { id: 'wedding', name: 'ChickenBriyani', tag: 'Weddings', image: '/Services/chickenBriyani.jpg' },
-  { id: 'bakery', name: 'Lemonrice', tag: 'Bakery', image: '/Services/Lemonrice.png' },
+  { id: 'thali', name: 'Chicken Curry', tag: 'Everyday', image: img('Services/chickencurry.jpg'), },
+  { id: 'biryani', name: 'Kaarakulambhu', tag: 'Weekend Special', image: img('Services/Kaarakulambhu.jpg'), },
+  { id: 'chaat', name: 'RiceSambar', tag: 'Chaat & Drinks', image: img('Services/RiceSambar.jpg'), },
+  { id: 'wedding', name: 'ChickenBriyani', tag: 'Weddings', image: img('Services/chickenBriyani.jpg'), },
+  { id: 'bakery', name: 'Lemonrice', tag: 'Bakery', image: img('Services/Lemonrice.png'), },
 ]
 
 const faqs = [
@@ -459,7 +464,7 @@ function ImmersiveStory({ prefersReducedMotion }) {
     <section ref={ref} className="services-page__story">
       <motion.div style={{ y }} className="services-page__story-media">
         <img
-          src="Services/ScaleQatind.jpg"
+          src={img('Services/ScaleQatind.jpg')}
           alt="Qatind spread of home-style and celebration food"
           loading="lazy"
         />

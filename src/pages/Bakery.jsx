@@ -411,15 +411,16 @@ export default function Bakery() {
                 }
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, margin: '-120px' }}
+                viewport={{ once: true, amount: 0 }}
                 variants={rowVariants}
               >
                 <div className="bakery-festive__media">
                   <motion.div
                     className="bakery-festive__media-frame"
-                    initial={{ clipPath: 'inset(0 100% 0 0)'}}
-                    whileInView={{ clipPath: 'inset(0 0% 0 0)' }}
-                    viewport={{ once: true, margin: '-120px' }}
+                     variants={{
+          hidden: { clipPath: 'inset(0 100% 0 0)' },
+          visible: { clipPath: 'inset(0 0% 0 0)' }  // ← driven by parent
+        }}
                     transition={{ duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
                   >
                     <img src={item.image} alt={item.name} className="bakery-festive__image" />
