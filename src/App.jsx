@@ -16,13 +16,12 @@ function App() {
   useLenis()
 
   return (
-    <Router>
+    <Router basename="/-Qatind-Enterprises">
       <Navbar />
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/menu" element={<Menu />} />
-          
           <Route path="/daily-menu" element={<DailyMenu />} />
           <Route path="/ServicesPage" element={<Service/>} />
           <Route path="/gallery" element={<Gallery />} />
