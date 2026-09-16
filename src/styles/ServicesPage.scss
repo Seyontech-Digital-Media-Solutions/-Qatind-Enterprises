@@ -1,72 +1,81 @@
-@use './variables' as *;
-@use './mixins' as *;
+@import './variables';
+@import './mixins';
 
-// ---------------------------------------------------------------------
-// Qatind Enterprises — Services page (v2 redesign)
-// "From home kitchen to big occasions" — editorial food-magazine layout.
-// Cream base, white working sections, one deliberate dark-green accent
-// section (Quality + Final CTA). Tricolor used as accents only.
-// ---------------------------------------------------------------------
+// =====================================================================
+// QATIND ENTERPRISES — SERVICES PAGE (SCSS)
+// Converted 1:1 from the Tailwind-based ServicesPage.jsx.
+// Colors continue to come from the CSS custom properties already
+// declared globally (--color-red, --color-saffron, --color-green,
+// --color-espresso, --color-cocoa, --color-cream) so the palette is
+// unchanged. Layout / spacing / typography use the shared
+// $breakpoint-* + mixins from this project's variables/mixins files.
+// Anything that is genuinely data-driven (per-item accent colors,
+// computed bubble positions in the curved process, drag offsets, etc.)
+// stays as inline style in the JSX — that's not a Tailwind concern.
+// =====================================================================
 
 .services-page {
   position: relative;
   min-height: 100vh;
-  background: #fbf2e3;
-  color: #241608;
   overflow-x: hidden;
-  font-family: 'Inter', $font-family-sans, Arial, sans-serif;
+  background: var(--color-cream);
+  color: var(--color-espresso);
+  font-family: 'Inter', Arial, sans-serif;
 
-  // -----------------------------------------------------------------
-  // Shared
-  // -----------------------------------------------------------------
-  &__scroll-progress {
+  // Matches Tailwind's selection:bg-*/selection:text-* utilities
+  & ::selection {
+    background: var(--color-saffron);
+    color: var(--color-espresso);
+  }
+
+  // -------------------------------------------------------------------
+  // Shared helpers
+  // -------------------------------------------------------------------
+  &__container {
+    max-width: 80rem;
+    margin: 0 auto;
+  }
+
+  &__eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--color-red);
+
+    &--saffron {
+      color: var(--color-saffron);
+    }
+  }
+
+  &__heading {
+    margin-top: 1rem;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--color-espresso);
+    font-size: clamp(2rem, 4.2vw, 3.2rem);
+
+    &--white {
+      color: #fff;
+    }
+
+    &--lg {
+      font-size: clamp(2rem, 4.4vw, 3.4rem);
+    }
+  }
+
+  &__progress {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, $color-red 0%, $color-saffron 50%, $color-green 100%);
-    transform-origin: 0%;
     z-index: 100;
-    pointer-events: none;
+    height: 3px;
+    transform-origin: left;
+    background: linear-gradient(90deg, var(--color-red), var(--color-saffron), var(--color-green));
   }
 
-  &__container {
-    width: 100%;
-    max-width: $breakpoint-2xl;
-    margin: 0 auto;
-    padding: 0 $spacing-md;
-
-    @include md {
-      padding: 0 $spacing-xl;
-    }
-  }
-
-  &__eyebrow {
-    font-size: $font-size-xs;
-    font-weight: $font-weight-bold;
-    text-transform: uppercase;
-    letter-spacing: 0.3em;
-    color: $color-red;
-    margin-bottom: $spacing-sm;
-  }
-
-  &__heading {
-    font-weight: $font-weight-extrabold;
-    letter-spacing: -0.02em;
-    line-height: 1.05;
-    color: #241608;
-
-    &--xl {
-      font-size: clamp(2rem, 4.4vw, 3.4rem);
-    }
-
-    &.text-white {
-      color: #ffffff;
-    }
-  }
-
-  // Grain texture, reused on hero + quality section
   &__grain {
     position: absolute;
     inset: 0;
@@ -75,31 +84,61 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
   }
 
+  &__shine {
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -60%;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.7s ease;
+      pointer-events: none;
+    }
+
+    &:hover::after {
+      left: 130%;
+    }
+  }
+
+  &__tilt {
+    transform: perspective(900px) rotateX(calc(var(--ty, 0) * -6deg)) rotateY(calc(var(--tx, 0) * 6deg)) translateZ(0);
+    transition: transform 0.25s ease-out;
+  }
+
   &__btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
-    padding: 1rem 1.85rem;
-    border-radius: $border-radius-full;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-bold;
+    gap: 0.75rem;
+    padding: 1rem 1.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 700;
     text-decoration: none;
-    transition: transform $transition-base, box-shadow $transition-base, background $transition-base;
-    cursor: pointer;
+    transition: transform 0.3s, background 0.3s, border-color 0.3s;
+
+    svg {
+      font-size: 1.125rem;
+    }
 
     &--primary {
-      background: linear-gradient(120deg, $color-saffron 0%, #e8871e 50%, $color-red 100%);
-      color: #241608;
+      background: linear-gradient(90deg, var(--color-saffron), #e8871e, var(--color-red));
+      color: var(--color-espresso);
       box-shadow: 0 20px 50px -20px rgba(242, 146, 26, 0.65);
 
       &:hover {
-        transform: translateY(-2px);
+        transform: translateY(-4px);
       }
     }
 
     &--ghost {
-      background: #ffffff;
-      color: #241608;
+      background: #fff;
+      color: var(--color-espresso);
       border: 1px solid rgba(36, 22, 8, 0.15);
 
       &:hover {
@@ -107,29 +146,18 @@
         background: rgba(20, 108, 54, 0.05);
       }
     }
-
-    &--outline-dark {
-      background: rgba(0, 0, 0, 0.2);
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.1);
-      }
-    }
   }
 
-  // -----------------------------------------------------------------
+  // -------------------------------------------------------------------
   // 1. Hero
-  // -----------------------------------------------------------------
+  // -------------------------------------------------------------------
   &__hero {
     position: relative;
     overflow: hidden;
-    padding: clamp(5rem, 8vw, 7.5rem) $spacing-md clamp(3.5rem, 6vw, 5rem);
+    padding: 7rem 1.5rem 7rem;
 
-    @include md {
-      padding-left: $spacing-xl;
-      padding-right: $spacing-xl;
+    @include lg {
+      padding: 9rem 2.5rem 9rem;
     }
 
     &-bg {
@@ -143,16 +171,16 @@
 
     &-aura {
       position: absolute;
+      pointer-events: none;
       border-radius: 50%;
       filter: blur(120px);
-      pointer-events: none;
 
       &--red {
         top: 1.5rem;
         left: -6rem;
         width: 380px;
         height: 380px;
-        background: rgba(192, 57, 43, 0.1);
+        background: rgba(193, 39, 45, 0.1);
       }
 
       &--green {
@@ -166,8 +194,8 @@
 
     &-inner {
       position: relative;
-      z-index: 2;
-      max-width: $breakpoint-2xl;
+      z-index: 10;
+      max-width: 80rem;
       margin: 0 auto;
     }
 
@@ -175,253 +203,109 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.5rem 1.1rem;
-      background: #ffffff;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
       border: 1px solid rgba(36, 22, 8, 0.1);
-      border-radius: $border-radius-full;
-      font-size: $font-size-xs;
-      font-weight: $font-weight-bold;
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      font-size: 0.75rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.3em;
-      color: $color-red;
-      box-shadow: $shadow-sm;
+      color: var(--color-red);
 
       svg {
-        color: $color-saffron;
+        font-size: 1rem;
+        color: var(--color-saffron);
       }
     }
 
     &-grid {
-      margin-top: $spacing-2xl;
+      margin-top: 2rem;
       display: grid;
-      gap: $spacing-2xl;
-      align-items: end;
+      gap: 2.5rem;
 
-      @include lg-up {
+      @include lg {
         grid-template-columns: 1.05fr 0.95fr;
+        align-items: end;
       }
     }
 
     &-title {
       font-size: clamp(2.6rem, 6.4vw, 5.4rem);
-      font-weight: $font-weight-extrabold;
+      font-weight: 900;
       line-height: 0.98;
       letter-spacing: -0.03em;
-      color: #241608;
+      color: var(--color-espresso);
 
       span {
         display: block;
       }
     }
 
+    &-copy-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
     &-copy {
       max-width: 28rem;
-      font-size: $font-size-lg;
-      line-height: $line-height-relaxed;
-      color: #5b4636;
-      margin-bottom: $spacing-lg;
+      font-size: 1.125rem;
+      line-height: 2rem;
+      color: var(--color-cocoa);
     }
 
     &-actions {
       display: flex;
       flex-wrap: wrap;
-      gap: $spacing-md;
-    }
-
-    // Floating image composition
-    &-media {
-      position: relative;
-      margin-top: $spacing-3xl;
-      display: grid;
-      gap: $spacing-lg;
-      grid-template-columns: 1fr;
-
-      @include sm-up {
-        grid-template-columns: 1.4fr 1fr;
-      }
-    }
-
-    &-media-main {
-      position: relative;
-      overflow: hidden;
-      border-radius: 2rem;
-      box-shadow: 0 40px 90px -40px rgba(43, 27, 14, 0.4);
-
-      img {
-        width: 100%;
-        height: 420px;
-        object-fit: cover;
-
-        @include sm-up {
-          height: 520px;
-        }
-      }
-
-      &::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to top, rgba(36, 22, 8, 0.55), transparent 55%);
-      }
-    }
-
-    &-media-caption {
-      position: absolute;
-      left: 1.5rem;
-      right: 1.5rem;
-      bottom: 1.5rem;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 1rem;
-      padding: 0.85rem 1.25rem;
-      box-shadow: $shadow-lg;
-      backdrop-filter: blur(6px);
-
-      strong {
-        display: block;
-        font-size: $font-size-sm;
-        font-weight: $font-weight-bold;
-        color: #241608;
-      }
-
-      small {
-        font-size: $font-size-xs;
-        color: #5b4636;
-      }
-    }
-
-    &-media-stack {
-      position: relative;
-      display: grid;
-      grid-template-rows: 1fr 1fr;
-      gap: $spacing-lg;
-    }
-
-    &-media-float {
-      position: relative;
-      overflow: hidden;
-      border-radius: 1.5rem;
-      box-shadow: 0 30px 70px -35px rgba(43, 27, 14, 0.35);
-      transition: transform 0.35s ease-out;
-
-      img {
-        width: 100%;
-        height: 100%;
-        max-height: 240px;
-        object-fit: cover;
-      }
-
-      &--stat {
-        background: #0a331a;
-
-        img {
-          opacity: 0.8;
-        }
-
-        &::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, rgba(10, 51, 26, 0.9), transparent 60%);
-        }
-      }
-    }
-
-    &-stat {
-      position: absolute;
-      left: 1.25rem;
-      bottom: 1rem;
-      z-index: 2;
-
-      strong {
-        display: block;
-        font-size: $font-size-2xl;
-        font-weight: $font-weight-extrabold;
-        color: #ffffff;
-      }
-
-      span {
-        font-size: $font-size-xs;
-        font-weight: $font-weight-semibold;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: rgba(255, 255, 255, 0.7);
-      }
+      gap: 1rem;
     }
   }
 
-  // Steam animation on hero caption
-  &__steam {
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
+  &__scroll-cue {
+    display: none;
+    pointer-events: none;
+    margin-top: 4rem;
+    flex-direction: column;
+    align-items: center;
     gap: 0.25rem;
-    height: 1.5rem;
-    width: 2.5rem;
+    animation: qatind-bounce 2s ease-in-out infinite;
+
+    @include sm {
+      display: flex;
+    }
 
     span {
-      width: 3px;
-      border-radius: $border-radius-full;
-      background: rgba(242, 146, 26, 0.7);
-      animation: services-steam 3.2s ease-in infinite;
-
-      &:nth-child(1) {
-        height: 0.75rem;
-      }
-
-      &:nth-child(2) {
-        height: 1rem;
-        animation-delay: 0.8s;
-      }
-
-      &:nth-child(3) {
-        height: 0.75rem;
-        animation-delay: 1.6s;
-      }
+      font-size: 0.625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: var(--color-cocoa);
     }
   }
 
-  @keyframes services-steam {
-    0% {
-      transform: translateY(0) scale(1);
-      opacity: 0.5;
-    }
-
-    100% {
-      transform: translateY(-46px) scale(1.5);
-      opacity: 0;
-    }
-  }
-
-  // -----------------------------------------------------------------
+  // -------------------------------------------------------------------
   // 2. Marquee (dual direction)
-  // -----------------------------------------------------------------
+  // -------------------------------------------------------------------
   &__ticker {
     position: relative;
     overflow: hidden;
-    background: #241608;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(36, 22, 8, 0.08);
+    border-bottom: 1px solid rgba(36, 22, 8, 0.08);
+    background: var(--color-espresso);
 
     &-row {
       display: flex;
       width: max-content;
-      padding: 0.6rem 0;
+      padding: 0.625rem 0;
 
       &--a {
-        animation: services-marquee 30s linear infinite;
+        animation: qatind-marquee 30s linear infinite;
       }
 
       &--b {
-        animation: services-marquee-rev 34s linear infinite;
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        animation: none;
+        animation: qatind-marquee-rev 34s linear infinite;
       }
     }
 
@@ -431,60 +315,44 @@
       gap: 0.75rem;
       margin: 0 1.25rem;
       white-space: nowrap;
-      font-size: $font-size-sm;
-      font-weight: $font-weight-bold;
+      font-size: 0.875rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.2em;
       color: rgba(255, 255, 255, 0.9);
+    }
 
-      &::after {
-        content: '';
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: $color-saffron;
-      }
+    &-item-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-saffron);
     }
   }
 
-  @keyframes services-marquee {
-    from {
-      transform: translateX(0);
-    }
-
-    to {
-      transform: translateX(-50%);
-    }
-  }
-
-  @keyframes services-marquee-rev {
-    from {
-      transform: translateX(-50%);
-    }
-
-    to {
-      transform: translateX(0);
-    }
-  }
-
-  // -----------------------------------------------------------------
+  // -------------------------------------------------------------------
   // 3. Food journey — "One Kitchen. Many Occasions."
-  // -----------------------------------------------------------------
+  // -------------------------------------------------------------------
   &__journey {
-    padding: clamp(4rem, 6vw, 6rem) 0;
+    position: relative;
+    padding: 6rem 1.5rem;
+
+    @include lg {
+      padding: 6rem 2.5rem;
+    }
+
+    &-heading {
+      max-width: 48rem;
+    }
 
     &-grid {
-      margin-top: $spacing-3xl;
+      margin-top: 4rem;
       display: grid;
       gap: 1px;
       overflow: hidden;
       border-radius: 1.5rem;
       border: 1px solid rgba(36, 22, 8, 0.1);
       background: rgba(36, 22, 8, 0.1);
-
-      @include sm-up {
-        grid-template-columns: repeat(2, 1fr);
-      }
 
       @include md {
         grid-template-columns: repeat(4, 1fr);
@@ -493,67 +361,87 @@
 
     &-card {
       position: relative;
-      min-height: 280px;
       display: flex;
+      min-height: 280px;
       flex-direction: column;
       justify-content: space-between;
-      background: #fbf2e3;
-      padding: $spacing-xl;
-      transition: background $transition-base;
+      background: var(--color-cream);
+      padding: 1.75rem;
+      transition: background-color 0.3s;
 
       &:hover {
-        background: #ffffff;
+        background: #fff;
       }
 
-      &-num {
-        font-size: 3rem;
-        font-weight: $font-weight-extrabold;
-        color: rgba(36, 22, 8, 0.1);
-        transition: color $transition-base;
+      &-icon {
+        display: flex;
+        height: 3.5rem;
+        width: 3.5rem;
+        align-items: center;
+        justify-content: center;
+        border-radius: 1rem;
+        border: 1px solid rgba(242, 146, 26, 0.3);
+        background: rgba(242, 146, 26, 0.15);
+        color: var(--color-red);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        transition: background 0.3s, color 0.3s;
+
+        svg {
+          font-size: 1.5rem;
+        }
       }
 
-      &:hover &-num {
-        color: rgba(242, 146, 26, 0.3);
+      &:hover &-icon {
+        background: var(--color-red);
+        color: #fff;
       }
 
       &-label {
-        margin-top: 0.5rem;
-        font-size: $font-size-xs;
-        font-weight: $font-weight-bold;
+        margin-top: 1rem;
+        font-size: 0.75rem;
+        font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.25em;
-        color: $color-red;
+        color: var(--color-red);
       }
 
       h3 {
-        margin-top: $spacing-md;
-        font-size: $font-size-xl;
-        font-weight: $font-weight-extrabold;
-        color: #241608;
+        font-size: 1.25rem;
+        font-weight: 900;
+        color: var(--color-espresso);
       }
 
       p {
         margin-top: 0.5rem;
-        font-size: $font-size-sm;
-        line-height: $line-height-relaxed;
-        color: #5b4636;
+        font-size: 0.875rem;
+        line-height: 1.5rem;
+        color: var(--color-cocoa);
       }
     }
   }
 
-  // -----------------------------------------------------------------
-  // 4. Interactive service menu (signature element)
-  // -----------------------------------------------------------------
+  // -------------------------------------------------------------------
+  // 4. Interactive service menu
+  // -------------------------------------------------------------------
   &__menu {
-    padding: clamp(4rem, 6vw, 6rem) 0;
-    background: #ffffff;
+    position: relative;
+    background: #fff;
+    padding: 6rem 1.5rem;
+
+    @include lg {
+      padding: 6rem 2.5rem;
+    }
+
+    &-heading {
+      max-width: 42rem;
+    }
 
     &-layout {
-      margin-top: $spacing-3xl;
+      margin-top: 3.5rem;
       display: grid;
-      gap: $spacing-2xl;
+      gap: 2.5rem;
 
-      @include lg-up {
+      @include lg {
         grid-template-columns: 0.34fr 0.66fr;
         align-items: stretch;
       }
@@ -565,7 +453,7 @@
       border-top: 1px solid rgba(36, 22, 8, 0.1);
       border-bottom: 1px solid rgba(36, 22, 8, 0.1);
 
-      @include lg-up {
+      @include lg {
         border: none;
       }
     }
@@ -575,55 +463,62 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: $spacing-md;
-      padding: $spacing-lg 0;
+      gap: 1rem;
+      padding: 1.25rem 0;
       background: transparent;
       border: none;
       border-bottom: 1px solid rgba(36, 22, 8, 0.1);
       text-align: left;
       cursor: pointer;
 
-      @include lg-up {
+      @include lg {
         &:last-child {
           border-bottom: none;
         }
       }
 
+      &-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
       &-num {
-        font-size: $font-size-xs;
-        font-weight: $font-weight-bold;
+        font-size: 0.75rem;
+        font-weight: 700;
         letter-spacing: 0.1em;
-        color: #5b4636;
-        margin-right: $spacing-md;
+        transition: color 0.2s;
       }
 
       &-label {
-        font-size: $font-size-xl;
-        font-weight: $font-weight-extrabold;
-        color: rgba(91, 70, 54, 0.7);
-        transition: color $transition-fast;
+        font-size: 1.25rem;
+        font-weight: 900;
+        color: rgba(36, 22, 8, 0.6);
+        transition: color 0.2s;
 
-        @include sm-up {
-          font-size: $font-size-2xl;
+        @include sm {
+          font-size: 1.5rem;
         }
       }
 
-      &:hover &-label {
-        color: #241608;
-      }
-
+      &:hover &-label,
       &.is-active &-label {
-        color: #241608;
+        color: var(--color-espresso);
       }
 
       &-arrow {
-        font-size: $font-size-2xl;
+        flex-shrink: 0;
+        font-size: 1.5rem;
         opacity: 0;
         transform: translateX(-8px);
-        transition: all $transition-fast;
+        transition: all 0.2s;
       }
 
-      &:hover &-arrow,
+      &:hover &-arrow {
+        opacity: 0.6;
+        transform: translateX(0);
+      }
+
       &.is-active &-arrow {
         opacity: 1;
         transform: translateX(0);
@@ -643,7 +538,7 @@
       min-height: 520px;
       overflow: hidden;
       border-radius: 2rem;
-      background: #241608;
+      background: var(--color-espresso);
 
       &-media {
         position: absolute;
@@ -654,162 +549,89 @@
           height: 100%;
           object-fit: cover;
         }
+      }
 
-        &::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, #241608, rgba(36, 22, 8, 0.55) 55%, transparent);
-        }
+      &-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, var(--color-espresso), rgba(36, 22, 8, 0.55) 55%, transparent);
       }
 
       &-content {
         position: relative;
-        z-index: 2;
+        z-index: 10;
         display: flex;
+        height: 100%;
+        min-height: 520px;
         flex-direction: column;
         justify-content: flex-end;
-        min-height: 520px;
-        padding: $spacing-2xl;
+        padding: 2rem;
 
-        @include sm-up {
-          padding: $spacing-3xl;
+        @include sm {
+          padding: 2.5rem;
+        }
+
+        h3 {
+          max-width: 32rem;
+          font-size: 1.5rem;
+          font-weight: 900;
+          line-height: 1.25;
+          color: #fff;
+
+          @include sm {
+            font-size: 1.875rem;
+          }
+        }
+
+        p {
+          margin-top: 0.75rem;
+          max-width: 32rem;
+          font-size: 0.875rem;
+          line-height: 1.75rem;
+          color: rgba(255, 255, 255, 0.75);
         }
       }
 
       &-tag {
+        margin-bottom: 1rem;
         display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
         width: fit-content;
-        padding: 0.4rem 0.9rem;
-        border-radius: $border-radius-full;
-        font-size: $font-size-xs;
-        font-weight: $font-weight-bold;
-        color: #241608;
-        margin-bottom: $spacing-md;
-      }
+        align-items: center;
+        gap: 0.5rem;
+        border-radius: 9999px;
+        padding: 0.375rem 0.875rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--color-espresso);
 
-      h3 {
-        max-width: 32rem;
-        font-size: $font-size-2xl;
-        font-weight: $font-weight-extrabold;
-        line-height: 1.15;
-        color: #ffffff;
-
-        @include sm-up {
-          font-size: 1.9rem;
+        svg {
+          font-size: 0.875rem;
         }
       }
 
-      p {
-        margin-top: $spacing-sm;
-        max-width: 32rem;
-        font-size: $font-size-sm;
-        line-height: $line-height-relaxed;
-        color: rgba(255, 255, 255, 0.75);
-      }
-
       &-tags {
+        margin-top: 1.25rem;
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
-        margin-top: $spacing-lg;
 
         span {
-          padding: 0.4rem 0.9rem;
-          border-radius: $border-radius-full;
-          font-size: $font-size-xs;
-          font-weight: $font-weight-semibold;
-          color: #ffffff;
-          background: rgba(255, 255, 255, 0.1);
+          border-radius: 9999px;
           border: 1px solid rgba(255, 255, 255, 0.2);
+          background: rgba(255, 255, 255, 0.1);
+          padding: 0.375rem 0.875rem;
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: #fff;
           backdrop-filter: blur(6px);
         }
       }
     }
   }
 
-  // -----------------------------------------------------------------
-  // 5. "What are you planning?" — occasion directory
-  // -----------------------------------------------------------------
-  &__occasions {
-    padding: clamp(4rem, 6vw, 6rem) 0;
-
-    &-list {
-      margin-top: $spacing-2xl;
-      border-top: 1px solid rgba(36, 22, 8, 0.1);
-      border-bottom: 1px solid rgba(36, 22, 8, 0.1);
-    }
-
-    &-row {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      overflow: hidden;
-      padding: $spacing-lg 0;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(36, 22, 8, 0.1);
-
-      &:last-child {
-        border-bottom: none;
-      }
-
-      &-label {
-        display: flex;
-        align-items: center;
-        gap: $spacing-md;
-        font-size: $font-size-2xl;
-        font-weight: $font-weight-extrabold;
-        letter-spacing: -0.01em;
-        color: #241608;
-        transition: color $transition-fast;
-
-        @include sm-up {
-          font-size: $font-size-3xl;
-        }
-
-        svg {
-          color: $color-green;
-        }
-      }
-
-      &:hover &-label {
-        color: $color-red;
-      }
-
-      &-arrow {
-        position: relative;
-        z-index: 2;
-        font-size: $font-size-2xl;
-        color: rgba(36, 22, 8, 0.4);
-        transition: all $transition-fast;
-      }
-
-      &:hover &-arrow {
-        color: $color-red;
-        transform: translate(4px, -4px);
-      }
-
-      &-preview {
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 12rem;
-        height: 7rem;
-        border-radius: 1rem;
-        object-fit: cover;
-        box-shadow: $shadow-xl;
-        pointer-events: none;
-      }
-    }
-  }
-
-  // -----------------------------------------------------------------
-  // 6. Immersive full-bleed story section
-  // -----------------------------------------------------------------
+  // -------------------------------------------------------------------
+  // 5. Immersive full-bleed story section
+  // -------------------------------------------------------------------
   &__story {
     position: relative;
     height: 70vh;
@@ -832,31 +654,37 @@
     &-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(36, 22, 8, 0.85), rgba(36, 22, 8, 0.3) 60%, rgba(36, 22, 8, 0.5));
+      background: linear-gradient(to top, rgba(36, 22, 8, 0.95), rgba(36, 22, 8, 0.6) 55%, rgba(36, 22, 8, 0.8));
     }
 
     &-inner {
       position: relative;
-      z-index: 2;
-      height: 100%;
+      z-index: 10;
       display: flex;
+      height: 100%;
       flex-direction: column;
       justify-content: space-between;
-      padding: $spacing-2xl $spacing-md;
+      padding: 3.5rem 1.5rem;
 
-      @include md {
-        padding-left: $spacing-xl;
-        padding-right: $spacing-xl;
+      @include lg {
+        padding: 3.5rem 2.5rem;
       }
     }
 
     &-title {
-      max-width: 46rem;
-      font-size: clamp(2rem, 5vw, 3.8rem);
-      font-weight: $font-weight-extrabold;
+      max-width: 48rem;
+      font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+      font-weight: 900;
       line-height: 1.02;
       letter-spacing: -0.02em;
-      color: #ffffff;
+      color: #fff;
+
+      &-highlight {
+        background: linear-gradient(90deg, var(--color-saffron), #ffb74d, var(--color-red));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
     }
 
     &-labels {
@@ -866,156 +694,359 @@
     }
 
     &-label {
-      padding: 0.5rem 1rem;
-      border-radius: $border-radius-full;
+      border-radius: 9999px;
       border: 1px solid rgba(255, 255, 255, 0.25);
       background: rgba(255, 255, 255, 0.1);
-      font-size: $font-size-xs;
-      font-weight: $font-weight-bold;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: #ffffff;
+      color: #fff;
       backdrop-filter: blur(6px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
   }
 
-  // -----------------------------------------------------------------
-  // 7. Process — vertical "behind the plate" timeline
-  // -----------------------------------------------------------------
+  // -------------------------------------------------------------------
+  // 6. Curved process — winding path + circular step bubbles
+  // -------------------------------------------------------------------
   &__process {
-    padding: clamp(4rem, 6vw, 6rem) 0;
-    background: #ffffff;
-
-    &-timeline {
-      position: relative;
-      margin-top: $spacing-2xl;
-      padding-left: 2.5rem;
-
-      @include sm-up {
-        padding-left: 3.5rem;
-      }
-    }
-
-    &-rail {
-      position: absolute;
-      top: 0;
-      left: 0.75rem;
-      width: 2px;
-      height: 100%;
-      background: rgba(36, 22, 8, 0.1);
-
-      @include sm-up {
-        left: 1.25rem;
-      }
-    }
-
-    &-rail-fill {
-      position: absolute;
-      top: 0;
-      left: 0.75rem;
-      width: 2px;
-      background: linear-gradient(to bottom, $color-red, $color-saffron, $color-green);
-      transform-origin: top;
-
-      @include sm-up {
-        left: 1.25rem;
-      }
-    }
-
-    &-steps {
-      display: flex;
-      flex-direction: column;
-      gap: $spacing-2xl;
-    }
-
-    &-step {
-      position: relative;
-      display: grid;
-      gap: $spacing-md;
-      align-items: center;
-
-      @include sm-up {
-        grid-template-columns: auto 1fr 180px;
-      }
-
-      &-dot {
-        position: absolute;
-        top: 0.25rem;
-        left: -2.5rem;
-        width: 1.5rem;
-        height: 1.5rem;
-        border-radius: 50%;
-        border: 4px solid #fbf2e3;
-        background: $color-green;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #ffffff;
-        font-size: 0.6rem;
-
-        @include sm-up {
-          left: -3.5rem;
-        }
-      }
-
-      &-num {
-        font-size: 2.5rem;
-        font-weight: $font-weight-extrabold;
-        color: rgba(36, 22, 8, 0.1);
-
-        @include sm-up {
-          font-size: 3rem;
-        }
-      }
-
-      h3 {
-        font-size: $font-size-xl;
-        font-weight: $font-weight-extrabold;
-        color: #241608;
-
-        @include sm-up {
-          font-size: $font-size-2xl;
-        }
-      }
-
-      p {
-        margin-top: 0.5rem;
-        max-width: 26rem;
-        font-size: $font-size-sm;
-        line-height: $line-height-relaxed;
-        color: #5b4636;
-      }
-
-      &-media {
-        display: none;
-        border-radius: 1rem;
-        overflow: hidden;
-
-        @include sm-up {
-          display: block;
-        }
-
-        img {
-          width: 100%;
-          height: 7rem;
-          object-fit: cover;
-        }
-      }
-    }
-  }
-
-  // -----------------------------------------------------------------
-  // 8. Quality — dark editorial section (numbered pillars)
-  // -----------------------------------------------------------------
-  &__quality {
     position: relative;
     overflow: hidden;
-    padding: clamp(4rem, 6vw, 6rem) 0;
-    background: linear-gradient(150deg, #0a331a 0%, #146c36 55%, #184228 100%);
-    color: #ffffff;
+    background: #fff;
+    padding: 6rem 1.5rem;
+
+    @include lg {
+      padding: 6rem 2.5rem;
+    }
 
     &-glow {
       position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+
+      &--saffron {
+        left: 0;
+        top: 33%;
+        width: 500px;
+        height: 500px;
+        background: rgba(242, 146, 26, 0.06);
+        filter: blur(180px);
+      }
+
+      &--green {
+        bottom: 0;
+        right: 0;
+        width: 420px;
+        height: 420px;
+        background: rgba(20, 108, 54, 0.06);
+        filter: blur(160px);
+      }
+    }
+
+    &-container {
+      max-width: 56rem;
+      margin: 0 auto;
+    }
+
+    &-canvas {
+      position: relative;
+      margin-top: 4rem;
+    }
+
+    &-svg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      height: 100%;
+      width: 100%;
+    }
+
+    // Single step row (dynamic top/height set inline per step)
+    &-step-row {
+      position: absolute;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    &-step-bubble {
+      position: absolute;
+      z-index: 10;
+    }
+
+    &-step-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+    }
+
+    &-step-border {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+    }
+
+    &-step-image-wrap {
+      position: absolute;
+      inset: 4px;
+      overflow: hidden;
+      border-radius: 50%;
+    }
+
+    &-step-image {
+      height: 118%;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    &-step-vignette {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      box-shadow: inset 0 0 36px rgba(36, 22, 8, 0.3);
+    }
+
+    &-step-text {
+      position: absolute;
+      z-index: 5;
+      max-width: 36%;
+
+      &--left {
+        right: 0;
+        text-align: left;
+      }
+
+      &--right {
+        left: 0;
+        text-align: right;
+      }
+    }
+
+    &-step-num {
+      font-size: 2.6rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    &-step-title {
+      margin-top: 0.375rem;
+      font-size: 1.25rem;
+      font-weight: 900;
+      line-height: 1.375;
+      color: var(--color-espresso);
+
+      @include sm {
+        font-size: 1.5rem;
+      }
+    }
+
+    &-step-copy {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      line-height: 1.75rem;
+      color: var(--color-cocoa);
+    }
+
+    &-step-chip {
+      margin-top: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-radius: 9999px;
+      padding: 0.375rem 0.875rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+
+      &--reverse {
+        flex-direction: row-reverse;
+      }
+
+      svg {
+        flex-shrink: 0;
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------
+  // 7. Food showcase — tilted overlapping slider
+  // -------------------------------------------------------------------
+  &__showcase {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-cream);
+    padding: 6rem 1.5rem;
+
+    @include lg {
+      padding: 6rem 2.5rem;
+    }
+
+    &-header {
+      max-width: 80rem;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    &-slider {
+      position: relative;
+      margin-top: 4rem;
+      display: flex;
+      height: 380px;
+      align-items: center;
+      justify-content: center;
+
+      @include sm {
+        height: 440px;
+      }
+    }
+
+    &-plate {
+      position: absolute;
+      height: 300px;
+      width: 220px;
+      overflow: hidden;
+      border-radius: 1.75rem;
+      cursor: grab;
+      box-shadow: 0 30px 60px -20px rgba(43, 27, 14, 0.35);
+
+      &:active {
+        cursor: grabbing;
+      }
+
+      @include sm {
+        height: 360px;
+        width: 270px;
+      }
+
+      img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      &-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(36, 22, 8, 0.25);
+      }
+    }
+
+    &-controls {
+      position: relative;
+      z-index: 20;
+      margin: 2rem auto 0;
+      display: flex;
+      max-width: 28rem;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    &-nav-btn {
+      display: flex;
+      height: 2.75rem;
+      width: 2.75rem;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 1px solid rgba(36, 22, 8, 0.15);
+      background: #fff;
+      color: var(--color-espresso);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      transition: border-color 0.2s;
+      cursor: pointer;
+
+      &:hover {
+        border-color: rgba(20, 108, 54, 0.4);
+      }
+
+      svg {
+        font-size: 1.25rem;
+      }
+    }
+
+    &-label {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      justify-content: center;
+      gap: 0.625rem;
+      border-radius: 9999px;
+      background: rgba(20, 108, 54, 0.1);
+      padding: 0.625rem 1.25rem;
+      text-align: center;
+    }
+
+    &-dot-wrap {
+      position: relative;
+      display: flex;
+      height: 0.625rem;
+      width: 0.625rem;
+      flex-shrink: 0;
+    }
+
+    &-dot-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid var(--color-green);
+    }
+
+    &-dot {
+      height: 0.625rem;
+      width: 0.625rem;
+      border-radius: 50%;
+      background: var(--color-green);
+    }
+
+    &-name {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--color-green);
+    }
+
+    &-pagination {
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+
+      &-dot {
+        height: 0.375rem;
+        border-radius: 9999px;
+        border: none;
+        transition: all 0.2s;
+        cursor: pointer;
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------
+  // 8. Quality pillars — dark editorial section
+  // -------------------------------------------------------------------
+  &__quality {
+    position: relative;
+    overflow: hidden;
+    padding: 6rem 1.5rem;
+    background: linear-gradient(150deg, #0a331a 0%, var(--color-green) 55%, #184228 100%);
+
+    @include lg {
+      padding: 6rem 2.5rem;
+    }
+
+    &-grain {
+      opacity: 0.4;
+    }
+
+    &-glow {
+      position: absolute;
+      pointer-events: none;
       top: 0;
       right: -5rem;
       width: 320px;
@@ -1023,28 +1054,37 @@
       border-radius: 50%;
       background: rgba(242, 146, 26, 0.2);
       filter: blur(130px);
-      pointer-events: none;
+    }
+
+    &-inner {
+      position: relative;
+      max-width: 80rem;
+      margin: 0 auto;
+    }
+
+    &-heading {
+      max-width: 48rem;
     }
 
     &-grid {
-      position: relative;
-      z-index: 2;
-      margin-top: $spacing-3xl;
+      margin-top: 4rem;
       display: grid;
-      gap: $spacing-2xl $spacing-xl;
+      gap: 3rem 2rem;
 
-      @include sm-up {
+      @include sm {
         grid-template-columns: repeat(2, 1fr);
       }
 
-      @include lg-up {
+      @include lg {
         grid-template-columns: repeat(3, 1fr);
       }
     }
 
     &-pillar {
-      padding-top: $spacing-lg;
+      border-radius: 1rem;
       border-top: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.03);
+      padding: 1.5rem;
 
       &-top {
         display: flex;
@@ -1053,287 +1093,107 @@
       }
 
       &-num {
-        font-size: $font-size-2xl;
-        font-weight: $font-weight-extrabold;
+        font-size: 2.25rem;
+        font-weight: 900;
         color: rgba(255, 255, 255, 0.2);
       }
 
       &-icon {
-        font-size: $font-size-xl;
-        color: $color-saffron;
+        font-size: 1.25rem;
+        color: var(--color-saffron);
       }
 
       &-label {
-        margin-top: $spacing-md;
-        font-size: $font-size-xs;
-        font-weight: $font-weight-bold;
+        margin-top: 1rem;
+        font-size: 0.75rem;
+        font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.25em;
-        color: $color-saffron;
+        color: var(--color-saffron);
       }
 
       h3 {
         margin-top: 0.25rem;
-        font-size: $font-size-lg;
-        font-weight: $font-weight-extrabold;
-        color: #ffffff;
+        font-size: 1.125rem;
+        font-weight: 900;
+        color: #fff;
       }
 
       p {
         margin-top: 0.5rem;
-        font-size: $font-size-sm;
-        line-height: $line-height-relaxed;
+        font-size: 0.875rem;
+        line-height: 1.5rem;
         color: rgba(255, 255, 255, 0.7);
       }
     }
   }
+}
 
-  // -----------------------------------------------------------------
-  // 9. FAQ — two-column editorial
-  // -----------------------------------------------------------------
-  &__faq {
-    padding: clamp(4rem, 6vw, 6rem) 0;
-    background: #ffffff;
-
-    &-layout {
-      display: grid;
-      gap: $spacing-2xl;
-
-      @include lg-up {
-        grid-template-columns: 0.4fr 0.6fr;
-      }
-    }
-
-    &-intro {
-      p.services-page__faq-note {
-        margin-top: $spacing-md;
-        max-width: 22rem;
-        font-size: $font-size-sm;
-        line-height: $line-height-relaxed;
-        color: #5b4636;
-      }
-
-      &-call {
-        margin-top: $spacing-lg;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: $font-size-sm;
-        font-weight: $font-weight-bold;
-        color: $color-red;
-        text-decoration: none;
-      }
-    }
-
-    &-list {
-      display: flex;
-      flex-direction: column;
-      gap: $spacing-sm;
-    }
-
-    &-item {
-      overflow: hidden;
-      border-radius: $border-radius-lg;
-      border: 1px solid rgba(36, 22, 8, 0.1);
-      background: #fbf2e3;
-      transition: border-color $transition-fast;
-
-      &:hover {
-        border-color: rgba(242, 146, 26, 0.4);
-      }
-
-      &-question {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: $spacing-md;
-        padding: $spacing-lg $spacing-xl;
-        background: transparent;
-        border: none;
-        text-align: left;
-        font-size: $font-size-base;
-        font-weight: $font-weight-bold;
-        color: #241608;
-        cursor: pointer;
-
-        .plus-icon {
-          flex-shrink: 0;
-          font-size: 1.4rem;
-          line-height: 1;
-          color: $color-red;
-          transition: transform $transition-base;
-        }
-
-        &.is-open .plus-icon {
-          transform: rotate(45deg);
-        }
-      }
-
-      &-answer {
-        padding: 0 $spacing-xl $spacing-lg;
-        font-size: $font-size-sm;
-        line-height: $line-height-relaxed;
-        color: #5b4636;
-      }
-    }
+// -----------------------------------------------------------------------
+// Keyframes
+// -----------------------------------------------------------------------
+@keyframes qatind-marquee {
+  from {
+    transform: translateX(0);
   }
 
-  // -----------------------------------------------------------------
-  // 10. Final CTA
-  // -----------------------------------------------------------------
-  &__cta {
-    position: relative;
-    overflow: hidden;
-    padding: clamp(4rem, 6vw, 6rem) $spacing-md;
-    background: linear-gradient(150deg, #0a331a 0%, #146c36 55%, #184228 100%);
-    color: #ffffff;
+  to {
+    transform: translateX(-50%);
+  }
+}
 
-    @include md {
-      padding-left: $spacing-xl;
-      padding-right: $spacing-xl;
-    }
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 5px;
-      background: linear-gradient(90deg, $color-red 0%, $color-saffron 50%, $color-green 100%);
-    }
-
-    &-glow {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(130px);
-      pointer-events: none;
-
-      &--saffron {
-        left: 25%;
-        top: 0;
-        width: 280px;
-        height: 280px;
-        background: rgba(242, 146, 26, 0.18);
-      }
-
-      &--red {
-        bottom: 0;
-        right: 2.5rem;
-        width: 240px;
-        height: 240px;
-        background: rgba(192, 57, 43, 0.18);
-      }
-    }
-
-    &-layout {
-      position: relative;
-      z-index: 2;
-      max-width: $breakpoint-xl;
-      margin: 0 auto;
-      display: grid;
-      gap: $spacing-2xl;
-      align-items: center;
-
-      @include lg-up {
-        grid-template-columns: 0.6fr 0.4fr;
-      }
-    }
-
-    &-tag {
-      font-size: $font-size-xs;
-      font-weight: $font-weight-bold;
-      text-transform: uppercase;
-      letter-spacing: 0.3em;
-      color: $color-saffron;
-    }
-
-    h2 {
-      margin-top: $spacing-md;
-      font-size: clamp(2.2rem, 5vw, 4rem);
-      font-weight: $font-weight-extrabold;
-      line-height: 1.02;
-      letter-spacing: -0.02em;
-      color: #ffffff;
-    }
-
-    p {
-      margin-top: $spacing-md;
-      max-width: 32rem;
-      font-size: $font-size-base;
-      line-height: $line-height-relaxed;
-      color: rgba(255, 255, 255, 0.75);
-    }
-
-    &-actions {
-      margin-top: $spacing-xl;
-      display: flex;
-      flex-wrap: wrap;
-      gap: $spacing-md;
-    }
-
-    &-media {
-      position: relative;
-
-      &-frame {
-        overflow: hidden;
-        border-radius: 2rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: $shadow-xl;
-
-        img {
-          width: 100%;
-          height: 18rem;
-          object-fit: cover;
-        }
-      }
-
-      &-badge {
-        position: absolute;
-        bottom: -1.25rem;
-        left: -1.25rem;
-        border-radius: $border-radius-lg;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(14px);
-        padding: 1rem 1.25rem;
-
-        @include mobile {
-          display: none;
-        }
-
-        span {
-          display: block;
-          font-size: $font-size-xs;
-          font-weight: $font-weight-semibold;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          color: rgba(255, 255, 255, 0.6);
-        }
-
-        strong {
-          display: block;
-          font-size: $font-size-sm;
-          font-weight: $font-weight-bold;
-          color: #ffffff;
-        }
-      }
-    }
+@keyframes qatind-marquee-rev {
+  from {
+    transform: translateX(-50%);
   }
 
-  // -----------------------------------------------------------------
-  // Reduced motion
-  // -----------------------------------------------------------------
-  @media (prefers-reduced-motion: reduce) {
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes qatind-steam {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateY(-46px) scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes qatind-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: translateY(10px);
+    opacity: 1;
+  }
+}
+
+// -----------------------------------------------------------------------
+// Reduced motion
+// -----------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .services-page {
 
     &__ticker-row,
-    &__steam span {
+    &__scroll-cue {
       animation: none !important;
     }
 
-    &__hero-media-float {
+    &__tilt {
       transform: none !important;
+    }
+
+    &__shine::after {
+      display: none;
     }
   }
 }

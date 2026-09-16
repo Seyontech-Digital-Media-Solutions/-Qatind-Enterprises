@@ -3,9 +3,11 @@ import {
   motion,
   AnimatePresence,
   useScroll,
-  useTransform,
   useSpring,
+  useTransform,
+  useMotionValue,
   useReducedMotion,
+  useInView,
 } from 'framer-motion'
 import {
   RiArrowRightLine,
@@ -20,8 +22,8 @@ import {
   RiInstagramLine,
   RiFacebookCircleLine,
   RiStarFill,
-  RiTeamLine,
   RiHeart2Line,
+  RiArrowDownLine,
 } from 'react-icons/ri'
 import { FiPhone, FiClock, FiUsers } from 'react-icons/fi'
 import { BsShieldCheck, BsPatchCheck } from 'react-icons/bs'
@@ -31,50 +33,50 @@ import { MdDeliveryDining, MdOutlineRestaurantMenu } from 'react-icons/md'
 import MouseGlowCursor from '../components/common/MouseGlowCursor'
 import MagneticButton from '../components/animations/MagneticButton'
 
-/* =====================================================================
-   QATIND ENTERPRISES — ULTRA MODERN & TRENDING CONTACT PAGE
-===================================================================== */
+import '../styles/ContactPage.scss'
+
+const img = (path) => `${import.meta.env.BASE_URL}${path}`
 
 const contactChannels = [
   {
     id: 'call',
-    label: 'Call Us Direct',
+    label: 'Call Direct',
     value: '+91 73054 61104',
-    sub: 'Mon – Sun, 8:00 AM – 9:00 PM',
-    badge: 'Immediate Response',
+    sub: 'Mon – Sun · 8 AM – 9 PM',
+    badge: 'Instant',
     icon: RiPhoneLine,
     href: 'tel:+917305461104',
-    accent: '#C0392B',
+    accent: 'red',
   },
   {
     id: 'whatsapp',
-    label: 'WhatsApp Kitchen',
-    value: 'Message Our Chef',
-    sub: 'Fastest way to get custom quote',
-    badge: '⚡ Under 15 Mins',
+    label: 'WhatsApp',
+    value: 'Message the Kitchen',
+    sub: 'Fastest path to a custom quote',
+    badge: '⚡ 15 min reply',
     icon: RiWhatsappLine,
     href: 'https://wa.me/917305461104',
-    accent: '#146C36',
+    accent: 'green',
   },
   {
     id: 'email',
-    label: 'Email Concierge',
+    label: 'Email',
     value: 'hello@qatind.com',
-    sub: 'Detailed menu proposals & bids',
-    badge: 'Same-Day Proposal',
+    sub: 'Detailed proposals & bids',
+    badge: 'Quik Response',
     icon: RiMailLine,
     href: 'mailto:hello@qatind.com',
-    accent: '#F2921A',
+    accent: 'saffron',
   },
   {
     id: 'visit',
-    label: 'Kitchen & Tasting',
+    label: 'Visit & Taste',
     value: 'Madambakkam, Tamil Nadu',
-    sub: 'By appointment for live tastings',
-    badge: 'Tasting Sessions',
+    sub: 'Live tastings by appointment',
+    badge: 'Live Tastings',
     icon: RiMapPin2Line,
     href: 'https://maps.google.com/?q=Qatind+Enterprises+Vellore',
-    accent: '#C0392B',
+    accent: 'red',
   },
 ]
 
@@ -85,77 +87,351 @@ const occasionOptions = [
   { id: 'school', label: 'School / College Canteen', icon: LuUtensilsCrossed },
   { id: 'wedding', label: 'Wedding & Reception Feast', icon: RiHeart2Line },
   { id: 'party', label: 'Party & Celebration', icon: RiSparklingLine },
-  { id: 'hampers', label: 'Festive & Corporate Gift Hampers', icon: MdOutlineRestaurantMenu },
-  { id: 'custom', label: 'Custom Catering Requirement', icon: MdDeliveryDining },
+  { id: 'hampers', label: 'Festive & Corporate Hampers', icon: MdOutlineRestaurantMenu },
+  { id: 'custom', label: 'Custom Requirement', icon: MdDeliveryDining },
 ]
 
 const stats = [
-  { label: 'Meals Delivered Daily', value: '10,000+', icon: MdDeliveryDining, accent: '#F2921A' },
-  { label: 'On-Time Scheduled Delivery', value: '99.8%', icon: FiClock, accent: '#146C36' },
-  { label: 'Customer Satisfaction', value: '4.9 / 5', icon: RiStarFill, accent: '#C0392B' },
-  { label: 'Separate Veg/Non-Veg Lines', value: '100%', icon: BsPatchCheck, accent: '#F2921A' },
+  { label: 'Meals Daily', value: '10,000+', icon: MdDeliveryDining, accent: 'saffron' },
+  { label: 'On-Time Rate', value: '99.8%', icon: FiClock, accent: 'green' },
+  { label: 'Satisfaction', value: '4.9 / 5', icon: RiStarFill, accent: 'red' },
+  { label: 'Veg/Non-Veg Lines', value: '100%', icon: BsPatchCheck, accent: 'saffron' },
 ]
 
 const officeHours = [
-  { day: 'Monday – Friday', time: '8:00 AM – 9:00 PM', status: 'Open Now' },
-  { day: 'Saturday', time: '8:00 AM – 9:00 PM', status: 'Open Now' },
-  { day: 'Sunday', time: '9:00 AM – 6:00 PM', status: 'Active Dispatch' },
+  { day: 'Monday – Friday', time: '8:00 AM – 9:00 PM', active: true },
+  { day: 'Saturday', time: '8:00 AM – 9:00 PM', active: true },
+  { day: 'Sunday', time: '9:00 AM – 6:00 PM', active: false },
 ]
 
 const showcaseCards = [
   {
     title: 'Corporate & Office Feasts',
     tag: 'Daily Delivery',
-    img: '/Services/CorporateEvents.jpg',
-    accent: '#C0392B',
+    img: img('Services/CorporateEvents.jpg'),
+    accent: 'red',
+    desc: 'Hot, hygienic, on-time — every day for 500 to 5,000 employees.',
   },
   {
-    title: 'Weddings & Celebrations',
+    title: 'Weddings & Grand Celebrations',
     tag: 'Grand Feasts',
-    img: '/Services/WeddingCatering.png',
-    accent: '#F2921A',
+    img: img('Services/WeddingCatering.png'),
+    accent: 'saffron',
+    desc: 'Live counters, elaborate spreads, curated menus for life\'s biggest moments.',
   },
   {
     title: 'Freshly Prepared & Sealed',
-    tag: 'Hygiene Assured',
-    img: '/Services/prepareFood.webp',
-    accent: '#146C36',
+    tag: 'Hygiene First',
+    img: img('Services/prepareFood.webp'),
+    accent: 'green',
+    desc: 'FSSAI certified prep lines — separate veg / non-veg from source to serving.',
   },
 ]
 
 const faqs = [
-  { question: 'How quickly will someone respond to my enquiry?', answer: 'WhatsApp messages and direct calls receive immediate replies within 15 minutes during kitchen hours. Form submissions and email requests are answered within 2 to 4 hours with full menu breakdowns.' },
-  { question: 'What details should I have ready for a quick quote?', answer: 'Occasion type, approximate headcount, event date, venue location, and dietary preference split (Veg/Non-Veg, Jain, Eggless). The more specific you are, the faster we shape your menu plan!' },
-  { question: 'Can we book a menu tasting before finalizing?', answer: 'Absolutely! For weddings, grand celebrations, and major corporate contracts, we arrange live tasting sessions at our Vellore kitchen facility or deliver fresh tasting samples directly to your office.' },
-  { question: 'Do you cater for small family functions or last-minute orders?', answer: 'Yes! We accommodate both small intimate housewarming meals (20+ guests) and large 5,000+ guest summits. For daily office orders, 24-hour advance notice is recommended, though urgent orders can be accommodated by direct call.' },
+  {
+    question: 'How quickly will someone respond to my enquiry?',
+    answer: 'WhatsApp messages and direct calls receive immediate replies within 15 minutes during kitchen hours. Form submissions and email requests are answered within 2–4 hours with full menu breakdowns.',
+  },
+  {
+    question: 'What details should I have ready for a quick quote?',
+    answer: 'Occasion type, approximate headcount, event date, venue location, and dietary preference split (Veg/Non-Veg, Jain, Eggless). The more specific you are, the faster we shape your menu plan.',
+  },
+  {
+    question: 'Can we book a menu tasting before finalizing?',
+    answer: 'Absolutely. For weddings, grand celebrations, and major corporate contracts, we arrange live tasting sessions at our kitchen facility or deliver fresh tasting samples directly to your office.',
+  },
+  {
+    question: 'Do you cater for small functions or last-minute orders?',
+    answer: 'Yes — from intimate housewarming meals (20+ guests) to large 5,000+ guest summits. For daily office orders, 24-hour advance notice is recommended, though urgent orders can be accommodated by direct call.',
+  },
 ]
 
-const ticker = ['⚡ Same-Day Responses', '🍵 Live Tastings Available', '🍲 100% Morning Fresh', '🚚 Insulated Dispatch', '★ FSSAI Certified', '🤝 Customized Menu Plans']
+const signatureEase = [0.22, 1, 0.36, 1]
 
-/* =====================================================================
-   MAIN PAGE COMPONENT
-===================================================================== */
-export default function ContactPage() {
-  const prefersReducedMotion = useReducedMotion()
-  const [openFaq, setOpenFaq] = useState(0)
+// ─── Hero text motion variants ─────────────────────────────────────────
+// Headline lines wipe up from behind a mask (like the shard reveal),
+// the subhead builds word-by-word, and the actions pop in with a
+// spring — a livelier, more layered entrance than a plain fade-up.
+const heroTitleGroup = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.18, delayChildren: 0.15 } },
+}
+const heroTitleLine = {
+  hidden: { y: '112%' },
+  visible: { y: '0%', transition: { duration: 0.95, ease: signatureEase } },
+}
 
-  const [form, setForm] = useState({ name: '', phone: '', occasion: occasionOptions[0].label, guests: '', message: '' })
-  const [status, setStatus] = useState('idle')
+const heroWordGroup = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.045, delayChildren: 0.85 } },
+}
+const heroWord = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: signatureEase } },
+}
+
+const heroActionsGroup = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12, delayChildren: 1.15 } },
+}
+const heroActionItem = {
+  hidden: { opacity: 0, y: 16, scale: 0.86 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { type: 'spring', stiffness: 260, damping: 20 },
+  },
+}
+
+const heroSubtitleText =
+  "Daily office lunches for 500 or grand wedding feasts for 3,000 — our kitchen is ready to plan, cook, and serve with care."
+const heroSubtitleWords = heroSubtitleText.split(' ')
+
+// ─── Hero background images (cycled by the paper-tear transition) ────
+const heroImages = [
+  img('Contact/contact-hero-bg.jpg'),
+  img('Contact/Contact-hero-bg1.jpg'),
+  img('Services/prepareFood.webp'),
+]
+
+// ─── Animated Counter ─────────────────────────────────────────────────
+function AnimatedNumber({ value, duration = 1.4 }) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: '-10%' })
+  const motionVal = useMotionValue(0)
+  const [display, setDisplay] = useState('0')
 
   useEffect(() => {
-    const previousBg = document.body.style.backgroundColor
-    const previousColor = document.body.style.color
-    document.body.style.backgroundColor = '#FBF2E3'
-    document.body.style.color = '#241608'
-    return () => {
-      document.body.style.backgroundColor = previousBg
-      document.body.style.color = previousColor
+    if (!isInView) return
+    const num = parseFloat(value.replace(/[^0-9.]/g, ''))
+    const controls = motionVal
+    let start = null
+    const animate = (timestamp) => {
+      if (!start) start = timestamp
+      const progress = Math.min((timestamp - start) / (duration * 1000), 1)
+      const ease = 1 - Math.pow(1 - progress, 3)
+      const current = num * ease
+      const formatted = value.includes('%')
+        ? current.toFixed(1) + (value.includes('/') ? ' / 5' : '%')
+        : value.includes('+')
+        ? Math.round(current).toLocaleString() + '+'
+        : current.toFixed(1) + (value.includes('/') ? ' / 5' : '')
+      setDisplay(value.includes('%') && value.includes('.')
+        ? current.toFixed(1) + '%'
+        : value.includes('/')
+        ? current.toFixed(1) + ' / 5'
+        : value.includes('+')
+        ? Math.round(current).toLocaleString() + '+'
+        : Math.round(current) + '%')
+      if (progress < 1) requestAnimationFrame(animate)
+      else setDisplay(value)
     }
-  }, [])
+    requestAnimationFrame(animate)
+  }, [isInView, value, duration])
 
-  const heroRef = useRef(null)
+  return <span ref={ref}>{display}</span>
+}
+
+// ─── Hero image cycle ──────────────────────────────────────────────────
+// Lifted out of the transition component so the hero copy can animate
+// in sync with the same "tearing" beat that drives the background.
+function useHeroImageCycle(count, { cycleMs = 5800, tearMs = 1150 } = {}) {
+  const prefersReducedMotion = useReducedMotion()
+  const [index, setIndex] = useState(0)
+  const [tearing, setTearing] = useState(false)
+
+  useEffect(() => {
+    if (prefersReducedMotion) return undefined
+
+    const cycle = window.setInterval(() => {
+      setTearing(true)
+      window.setTimeout(() => {
+        setIndex((i) => (i + 1) % count)
+        setTearing(false)
+      }, tearMs)
+    }, cycleMs)
+
+    return () => window.clearInterval(cycle)
+  }, [prefersReducedMotion, count, cycleMs, tearMs])
+
+  return { index, nextIndex: (index + 1) % count, tearing, prefersReducedMotion }
+}
+
+// ─── Hero "Paper Tear" Background Transition ──────────────────────────
+// The current photo splits along a slanted seam into two shards. The
+// left shard translates away toward the top-left corner, the right
+// shard toward the bottom-right corner, fading as they go — revealing
+// the next photo already sitting underneath. Then the cycle repeats.
+function HeroTearTransition({ index, nextIndex, tearing, prefersReducedMotion }) {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '22%'])
+
+  const shardTransition = { duration: 1.05, ease: signatureEase }
+
+  return (
+    <div ref={ref} className="contact-hero-bg-wrap">
+      <motion.div className="contact-hero-bg-reel" style={{ y }}>
+        {/* Next photo, always sitting full-bleed underneath the shards */}
+        <div
+          className="contact-hero-bg-img--base"
+          style={{ backgroundImage: `url(${heroImages[nextIndex]})` }}
+        />
+
+        {/* Current photo, torn into two slanted halves */}
+        <motion.div
+          className="contact-hero-bg-shard contact-hero-bg-shard--left"
+          style={{ backgroundImage: `url(${heroImages[index]})` }}
+          animate={
+            !prefersReducedMotion && tearing
+              ? { x: '-55%', y: '-38%', rotate: -10, opacity: 0 }
+              : { x: '0%', y: '0%', rotate: 0, opacity: 1 }
+          }
+          transition={shardTransition}
+        />
+        <motion.div
+          className="contact-hero-bg-shard contact-hero-bg-shard--right"
+          style={{ backgroundImage: `url(${heroImages[index]})` }}
+          animate={
+            !prefersReducedMotion && tearing
+              ? { x: '55%', y: '38%', rotate: 10, opacity: 0 }
+              : { x: '0%', y: '0%', rotate: 0, opacity: 1 }
+          }
+          transition={{ ...shardTransition, delay: 0.05 }}
+        />
+      </motion.div>
+      <div className="contact-hero-bg-vignette" />
+    </div>
+  )
+}
+
+// ─── Channel Card ─────────────────────────────────────────────────────
+function ChannelCard({ ch, i }) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: '-8%' })
+
+  return (
+    <motion.a
+      ref={ref}
+      key={ch.id}
+      href={ch.href}
+      target={ch.id === 'visit' || ch.id === 'whatsapp' ? '_blank' : undefined}
+      rel="noopener noreferrer"
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.65, delay: i * 0.1, ease: signatureEase }}
+      whileHover={{ y: -6, transition: { duration: 0.3 } }}
+      className={`contact-channel-card contact-channel-card--${ch.accent}`}
+    >
+      <div className="contact-channel-eyebrow">
+        <span className={`contact-channel-icon contact-channel-icon--${ch.accent}`}>
+          <ch.icon />
+        </span>
+        <span className={`contact-channel-badge contact-channel-badge--${ch.accent}`}>{ch.badge}</span>
+      </div>
+      <h3 className="contact-channel-title">{ch.label}</h3>
+      <p className="contact-channel-value">{ch.value}</p>
+      <p className="contact-channel-sub">{ch.sub}</p>
+      <div className="contact-channel-stat-row">
+        <span className={`contact-channel-stat contact-channel-stat--${ch.accent}`}>{ch.stat}</span>
+        <span className="contact-channel-stat-label">{ch.statLabel}</span>
+      </div>
+      <div className="contact-channel-cta">
+        <span>Connect</span>
+        <motion.span
+          className="contact-channel-arrow"
+          initial={{ x: 0 }}
+          whileHover={{ x: 4 }}
+        >
+          <RiArrowRightLine />
+        </motion.span>
+      </div>
+    </motion.a>
+  )
+}
+
+// ─── Showcase with Overshading ────────────────────────────────────────
+function ShowcaseCard({ sc, i }) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: '-8%' })
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, delay: i * 0.12, ease: signatureEase }}
+      className="contact-showcase-card"
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+    >
+      <div className="contact-showcase-image-wrap">
+        <motion.img
+          src={sc.img}
+          alt={sc.title}
+          className="contact-showcase-image"
+          animate={{ scale: hovered ? 1.08 : 1 }}
+          transition={{ duration: 0.7, ease: signatureEase }}
+        />
+        {/* Cinematic overshading layers */}
+        <motion.div
+          className="contact-showcase-shade-base"
+          animate={{ opacity: hovered ? 0.55 : 0.72 }}
+          transition={{ duration: 0.5 }}
+        />
+        <motion.div
+          className="contact-showcase-shade-color"
+          animate={{ opacity: hovered ? 0.3 : 0 }}
+          transition={{ duration: 0.5 }}
+          style={{
+            background:
+              sc.accent === 'red'
+                ? 'linear-gradient(135deg, rgba(193,39,45,0.6) 0%, transparent 70%)'
+                : sc.accent === 'saffron'
+                ? 'linear-gradient(135deg, rgba(255,153,51,0.5) 0%, transparent 70%)'
+                : 'linear-gradient(135deg, rgba(20,108,54,0.5) 0%, transparent 70%)',
+          }}
+        />
+        <span className={`contact-showcase-tag contact-showcase-tag--${sc.accent}`}>{sc.tag}</span>
+        <motion.div
+          className="contact-showcase-reveal"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 12 }}
+          transition={{ duration: 0.4, ease: signatureEase }}
+        >
+          
+        </motion.div>
+      </div>
+      <div className="contact-showcase-body">
+        <h3 className="contact-showcase-title">{sc.title}</h3>
+        <p className="contact-showcase-desc">{sc.desc}</p>
+      </div>
+    </motion.div>
+  )
+}
+
+/* =====================================================================
+   MAIN PAGE
+===================================================================== */
+export default function ContactPage() {
+  const [openFaq, setOpenFaq] = useState(0)
+  const [form, setForm] = useState({
+    name: '',
+    phone: '',
+    occasion: occasionOptions[0].label,
+    guests: '',
+    message: '',
+  })
+  const [status, setStatus] = useState('idle')
+
   const { scrollYProgress: pageProgress } = useScroll()
   const progressBar = useSpring(pageProgress, { stiffness: 120, damping: 24 })
+
+  const { index: heroIndex, nextIndex: heroNextIndex, tearing: heroTearing, prefersReducedMotion } =
+    useHeroImageCycle(heroImages.length)
 
   const handleChange = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }))
 
@@ -163,583 +439,477 @@ export default function ContactPage() {
     e.preventDefault()
     if (!form.name || !form.phone) return
     setStatus('sending')
-
     const lines = [
       `👋 New Catering Enquiry from ${form.name}`,
       `📞 Phone: ${form.phone}`,
       `🎉 Occasion: ${form.occasion}`,
       form.guests ? `👥 Guest Count: ${form.guests} Guests` : null,
       form.message ? `💬 Details: ${form.message}` : null,
-    ].filter(Boolean).join('\n')
-
+    ]
+      .filter(Boolean)
+      .join('\n')
     window.setTimeout(() => {
-      window.open(`https://wa.me/917305401704?text=${encodeURIComponent(lines)}`, '_blank', 'noopener')
+      window.open(
+        `https://wa.me/917305401704?text=${encodeURIComponent(lines)}`,
+        '_blank',
+        'noopener'
+      )
       setStatus('sent')
     }, 550)
   }
 
-  const handleTilt = (e) => {
-    if (prefersReducedMotion) return
-    const { currentTarget, clientX, clientY } = e
-    const rect = currentTarget.getBoundingClientRect()
-    currentTarget.style.setProperty('--tx', (((clientX - rect.left) / rect.width - 0.5) * 2).toFixed(3))
-    currentTarget.style.setProperty('--ty', (((clientY - rect.top) / rect.height - 0.5) * 2).toFixed(3))
-  }
-
-  const resetTilt = (e) => {
-    e.currentTarget.style.setProperty('--tx', 0)
-    e.currentTarget.style.setProperty('--ty', 0)
-  }
-
   return (
-    <div
-      className="relative min-h-screen overflow-x-hidden bg-[#FBF2E3] font-sans text-[#241608] selection:bg-[#F2921A] selection:text-[#241608]"
-      style={{ fontFamily: "'Inter', Arial, sans-serif" }}
-    >
-      <style>{`
-        @keyframes qatind-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        .qatind-marquee-a { animation: qatind-marquee 28s linear infinite; }
-        .qatind-grain {
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-        }
-        .qatind-shine { position: relative; overflow: hidden; }
-        .qatind-shine::after {
-          content: '';
-          position: absolute; top: 0; left: -60%;
-          width: 40%; height: 100%;
-          background: linear-gradient(115deg,transparent,rgba(255,255,255,0.22),transparent);
-          transform: skewX(-20deg);
-          transition: left 0.7s ease;
-          pointer-events: none;
-        }
-        .qatind-shine:hover::after { left: 130%; }
-        .qatind-tilt {
-          transform: perspective(900px) rotateX(calc(var(--ty,0)*-6deg)) rotateY(calc(var(--tx,0)*6deg)) translateZ(0);
-          transition: transform .25s ease-out;
-        }
-        .qatind-field {
-          background: white;
-          border: 1.5px solid rgba(36,22,8,0.12);
-          border-radius: 1.25rem;
-          padding: 0.95rem 1.2rem;
-          font-size: 0.95rem;
-          color: #241608;
-          transition: border-color .2s ease, box-shadow .2s ease;
-          width: 100%;
-        }
-        .qatind-field::placeholder { color: #5B4636; opacity: .6; }
-        .qatind-field:focus {
-          outline: none;
-          border-color: #F2921A;
-          box-shadow: 0 0 0 4px rgba(242,146,26,0.18);
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .qatind-marquee-a { animation: none !important; }
-          .qatind-tilt { transform: none !important; }
-          .qatind-shine::after { display: none; }
-        }
-      `}</style>
-
+    <div className="contact-page">
       <MouseGlowCursor />
 
-      {/* Reading Progress Indicator */}
-      <motion.div
-        style={{ scaleX: progressBar }}
-        className="fixed left-0 right-0 top-0 z-[100] h-[3.5px] origin-left bg-gradient-to-r from-[#C0392B] via-[#F2921A] to-[#146C36]"
-      />
+      {/* Reading Progress Bar */}
+      {/* <motion.div style={{ scaleX: progressBar }} className="cp-progress-bar" /> */}
 
       {/* ================================================================
-          1 — DYNAMIC 2-COLUMN HERO WITH FLOATING IMAGE STACK
+          1 — HERO: Light theme with paper-tear image transition
       ================================================================ */}
-      <section ref={heroRef} className="relative overflow-hidden px-6 pb-20 pt-28 lg:px-10 lg:pb-28 lg:pt-36">
-        <div className="qatind-grain pointer-events-none absolute inset-0 opacity-40" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(242,146,26,0.22),transparent_42%),radial-gradient(circle_at_bottom_right,_rgba(20,108,54,0.18),transparent_45%)]" />
-        <div className="pointer-events-none absolute -left-28 top-10 h-[420px] w-[420px] rounded-full bg-[#C0392B]/12 blur-[140px]" />
-        <div className="pointer-events-none absolute -right-20 top-40 h-[400px] w-[400px] rounded-full bg-[#F2921A]/15 blur-[150px]" />
+      <section className="contact-hero">
+        <HeroTearTransition
+          index={heroIndex}
+          nextIndex={heroNextIndex}
+          tearing={heroTearing}
+          prefersReducedMotion={prefersReducedMotion}
+        />
 
-        <div className="relative z-10 mx-auto max-w-7xl">
-          <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-            {/* Left Content */}
-            <motion.div
-              initial="hidden"
-              animate="show"
-              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
-            >
-              <motion.span
-                variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}
-                className="inline-flex items-center gap-2 rounded-full border border-[#C0392B]/20 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.3em] text-[#C0392B] shadow-sm backdrop-blur-md"
-              >
-                <RiSparklingLine className="text-base text-[#F2921A]" />
-                Direct Kitchen Concierge
+        <motion.div
+          className="contact-hero-content"
+          animate={
+            !prefersReducedMotion && heroTearing
+              ? { scale: 0.985, filter: 'blur(1.5px)' }
+              : { scale: 1, filter: 'blur(0px)' }
+          }
+          transition={{ duration: 0.6, ease: signatureEase }}
+        >
+          <motion.span
+            initial={{ opacity: 0, y: -14, scale: 0.85, rotate: -4 }}
+            animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 18, delay: 0.05 }}
+            className="contact-hero-pill"
+          >
+            <RiSparklingLine />
+            Direct Kitchen Concierge
+          </motion.span>
+
+          <motion.h1
+            className="contact-hero-title"
+            initial="hidden"
+            animate="visible"
+            variants={heroTitleGroup}
+          >
+            <span className="contact-hero-title-line">
+              <motion.span className="contact-hero-title-line-inner" variants={heroTitleLine}>
+                Good food,
               </motion.span>
-
-              <motion.h1
-                variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="mt-6 text-[clamp(2.5rem,6vw,5.2rem)] font-black leading-[0.98] tracking-[-0.03em] text-[#241608]"
+            </span>
+            <span className="contact-hero-title-line">
+              <motion.span
+                className="contact-hero-title-line-inner contact-hero-title-em"
+                variants={heroTitleLine}
               >
-                Let's bring good food{' '}
-                <span className="bg-gradient-to-r from-[#C0392B] via-[#F2921A] to-[#146C36] bg-clip-text text-transparent">
-                  to your table.
-                </span>
-              </motion.h1>
+                brought to your table.
+              </motion.span>
+            </span>
+          </motion.h1>
 
-              <motion.p
-                variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
-                transition={{ duration: 0.6 }}
-                className="mt-6 max-w-lg text-lg leading-8 text-[#5B4636]"
-              >
-                Whether it's daily office lunches for 500 or a grand wedding feast for 3,000 —
-                our kitchen is ready to plan, cook, and serve with care.
-              </motion.p>
+          <motion.p
+            className="contact-hero-sub"
+            initial="hidden"
+            animate="visible"
+            variants={heroWordGroup}
+          >
+            {heroSubtitleWords.map((word, i) => (
+              <motion.span key={`${word}-${i}`} className="contact-hero-word" variants={heroWord}>
+                {word}
+                {'\u00A0'}
+              </motion.span>
+            ))}
+          </motion.p>
 
-              {/* Action Buttons */}
-              <motion.div
-                variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
-                transition={{ duration: 0.6 }}
-                className="mt-8 flex flex-wrap items-center gap-4"
-              >
-                <MagneticButton>
-                  <a
-                    href="https://wa.me/917305401704"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-[#146C36] to-[#0A331A] px-7 py-4 text-sm font-bold text-white shadow-[0_20px_50px_-20px_rgba(20,108,54,0.6)] transition duration-300 hover:-translate-y-1"
-                  >
-                    <RiWhatsappLine className="text-xl text-[#2ECC71]" />
-                    Chat on WhatsApp
-                  </a>
-                </MagneticButton>
-
-                <MagneticButton>
-                  <a
-                    href="tel:+917305401704"
-                    className="inline-flex items-center gap-3 rounded-full border border-[#241608]/15 bg-white px-7 py-4 text-sm font-bold text-[#241608] shadow-sm transition duration-300 hover:border-[#C0392B]/40 hover:bg-[#C0392B]/5"
-                  >
-                    <FiPhone className="text-lg text-[#C0392B]" />
-                    Call +91 73054 01704
-                  </a>
-                </MagneticButton>
-              </motion.div>
+          <motion.div
+            className="contact-hero-actions"
+            initial="hidden"
+            animate="visible"
+            variants={heroActionsGroup}
+          >
+            <motion.div variants={heroActionItem} className="contact-hero-action-item">
+              <MagneticButton>
+                <a
+                  href="https://wa.me/917305401704"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="contact-btn contact-btn--whatsapp"
+                >
+                  <RiWhatsappLine />
+                  Chat on WhatsApp
+                </a>
+              </MagneticButton>
             </motion.div>
 
-            {/* Right Visual Image Showcase Card */}
+            <motion.div variants={heroActionItem} className="contact-hero-action-item">
+              <MagneticButton>
+                <a href="tel:+917305401704" className="contact-btn contact-btn--call">
+                  <FiPhone />
+                  +91 73054 01704
+                </a>
+              </MagneticButton>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1.5 }}
+            className="contact-hero-scroll"
+          >
             <motion.div
-              initial={{ opacity: 0, scale: 0.92, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="relative flex justify-center"
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             >
-              <div className="relative w-full max-w-md">
-                {/* Glowing Aura Ring */}
-                <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-r from-[#F2921A]/30 to-[#C0392B]/30 blur-2xl transform rotate-3" />
+              <RiArrowDownLine />
+            </motion.div>
+            <span>Scroll to explore</span>
+          </motion.div>
+        </motion.div>
+      </section>
 
-                {/* Main Card Container */}
-                <div className="relative overflow-hidden rounded-[2.5rem] border border-white/40 bg-white/60 p-4 shadow-[0_30px_70px_-20px_rgba(36,22,8,0.25)] backdrop-blur-xl">
-                  <img
-                    src="/Services/FoodDelivery.png"
-                    alt="Qatind Catering Delivery"
-                    className="h-80 w-full rounded-[2rem] object-cover shadow-md"
-                  />
-
-                  {/* Floating Live Badge */}
-                  <motion.div
-                    animate={{ y: [0, -6, 0] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                    className="absolute bottom-8 left-8 right-8 flex items-center justify-between rounded-2xl border border-white/30 bg-[#241608]/85 p-4 text-white backdrop-blur-xl shadow-xl"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F2921A] text-[#241608] text-lg font-bold">
-                        ⚡
-                      </div>
-                      <div>
-                        <p className="text-xs font-semibold text-white/70">Response Guarantee</p>
-                        <p className="text-sm font-bold text-white">Under 15 Mins Reply</p>
-                      </div>
-                    </div>
-                    <span className="flex h-3 w-3 rounded-full bg-[#2ECC71] animate-ping" />
-                  </motion.div>
-                </div>
+      {/* ================================================================
+          2 — STATS
+      ================================================================ */}
+      <section className="cp-stats-section">
+        <div className="cp-stats-inner">
+          {stats.map((st, i) => (
+            <motion.div
+              key={st.label}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-12%' }}
+              transition={{ duration: 0.55, delay: i * 0.08, ease: signatureEase }}
+              className={`cp-stat-card cp-stat-card--${st.accent}`}
+            >
+              <div className={`cp-stat-icon cp-stat-icon--${st.accent}`}>
+                <st.icon />
+              </div>
+              <div>
+                <p className="cp-stat-value">
+                  <AnimatedNumber value={st.value} />
+                </p>
+                <p className="cp-stat-label">{st.label}</p>
               </div>
             </motion.div>
-          </div>
-        </div>
-      </section>
-
-
-      {/* ================================================================
-          3 — QUICK METRICS STATS BAR
-      ================================================================ */}
-      <section className="relative px-6 py-14 lg:px-10 bg-white/40 border-b border-[#241608]/5">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {stats.map((st, i) => (
-              <motion.div
-                key={st.label}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="flex items-center gap-4 rounded-2xl border border-[#241608]/8 bg-white p-5 shadow-sm transition hover:shadow-md hover:border-[#F2921A]/40"
-              >
-                <div
-                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-xl"
-                  style={{ background: `${st.accent}15`, color: st.accent }}
-                >
-                  <st.icon />
-                </div>
-                <div>
-                  <p className="text-2xl font-black text-[#241608]">{st.value}</p>
-                  <p className="text-xs font-semibold text-[#5B4636]">{st.label}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          ))}
         </div>
       </section>
 
       {/* ================================================================
-          4 — CONTACT CHANNELS (BENTO GRID)
+          3 — CHANNELS
       ================================================================ */}
-      <section className="relative px-6 py-24 lg:px-10">
-        <div className="mx-auto max-w-7xl">
-          <div className="text-center max-w-2xl mx-auto">
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#C0392B]">Fast & Direct Access</p>
-            <h2 className="mt-3 text-[clamp(2rem,4vw,3.2rem)] font-black leading-[1.05] tracking-[-0.02em] text-[#241608]">
-              Reach out however suits you best.
-            </h2>
-          </div>
+      <section className="cp-channels-section">
+        <div className="cp-channels-inner">
+          <motion.div
+            className="cp-section-header"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-12%' }}
+            transition={{ duration: 0.65, ease: signatureEase }}
+          >
+            <p className="cp-eyebrow">Fast & Direct Access</p>
+            <h2 className="cp-section-title">Reach out however suits you best.</h2>
+          </motion.div>
 
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="cp-channels-grid">
             {contactChannels.map((ch, i) => (
-              <motion.a
-                key={ch.id}
-                href={ch.href}
-                target={ch.id === 'visit' || ch.id === 'whatsapp' ? '_blank' : undefined}
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.55, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                whileHover={{ y: -6, scale: 1.02 }}
-                onMouseMove={handleTilt}
-                onMouseLeave={resetTilt}
-                className="qatind-tilt qatind-shine group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-[#241608]/10 bg-white p-7 shadow-lg transition-all duration-300 hover:border-[#F2921A]/50 hover:shadow-2xl"
-              >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <span
-                      className="flex h-12 w-12 items-center justify-center rounded-2xl text-xl shadow-inner group-hover:scale-110 transition-transform duration-300"
-                      style={{ background: `${ch.accent}18`, color: ch.accent }}
-                    >
-                      <ch.icon />
-                    </span>
-                    <span
-                      className="rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider"
-                      style={{ background: `${ch.accent}15`, color: ch.accent }}
-                    >
-                      {ch.badge}
-                    </span>
-                  </div>
-
-                  <h3 className="mt-6 text-xl font-black text-[#241608] group-hover:text-[#C0392B] transition-colors">
-                    {ch.label}
-                  </h3>
-                  <p className="mt-1 text-base font-bold text-[#5B4636]">{ch.value}</p>
-                  <p className="mt-2 text-xs text-[#5B4636]/80">{ch.sub}</p>
-                </div>
-
-                <div className="mt-8 flex items-center gap-2 text-xs font-bold uppercase tracking-wider" style={{ color: ch.accent }}>
-                  <span>Connect Now</span>
-                  <RiArrowRightLine className="text-sm group-hover:translate-x-1 transition-transform" />
-                </div>
-              </motion.a>
+              <ChannelCard key={ch.id} ch={ch} i={i} />
             ))}
           </div>
         </div>
       </section>
 
       {/* ================================================================
-          5 — INTERACTIVE FORM + VISUAL INFO SHOWCASE PANEL
+          4 — FORM + INFO (split layout)
       ================================================================ */}
-      <section className="relative bg-white px-6 py-24 lg:px-10">
-        <div className="mx-auto max-w-7xl">
-          <div className="max-w-2xl">
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#C0392B]">Instant Plan & Quote</p>
-            <h2 className="mt-3 text-[clamp(2rem,4.2vw,3.2rem)] font-black leading-[1.05] tracking-[-0.02em] text-[#241608]">
-              Tell us about your event. We'll craft the menu.
-            </h2>
-          </div>
+      <section className="cp-form-section">
+        <div className="cp-form-inner">
+          {/* Form side */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-12%' }}
+            transition={{ duration: 0.75, ease: signatureEase }}
+            className="cp-form-col"
+          >
+            <p className="cp-eyebrow">Instant Plan & Quote</p>
+            <h2 className="cp-section-title cp-section-title--left">Tell us about your event. We'll craft the menu.</h2>
 
-          <div className="mt-14 grid gap-10 lg:grid-cols-[0.58fr_0.42fr] lg:items-stretch">
-            {/* Interactive Form */}
-            <motion.form
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              onSubmit={handleSubmit}
-              className="rounded-[2.5rem] border border-[#241608]/10 bg-[#FBF2E3] p-7 sm:p-10 shadow-xl flex flex-col justify-between"
-            >
-              <div>
-                <h3 className="text-xl font-black text-[#241608] mb-6 flex items-center gap-2">
-                  <LuChefHat className="text-[#C0392B]" /> Catering Requirements Form
-                </h3>
-
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <label className="block">
-                    <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#5B4636]">Your Name *</span>
-                    <input
-                      required
-                      value={form.name}
-                      onChange={handleChange('name')}
-                      placeholder="e.g. Aravind Kumar"
-                      className="qatind-field"
-                    />
-                  </label>
-                  <label className="block">
-                    <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#5B4636]">Phone Number *</span>
-                    <input
-                      required
-                      type="tel"
-                      value={form.phone}
-                      onChange={handleChange('phone')}
-                      placeholder="+91 XXXXX XXXXX"
-                      className="qatind-field"
-                    />
-                  </label>
-                </div>
-
-                {/* Occasion Selection Chips */}
-                <div className="mt-6">
-                  <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-[#5B4636]">Select Occasion Type *</span>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {occasionOptions.slice(0, 4).map((o) => (
-                      <button
-                        key={o.id}
-                        type="button"
-                        onClick={() => setForm((f) => ({ ...f, occasion: o.label }))}
-                        className={`flex items-center gap-2 rounded-xl p-3 text-xs font-bold text-left transition-all ${form.occasion === o.label
-                            ? 'bg-[#241608] text-white shadow-md'
-                            : 'bg-white border border-[#241608]/10 text-[#5B4636] hover:border-[#F2921A]'
-                          }`}
-                      >
-                        <o.icon className="text-base shrink-0 text-[#F2921A]" />
-                        <span className="truncate">{o.label.split(' ')[0]}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-5 grid gap-5 sm:grid-cols-2">
-                  <label className="block">
-                    <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#5B4636]">Occasion Category</span>
-                    <select value={form.occasion} onChange={handleChange('occasion')} className="qatind-field">
-                      {occasionOptions.map((o) => <option key={o.id} value={o.label}>{o.label}</option>)}
-                    </select>
-                  </label>
-
-                  <label className="block">
-                    <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#5B4636]">Estimated Guests</span>
-                    <input
-                      type="number"
-                      min="1"
-                      value={form.guests}
-                      onChange={handleChange('guests')}
-                      placeholder="e.g. 150 Guests"
-                      className="qatind-field"
-                    />
-                  </label>
-                </div>
-
-                <label className="mt-5 block">
-                  <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#5B4636]">Dietary Notes & Event Date</span>
-                  <textarea
-                    rows={3}
-                    value={form.message}
-                    onChange={handleChange('message')}
-                    placeholder="Event date, venue location, Veg/Non-Veg ratio, Jain or low-oil requests..."
-                    className="qatind-field resize-none"
+            <form onSubmit={handleSubmit} className="cp-form">
+              <div className="cp-field-row">
+                <label className="cp-field-wrap">
+                  <span className="cp-field-label">Your name</span>
+                  <input
+                    required
+                    value={form.name}
+                    onChange={handleChange('name')}
+                    placeholder="Aravind Kumar"
+                    className="cp-field"
+                  />
+                </label>
+                <label className="cp-field-wrap">
+                  <span className="cp-field-label">Phone number</span>
+                  <input
+                    required
+                    type="tel"
+                    value={form.phone}
+                    onChange={handleChange('phone')}
+                    placeholder="+91 XXXXX XXXXX"
+                    className="cp-field"
                   />
                 </label>
               </div>
 
-              <div className="mt-8">
+              <div className="cp-occasion-block">
+                <span className="cp-field-label">Occasion type</span>
+                <div className="cp-chips">
+                  {occasionOptions.slice(0, 6).map((o) => (
+                    <button
+                      key={o.id}
+                      type="button"
+                      onClick={() => setForm((f) => ({ ...f, occasion: o.label }))}
+                      className={`cp-chip ${form.occasion === o.label ? 'cp-chip--active' : ''}`}
+                    >
+                      <o.icon aria-hidden="true" />
+                      <span>{o.label.split(' ')[0]}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="cp-field-row cp-field-row--mt">
+                <label className="cp-field-wrap">
+                  <span className="cp-field-label">Full occasion</span>
+                  <select value={form.occasion} onChange={handleChange('occasion')} className="cp-field cp-select">
+                    {occasionOptions.map((o) => (
+                      <option key={o.id} value={o.label}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="cp-field-wrap">
+                  <span className="cp-field-label">Estimated guests</span>
+                  <input
+                    type="number"
+                    min="1"
+                    value={form.guests}
+                    onChange={handleChange('guests')}
+                    placeholder="150"
+                    className="cp-field"
+                  />
+                </label>
+              </div>
+
+              <label className="cp-field-wrap cp-field-wrap--mt">
+                <span className="cp-field-label">Dietary notes & event date</span>
+                <textarea
+                  rows={3}
+                  value={form.message}
+                  onChange={handleChange('message')}
+                  placeholder="Event date, venue, Veg/Non-Veg ratio, Jain or low-oil requests…"
+                  className="cp-field cp-textarea"
+                />
+              </label>
+
+              <div className="cp-submit-wrap">
                 <MagneticButton>
                   <motion.button
                     type="submit"
                     whileTap={{ scale: 0.97 }}
                     disabled={status === 'sending'}
-                    className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-gradient-to-r from-[#F2921A] via-[#E8871E] to-[#C0392B] px-8 py-4 text-base font-extrabold text-[#241608] shadow-[0_20px_50px_-20px_rgba(242,146,26,0.65)] transition duration-300 hover:-translate-y-1 disabled:opacity-70"
+                    className="cp-submit-btn"
                   >
                     <AnimatePresence mode="wait" initial={false}>
                       {status === 'sent' ? (
-                        <motion.span key="sent" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2">
-                          <RiCheckLine className="text-xl" /> Opened WhatsApp Chat
+                        <motion.span
+                          key="sent"
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -6 }}
+                          className="cp-submit-inner"
+                        >
+                          <RiCheckLine />
+                          WhatsApp Chat Opened
                         </motion.span>
                       ) : (
-                        <motion.span key="send" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2">
-                          {status === 'sending' ? 'Opening WhatsApp…' : 'Send Enquiry via WhatsApp'}
-                          <RiSendPlaneFill className="text-lg" />
+                        <motion.span
+                          key="send"
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -6 }}
+                          className="cp-submit-inner"
+                        >
+                          {status === 'sending' ? 'Opening WhatsApp…' : 'Send via WhatsApp'}
+                          <RiSendPlaneFill />
                         </motion.span>
                       )}
                     </AnimatePresence>
                   </motion.button>
                 </MagneticButton>
-                <p className="mt-3 text-xs leading-5 text-center text-[#5B4636]">
-                  ⚡ Opens WhatsApp directly with pre-filled details for instant estimation.
+                <p className="cp-submit-note">
+                  Opens WhatsApp with pre-filled details — instant estimation.
                 </p>
               </div>
-            </motion.form>
+            </form>
+          </motion.div>
 
-            {/* Visual Info Showcase Panel */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="relative overflow-hidden rounded-[2.5rem] bg-[#241608] p-8 text-white sm:p-10 shadow-2xl flex flex-col justify-between"
-            >
-              <div className="pointer-events-none absolute -right-16 -top-16 h-60 w-60 rounded-full bg-[#F2921A]/20 blur-[100px]" />
-              <div className="pointer-events-none absolute -left-16 -bottom-16 h-60 w-60 rounded-full bg-[#C0392B]/20 blur-[100px]" />
+          {/* Info side */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-12%' }}
+            transition={{ duration: 0.75, delay: 0.1, ease: signatureEase }}
+            className="cp-info-col"
+          >
+            <div className="cp-info-card">
+              <span className="cp-info-badge">
+                <BsShieldCheck />
+                FSSAI Certified Master Kitchen
+              </span>
 
-              <div className="relative z-10">
-                <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-bold text-[#F2921A] backdrop-blur-md">
-                  <BsShieldCheck /> FSSAI Certified Master Kitchen
-                </span>
+              <h3 className="cp-info-title">Kitchen hours</h3>
+              <div className="cp-hours-list">
+                {officeHours.map((h) => (
+                  <div key={h.day} className={`cp-hours-row ${h.active ? 'cp-hours-row--active' : ''}`}>
+                    <span className="cp-hours-day">
+                      <RiTimeLine aria-hidden="true" />
+                      {h.day}
+                    </span>
+                    <span className="cp-hours-time">{h.time}</span>
+                  </div>
+                ))}
+              </div>
 
-                <h3 className="mt-6 text-2xl font-black text-white">Kitchen Hours & Support</h3>
-                <div className="mt-5 space-y-3.5">
-                  {officeHours.map((h) => (
-                    <div key={h.day} className="flex items-center justify-between border-b border-white/10 pb-3.5 text-sm">
-                      <span className="flex items-center gap-2.5 text-white/80">
-                        <RiTimeLine className="text-[#F2921A]" /> {h.day}
-                      </span>
-                      <span className="font-bold text-white">{h.time}</span>
-                    </div>
+              <h3 className="cp-info-title cp-info-title--mt">Kitchen & office</h3>
+              <p className="cp-address">
+                <RiMapPin2Line aria-hidden="true" />
+                Qatind Enterprises, Main Road, Vellore, Tamil Nadu
+                <br />
+                <span className="cp-address-note">Tastings available by appointment</span>
+              </p>
+
+              <div className="cp-info-image-wrap">
+                <img
+                  src={img('Contact/officekitchen.jpg')}
+                  alt="Qatind Office & Kitchen"
+                  className="cp-info-image"
+                  loading="lazy"
+                />
+                <div className="cp-info-image-shine" />
+              </div>
+
+              <div className="cp-social-row">
+                <span className="cp-social-label">Follow Qatind</span>
+                <div className="cp-social-icons">
+                  {[
+                    { href: 'https://instagram.com', icon: RiInstagramLine, label: 'Instagram' },
+                    { href: 'https://facebook.com', icon: RiFacebookCircleLine, label: 'Facebook' },
+                  ].map(({ href, icon: Icon, label }) => (
+                    <motion.a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={label}
+                      className="cp-social-icon"
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                    >
+                      <Icon />
+                    </motion.a>
                   ))}
                 </div>
-
-                <h3 className="mt-8 text-2xl font-black text-white">Kitchen & Office Address</h3>
-                <p className="mt-3 flex items-start gap-3 text-sm leading-6 text-white/80">
-                  <RiMapPin2Line className="mt-1 shrink-0 text-xl text-[#F2921A]" />
-                  Qatind Enterprises, Main Road, Vellore, Tamil Nadu — Tastings available by appointment.
-                </p>
-
-                {/* Image Card Overlay */}
-                <div className="mt-6 overflow-hidden rounded-2xl border border-white/15 shadow-lg">
-                  <img
-                    src='/Contact/officekitchen.jpg'
-                    alt="Qatind Office & Kitchen"
-                    className="h-36 w-full object-cover"
-                  />
-                </div>
               </div>
-
-              <div className="relative z-10 mt-8 flex items-center justify-between border-t border-white/10 pt-6">
-                <span className="text-xs font-bold uppercase tracking-wider text-white/60">Follow Qatind</span>
-                <div className="flex items-center gap-3">
-                  <a
-                    href="https://instagram.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Instagram"
-                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-xl transition hover:border-[#F2921A] hover:text-[#F2921A] hover:bg-white/5"
-                  >
-                    <RiInstagramLine />
-                  </a>
-                  <a
-                    href="https://facebook.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Facebook"
-                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-xl transition hover:border-[#F2921A] hover:text-[#F2921A] hover:bg-white/5"
-                  >
-                    <RiFacebookCircleLine />
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* ================================================================
-          6 — OCCASION SHOWCASE GALLERY CARDS
+          5 — SHOWCASE with cinematic overshading
       ================================================================ */}
-      <section className="relative px-6 py-24 lg:px-10 bg-[#FBF2E3]">
-        <div className="mx-auto max-w-7xl">
-          <div className="text-center max-w-2xl mx-auto">
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#C0392B]">What We Cater</p>
-            <h2 className="mt-3 text-[clamp(2rem,4vw,3.2rem)] font-black leading-[1.05] tracking-[-0.02em] text-[#241608]">
-              Food created for every scale & style.
-            </h2>
-          </div>
+      <section className="cp-showcase-section">
+        <div className="cp-showcase-inner">
+          <motion.div
+            className="cp-section-header"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-12%' }}
+            transition={{ duration: 0.65, ease: signatureEase }}
+          >
+            <p className="cp-eyebrow">What We Cater</p>
+            <h2 className="cp-section-title">Food created for every scale and style.</h2>
+          </motion.div>
 
-          <div className="mt-14 grid gap-8 sm:grid-cols-3">
+          <div className="cp-showcase-grid">
             {showcaseCards.map((sc, i) => (
-              <motion.div
-                key={sc.title}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
-                whileHover={{ y: -6 }}
-                className="group relative overflow-hidden rounded-[2rem] border border-[#241608]/10 bg-white shadow-xl"
-              >
-                <div className="relative h-60 overflow-hidden">
-                  <img src={sc.img} alt={sc.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#241608]/80 via-transparent to-transparent" />
-                  <span
-                    className="absolute top-4 left-4 rounded-full px-3.5 py-1 text-xs font-extrabold uppercase tracking-wider text-white backdrop-blur-md"
-                    style={{ background: sc.accent }}
-                  >
-                    {sc.tag}
-                  </span>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-black text-[#241608] group-hover:text-[#C0392B] transition-colors">{sc.title}</h3>
-                  <p className="mt-2 text-xs text-[#5B4636] font-medium">Customized menus, live counters & full event service.</p>
-                </div>
-              </motion.div>
+              <ShowcaseCard key={sc.title} sc={sc} i={i} />
             ))}
           </div>
         </div>
       </section>
 
       {/* ================================================================
-          7 — FAQ ACCORDION
+          6 — FAQ
       ================================================================ */}
-      <section className="relative bg-white px-6 py-24 lg:px-10">
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.4fr_0.6fr]">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#C0392B]">Questions Answered</p>
-            <h2 className="mt-4 text-[clamp(2rem,4vw,3rem)] font-black leading-[1.05] tracking-[-0.02em] text-[#241608]">
-              Frequently asked catering questions.
-            </h2>
-            <p className="mt-5 max-w-sm text-sm leading-7 text-[#5B4636]">
-              Have a custom request or dietary requirement? Call our kitchen team directly.
-            </p>
-            <MagneticButton>
-              <a href="tel:+917305401704" className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#C0392B]">
-                <FiPhone /> +91 73054 01704
-              </a>
-            </MagneticButton>
+      <section className="cp-faq-section">
+        <div className="cp-faq-inner">
+          <div className="cp-faq-left">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-12%' }}
+              transition={{ duration: 0.65, ease: signatureEase }}
+            >
+              <p className="cp-eyebrow">Questions Answered</p>
+              <h2 className="cp-faq-title">Everything you need to know before you reach out.</h2>
+              <p className="cp-faq-desc">
+                Have a custom requirement or dietary need? Call our kitchen team directly.
+              </p>
+              <MagneticButton>
+                <a href="tel:+917305401704" className="cp-faq-phone">
+                  <FiPhone aria-hidden="true" />
+                  +91 73054 01704
+                </a>
+              </MagneticButton>
+            </motion.div>
           </div>
 
-          <div className="space-y-4">
+          <div className="cp-faq-list">
             {faqs.map((item, index) => {
               const isOpen = openFaq === index
               return (
-                <div key={item.question} className="overflow-hidden rounded-2xl border border-[#241608]/10 bg-[#FBF2E3] transition-colors hover:border-[#F2921A]/50">
+                <motion.div
+                  key={item.question}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-8%' }}
+                  transition={{ duration: 0.5, delay: index * 0.07, ease: signatureEase }}
+                  className={`cp-faq-item ${isOpen ? 'cp-faq-item--open' : ''}`}
+                >
                   <button
                     type="button"
                     aria-expanded={isOpen}
                     onClick={() => setOpenFaq(isOpen ? null : index)}
-                    className="flex w-full items-center justify-between gap-4 px-7 py-5 text-left text-base font-bold text-[#241608]"
+                    className="cp-faq-btn"
                   >
                     <span>{item.question}</span>
-                    <motion.span animate={{ rotate: isOpen ? 45 : 0 }} className="shrink-0 text-2xl leading-none text-[#C0392B]">
+                    <motion.span
+                      className="cp-faq-icon"
+                      animate={{ rotate: isOpen ? 45 : 0 }}
+                      transition={{ duration: 0.3, ease: signatureEase }}
+                    >
                       +
                     </motion.span>
                   </button>
@@ -749,14 +919,14 @@ export default function ContactPage() {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="px-7"
+                        transition={{ duration: 0.38, ease: signatureEase }}
+                        className="cp-faq-answer-wrap"
                       >
-                        <p className="pb-6 text-sm leading-7 text-[#5B4636]">{item.answer}</p>
+                        <p className="cp-faq-answer">{item.answer}</p>
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </div>
+                </motion.div>
               )
             })}
           </div>
@@ -764,38 +934,29 @@ export default function ContactPage() {
       </section>
 
       {/* ================================================================
-          8 — FINAL CTA BANNER
+          7 — CTA
       ================================================================ */}
-      <section
-        className="relative overflow-hidden px-6 py-24 lg:px-10"
-        style={{ background: 'linear-gradient(150deg, #0A331A 0%, #146C36 55%, #184228 100%)' }}
-      >
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[5px] bg-gradient-to-r from-[#C0392B] via-[#F2921A] to-[#146C36]" />
-        <div className="pointer-events-none absolute left-1/4 top-0 h-[280px] w-[280px] rounded-full bg-[#F2921A]/18 blur-[130px]" />
-        <div className="pointer-events-none absolute bottom-0 right-10 h-[240px] w-[240px] rounded-full bg-[#C0392B]/18 blur-[120px]" />
-
+      <section className="cp-cta-section">
+        <div className="cp-cta-noise" />
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.7 }}
-          className="relative mx-auto max-w-3xl text-center"
+          viewport={{ once: true, margin: '-12%' }}
+          transition={{ duration: 0.85, ease: signatureEase }}
+          className="cp-cta-inner"
         >
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#F2921A]">Ready to get started?</p>
-          <h2 className="mt-4 text-[clamp(2.2rem,5vw,3.6rem)] font-black leading-[1.02] tracking-[-0.02em] text-white">
-            A 5-minute conversation sets your menu in motion.
+          <p className="cp-cta-eyebrow">Ready to get started?</p>
+          <h2 className="cp-cta-title">
+            A 5-minute conversation<br />sets your menu in motion.
           </h2>
-          <p className="mx-auto mt-5 max-w-lg text-base leading-8 text-white/75">
-            No commitment, no stress — let's plan delicious food for your guests.
+          <p className="cp-cta-sub">
+            No commitment. No stress. Let's plan delicious food for your guests.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <div className="cp-cta-actions">
             <MagneticButton>
-              <a
-                href="tel:+917305401704"
-                className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-[#F2921A] via-[#E8871E] to-[#C0392B] px-8 py-4 text-sm font-bold text-[#241608] shadow-lg transition duration-300 hover:-translate-y-1"
-              >
+              <a href="tel:+917305401704" className="contact-btn contact-btn--cta-primary">
                 Call Qatind Kitchen
-                <RiArrowRightLine className="text-lg" />
+                <RiArrowRightLine />
               </a>
             </MagneticButton>
             <MagneticButton>
@@ -803,9 +964,10 @@ export default function ContactPage() {
                 href="https://wa.me/917305401704"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 rounded-full border border-white/20 bg-black/20 px-8 py-4 text-sm font-bold text-white transition duration-300 hover:bg-white/10"
+                className="contact-btn contact-btn--cta-outline"
               >
-                <RiWhatsappLine className="text-lg text-[#2ECC71]" /> WhatsApp Instant Quote
+                <RiWhatsappLine />
+                WhatsApp Instant Quote
               </a>
             </MagneticButton>
           </div>
