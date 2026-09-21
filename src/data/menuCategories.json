@@ -1,0 +1,143 @@
+[
+  {
+    "id": "rice",
+    "name": "Rice",
+    "icon": "FiBox",
+    "items": [
+      { "name": "Ghee Rice", "image": "ghee-rice.png" },
+      { "name": "White Rice", "image": "white-rice.png" },
+      { "name": "Sambar Rice", "image": "sambar-rice.png" },
+      { "name": "Curd Rice", "image": "curd-rice.png" },
+      { "name": "Lemon Rice", "image": "lemon-rice.png" },
+      { "name": "Tomato Rice", "image": "tomato-rice.png" },
+      { "name": "White Brinji", "image": "white-brinji.png" },
+      { "name": "Jeera Rice", "image": "jeera-rice.png" },
+      { "name": "Kaju Pulav", "image": "kaju-pulav.png" }
+    ]
+  },
+  {
+    "id": "biryani",
+    "name": "Biryani",
+    "icon": "FiBox",
+    "items": [
+      { "name": "Mutton Biryani", "image": "mutton-biryani.jpg" },
+      { "name": "Chicken Biryani", "image": "chicken-biryani.jpg" },
+      { "name": "Kongu Rice", "image": "kongu-rice.png" },
+      { "name": "Prawn Biryani", "image": "prawn-biryani.png" },
+      { "name": "Egg Biryani", "image": "egg-biryani.png" },
+      { "name": "Khushka", "image": "khushka.png" }
+    ]
+  },
+  {
+    "id": "veg-starters",
+    "name": "Veg Starters",
+    "icon": "FiFeather",
+    "items": [
+      { "name": "Mint Gobi Fry", "image": "mint-gobi-fry.jpg" },
+      { "name": "Schezwan Yam", "image": "schezwan-yam.jpg" },
+      { "name": "Chilly Potato", "image": "chilly-potato.jpg" },
+      { "name": "Mushroom 65", "image": "mushroom-65.jpg" },
+      { "name": "Paneer 65", "image": "paneer-65.jpg" },
+      { "name": "Paneer Tikka", "image": "paneer-tikka.jpg" },
+      { "name": "Chilly Sweet Potato", "image": "chilly-sweet-potato.jpg" },
+      { "name": "Tandoori Potato", "image": "tandoori-potato.jpg" },
+      { "name": "Grilled Mushroom", "image": "grilled-mushroom.jpg" }
+    ]
+  },
+  {
+    "id": "non-veg-starters",
+    "name": "Non-Veg Starters",
+    "icon": "FiTarget",
+    "items": [
+      { "name": "Chicken 65", "image": "chicken-65.jpg" },
+      { "name": "Fish Fry", "image": "fish-fry.jpg" },
+      { "name": "Prawn Fry", "image": "prawn-fry.jpg" },
+      { "name": "Garlic Prawn", "image": "garlic-prawn.jpg" },
+      { "name": "Orange Chicken", "image": "orange-chicken.jpg" }
+    ]
+  },
+  {
+    "id": "gravy-veg",
+    "name": "Gravy Veg",
+    "icon": "FiCircle",
+    "items": [
+      { "name": "Chettinadu Karunai", "image": "chettinadu-karunai.jpg" },
+      { "name": "Paneer Tikka Masala", "image": "paneer-tikka-masala.jpg" },
+      { "name": "Mushroom Masala", "image": "mushroom-masala.jpg" },
+      { "name": "Paneer Butter Masala", "image": "paneer-butter-masala.jpg" },
+      { "name": "Dal Fry", "image": "dal-fry.jpg" },
+      { "name": "Mix Veg Masala", "image": "mix-veg-masala.jpg" },
+      { "name": "White Kurma", "image": "white-kurma.jpg" },
+      { "name": "Kathrika Andhra Thokku", "image": "kathrika-andhra-thokku.jpg" },
+      { "name": "Konda Kadala Masala", "image": "konda-kadala-masala.jpg" }
+    ]
+  },
+  {
+    "id": "gravy-non-veg",
+    "name": "Gravy Non-Veg",
+    "icon": "FiCircle",
+    "items": [
+      { "name": "Chicken Tikka Masala", "image": "chicken-tikka-masala.jpg" },
+      { "name": "Chicken Thokku", "image": "chicken-thokku.jpg" },
+      { "name": "Mutton Curry", "image": "mutton-curry.jpg" },
+      { "name": "Prawn Masala", "image": "prawn-masala.jpg" },
+      { "name": "Cashew Chicken Masala", "image": "cashew-chicken-masala.jpg" },
+      { "name": "Mutton Stew", "image": "mutton-stew.jpg" },
+      { "name": "Chicken Kurma", "image": "chicken-kurma.jpg" },
+      { "name": "Meen Kuzhambu", "image": "meen-kuzhambu.jpg" }
+    ]
+  },
+  {
+    "id": "breakfast-dinner",
+    "name": "Break Fast & Dinner",
+    "icon": "FiSunrise",
+    "items": [
+      { "name": "Idly with Sambar and Chutney", "image": "idly-sambar-chutney.jpg" },
+      { "name": "Set Dosa with Vadacurry", "image": "set-dosa-vadacurry.jpg" },
+      { "name": "Poori & Masala", "image": "poori-masala.jpg" },
+      { "name": "Pongal & Masala", "image": "pongal-masala.jpg" },
+      { "name": "Rava Kichadi & Thenga Chutney", "image": "rava-kichadi-thenga-chutney.jpg" },
+      { "name": "Upma & Kara Chutney", "image": "upma-kara-chutney.jpg" },
+      { "name": "Kichadi with Chutney", "image": "kichadi-chutney.jpg" },
+      { "name": "Rava Pongal & Thenga Chutney", "image": "rava-pongal-thenga-chutney.jpg" },
+      { "name": "Idiyappam & Kurma", "image": "idiyappam-kurma.jpg" },
+      { "name": "Sambar Idly", "image": "sambar-idly.jpg" },
+      { "name": "Chappati and Dal", "image": "chappati-dal.jpg" },
+      { "name": "Rava Idly with Puthina Chutney", "image": "rava-idly-puthina-chutney.jpg" },
+      { "name": "Adai with Kara Chutney", "image": "adai-kara-chutney.jpg" },
+      { "name": "Vada with Chutney", "image": "vada-chutney.jpg" }
+    ]
+  },
+  {
+    "id": "snacks",
+    "name": "Snacks",
+    "icon": "FiCoffee",
+    "items": [
+      { "name": "Ragi Semiya", "image": "ragi-semiya.jpg" },
+      { "name": "Peanut Sundal", "image": "peanut-sundal.jpg" },
+      { "name": "Karapaniyaram", "image": "karapaniyaram.jpg" },
+      { "name": "Black Channa Sundal", "image": "black-channa-sundal.jpg" },
+      { "name": "Samosa Sundal", "image": "samosa-sundal.jpg" },
+      { "name": "Muffins", "image": "muffins.jpg" },
+      { "name": "Fruit Salad", "image": "fruit-salad.jpg" },
+      { "name": "Kara Vada with Chutney", "image": "kara-vada-chutney.jpg" },
+      { "name": "Medhuvada with Chutney", "image": "medhuvada-chutney.jpg" }
+    ]
+  },
+  {
+    "id": "confectionery",
+    "name": "Confectionery",
+    "icon": "FiGift",
+    "items": [
+      { "name": "Orange Ginger Cake", "image": "orange-ginger-cake.jpg" },
+      { "name": "Coconut Cake", "image": "coconut-cake.jpg" },
+      { "name": "Almond Cake", "image": "almond-cake.jpg" },
+      { "name": "Truffled Brownie", "image": "truffled-brownie.jpg" },
+      { "name": "Brownie", "image": "brownie.jpg" },
+      { "name": "Pound Cake", "image": "pound-cake.jpg" },
+      { "name": "Cashew Biscuits", "image": "cashew-biscuits.jpg" },
+      { "name": "Cookie Sticks", "image": "cookie-sticks.jpg" },
+      { "name": "Walnut Cake", "image": "walnut-cake.jpg" }
+    ]
+  }
+]
