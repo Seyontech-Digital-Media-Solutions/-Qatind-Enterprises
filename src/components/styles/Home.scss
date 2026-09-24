@@ -1,24 +1,31 @@
 @import '../../styles/variables';
 @import '../../styles/mixins';
 
+// Handwritten accent used for "We Create Happiness" / "Made with Love".
+// Add this once to index.html (or your global font stylesheet) for the
+// exact look — falls back to the system cursive stack without it:
+// <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap">
+$font-script: 'Caveat', 'Segoe Script', cursive;
+
 .home {
   main {
     min-height: 100vh;
   }
 }
 
-// Hero Section
+// ============================
+// Hero Section — unchanged
+// ============================
 .hero {
   position: relative;
+  overflow: hidden;
   background: linear-gradient(135deg, $color-primary 0%, darken($color-primary, 12%) 100%);
   color: $color-light;
   padding: $spacing-3xl $spacing-md;
-  min-height: 500px;
+  min-height: 600px;
   display: flex;
   align-items: center;
-  justify-content: center;
 
-  // Brand tricolor accent stripe
   &::before {
     content: '';
     position: absolute;
@@ -26,6 +33,7 @@
     left: 0;
     right: 0;
     height: 4px;
+    z-index: 2;
     background: linear-gradient(
       90deg,
       $color-red 0%,
@@ -38,7 +46,7 @@
   }
 
   @include mobile {
-    min-height: 350px;
+    min-height: auto;
     padding: $spacing-2xl $spacing-md;
   }
 
@@ -46,8 +54,58 @@
     width: 100%;
   }
 
+  &__shape {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+
+    &--1 {
+      width: 260px;
+      height: 260px;
+      top: -60px;
+      left: -60px;
+      background: rgba($color-saffron, 0.15);
+    }
+
+    &--2 {
+      width: 180px;
+      height: 180px;
+      bottom: -40px;
+      right: 8%;
+      background: rgba($color-red, 0.15);
+    }
+  }
+
+  &__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: $spacing-2xl;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $spacing-2xl;
+    }
+  }
+
   &__content {
-    text-align: center;
+    text-align: left;
+
+    @include mobile {
+      text-align: center;
+    }
+  }
+
+  &__eyebrow {
+    display: inline-block;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-saffron;
+    margin-bottom: $spacing-sm;
   }
 
   &__title {
@@ -64,23 +122,168 @@
   &__subtitle {
     font-size: $font-size-xl;
     margin-bottom: $spacing-2xl;
-    opacity: 0.95;
+    opacity: 0.9;
+    max-width: 480px;
 
     @include mobile {
       font-size: $font-size-base;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    flex-wrap: wrap;
+
+    @include mobile {
+      justify-content: center;
     }
   }
 
   &__cta {
-    @include button-secondary;
     padding: $spacing-md $spacing-2xl;
     font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    border-radius: $border-radius-full;
     display: inline-block;
     text-decoration: none;
+    transition: all $transition-base;
+
+    &--primary {
+      background-color: $color-saffron;
+      color: $color-dark;
+
+      &:hover {
+        background-color: darken($color-saffron, 8%);
+        box-shadow: $shadow-md;
+        transform: translateY(-2px);
+      }
+    }
+
+    &--outline {
+      background-color: transparent;
+      color: $color-light;
+      border: 2px solid rgba($color-light, 0.6);
+
+      &:hover {
+        background-color: rgba($color-light, 0.12);
+        border-color: $color-light;
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  &__visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 420px;
+
+    @include mobile {
+      min-height: 320px;
+    }
+  }
+
+  &__blob {
+    position: absolute;
+    width: 340px;
+    height: 340px;
+    border-radius: 42% 58% 60% 40% / 45% 40% 60% 55%;
+    background: linear-gradient(135deg, $color-saffron 0%, $color-red 100%);
+    opacity: 0.9;
+
+    @include mobile {
+      width: 260px;
+      height: 260px;
+    }
+  }
+
+  &__ring {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    border: 2px dashed rgba($color-light, 0.35);
+
+    @include mobile {
+      width: 300px;
+      height: 300px;
+    }
+  }
+
+  &__main-img {
+    position: relative;
+    z-index: 1;
+    width: 320px;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 6px solid rgba($color-light, 0.9);
+    box-shadow: $shadow-xl;
+
+    @include mobile {
+      width: 240px;
+      height: 240px;
+    }
+  }
+
+  &__float {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: $shadow-lg;
+    border: 4px solid $color-light;
+    background-color: $bg-primary;
+
+    &--1 {
+      width: 100px;
+      height: 100px;
+      top: 8%;
+      right: 4%;
+
+      @include mobile {
+        width: 70px;
+        height: 70px;
+      }
+    }
+
+    &--2 {
+      width: 90px;
+      height: 90px;
+      bottom: 10%;
+      left: 0;
+
+      @include mobile {
+        width: 64px;
+        height: 64px;
+      }
+    }
+
+    &--3 {
+      width: 80px;
+      height: 80px;
+      bottom: -4%;
+      right: 14%;
+
+      @include mobile {
+        width: 56px;
+        height: 56px;
+        bottom: 0;
+        right: 6%;
+      }
+    }
   }
 }
 
-// Section Common Styles
+// ============================
+// Shared section heading (Featured Dishes, Reviews)
+// ============================
 .section__title {
   position: relative;
   font-size: $font-size-4xl;
@@ -113,85 +316,585 @@
   }
 }
 
-// Features Section
-.features {
-  padding: $spacing-3xl $spacing-md;
+// ============================
+// Why Qatind?
+// ============================
+.why-qatind {
+  position: relative;
+  padding: $spacing-3xl $spacing-md calc(#{$spacing-3xl} + 60px);
   background-color: $bg-secondary;
+  overflow: hidden;
+
+  @include mobile {
+    padding: $spacing-2xl $spacing-md calc(#{$spacing-2xl} + 50px);
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  // Decorative corner leaves
+  &__leaf {
+    position: absolute;
+    z-index: 0;
+    color: rgba($color-green, 0.14);
+    pointer-events: none;
+
+    &--tl {
+      top: -30px;
+      left: -20px;
+      font-size: 9rem;
+      transform: rotate(-15deg);
+    }
+
+    &--tr {
+      top: -10px;
+      right: -30px;
+      font-size: 7rem;
+      transform: rotate(30deg) scaleX(-1);
+    }
+  }
+
+  &__top {
+    display: grid;
+    grid-template-columns: 1fr 0.9fr;
+    align-items: center;
+    gap: $spacing-2xl;
+    margin-bottom: $spacing-3xl;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $spacing-xl;
+      margin-bottom: $spacing-2xl;
+      text-align: center;
+    }
+  }
+
+  &__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $color-primary;
+    margin-bottom: $spacing-sm;
+
+    @include mobile {
+      justify-content: center;
+    }
+  }
+
+  &__title {
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-bold;
+    line-height: $line-height-tight;
+    color: $text-primary;
+    margin-bottom: $spacing-lg;
+    display: flex;
+    flex-direction: column;
+
+    @include mobile {
+      font-size: $font-size-2xl;
+    }
+  }
+
+  &__title-script {
+    font-family: $font-script;
+    font-weight: 700;
+    font-size: 1.7em;
+    color: $color-red;
+    line-height: 1.1;
+    text-decoration: none;
+    text-decoration-color: $color-saffron;
+    text-underline-offset: 6px;
+    margin-top: $spacing-xs;
+  }
+
+  &__text {
+    @include body-text;
+    max-width: 46ch;
+    margin-bottom: $spacing-lg;
+
+    @include mobile {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  &__link {
+    @include button-primary;
+    background-color: darken($color-primary, 6%);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
+    border-radius: $border-radius-full;
+  }
+
+  // ----------------------------
+  // Blob visual (image + accents)
+  // ----------------------------
+  &__visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-2xl $spacing-2xl $spacing-2xl;
+  }
+
+  &__made {
+    position: absolute;
+    top: -4px;
+    right: 24%;
+    left: auto;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-family: $font-script;
+    font-weight: 700;
+    font-size: $font-size-2xl;
+    color: $color-saffron;
+    transform: rotate(6deg);
+
+    @include mobile {
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%) rotate(4deg);
+    }
+  }
+
+  // Organic freeform crop instead of a plain rectangle (or the old
+  // border-radius blob fake). Clipped to an exact irregular path via
+  // the <clipPath id="whyQatindBlob"> defined once in Home.jsx.
+  &__img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width:620px;
+    height: 480px;
+    object-fit: cover;
+    border: none;
+    clip-path: url(#whyQatindBlob);
+    filter: drop-shadow(0 18px 28px rgba($color-dark, 0.22));
+    transition: transform $transition-slow;
+
+    .why-qatind__visual:hover & {
+      transform: scale(1.03);
+    }
+
+    @include mobile {
+      height: 300px;
+      max-width: 320px;
+    }
+  }
+
+  &__placeholder {
+    width: 100%;
+    max-width: 420px;
+    height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed $color-gray-400;
+    clip-path: url(#whyQatindBlob);
+    color: $text-secondary;
+
+    @include mobile {
+      height: 300px;
+      max-width: 320px;
+    }
+  }
+
+  // Thin hand-drawn accent lines flanking the blob, like the reference.
+
+  &__accent {
+    position: absolute;
+    z-index: 0;
+    width: 76px;
+    height: auto;
+    pointer-events: none;
+
+    path {
+      fill: none;
+      stroke: $color-green;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    &--1 {
+      top: 2%;
+      left: -2%;
+    }
+
+    &--2 {
+      bottom: 6%;
+      right: -2%;
+
+      path {
+        stroke: $color-saffron;
+      }
+    }
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  &__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: $spacing-lg;
+  }
+}
+
+.reason-card {
+  position: relative;
+  padding: $spacing-xl $spacing-lg $spacing-2xl;
+  border-radius: $border-radius-lg;
+  text-align: center;
+  transition: transform $transition-base, box-shadow $transition-base;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: $shadow-lg;
+
+    .reason-card__icon {
+      transform: scale(1.1) rotate(-6deg);
+    }
+  }
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    color: $color-light;
+    margin-bottom: $spacing-md;
+    transition: transform $transition-base;
+    box-shadow: $shadow-sm;
+  }
+
+  &__title {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-xs;
+    color: $text-primary;
+  }
+
+  &__text {
+    @include small-text;
+    margin: 0;
+  }
+
+  &__underline {
+    position: absolute;
+    bottom: $spacing-md;
+    top:85%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 28px;
+    height: 3px;
+    border-radius: $border-radius-full;
+  }
+
+  &--green {
+    background-color: rgba($color-green, 0.09);
+
+    .reason-card__icon { background-color: $color-green; }
+    .reason-card__underline { background-color: $color-green; }
+  }
+
+  &--saffron {
+    background-color: rgba($color-saffron, 0.14);
+
+    .reason-card__icon { background-color: darken($color-saffron, 4%); }
+    .reason-card__underline { background-color: $color-saffron; }
+  }
+
+  &--red {
+    background-color: rgba($color-red, 0.09);
+
+    .reason-card__icon { background-color: $color-red; }
+    .reason-card__underline { background-color: $color-red; }
+  }
+
+  &--blue {
+    background-color: rgba(#2563eb, 0.09);
+
+    .reason-card__icon { background-color: #2563eb; }
+    .reason-card__underline { background-color: #2563eb; }
+  }
+}
+
+// Full-width wave closing out the section
+.why-qatind__wave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 90px;
+  z-index: 0;
+
+  path {
+    fill: $color-primary;
+  }
+
+  @include mobile {
+    height: 60px;
+  }
+}
+
+// ============================
+// What Makes Our Food Different? (process / kitchen journey)
+// ============================
+.process {
+  position: relative;
+  padding: $spacing-3xl $spacing-md;
+  background-color: rgba($color-saffron, 0.30);
+  overflow: hidden;
 
   @include mobile {
     padding: $spacing-2xl $spacing-md;
   }
 
-  &__grid {
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__header {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: 0.85fr 1.15fr;
+    align-items: center;
     gap: $spacing-2xl;
+    margin-bottom: $spacing-2xl;
 
     @include mobile {
       grid-template-columns: 1fr;
-      gap: $spacing-lg;
+      gap: $spacing-xl;
     }
   }
-}
 
-.feature-card {
-  background-color: $bg-primary;
-  padding: $spacing-2xl;
-  border-radius: $border-radius-lg;
-  text-align: center;
-  box-shadow: $shadow-md;
-  border-top: 4px solid $color-primary;
-  transition: all $transition-base;
-
-  &:nth-child(3n+2) {
-    border-top-color: $color-saffron;
-  }
-
-  &:nth-child(3n+3) {
-    border-top-color: $color-red;
-  }
-
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: $shadow-xl;
-  }
-
-  &__icon {
-    margin-bottom: $spacing-lg;
-  }
-
-  &__icon-bg {
-    width: 80px;
-    height: 80px;
-    background-color: $color-primary;
-    border-radius: $border-radius-lg;
-    margin: 0 auto;
-    opacity: 0.12;
-  }
-
-  // Cycle brand colors across repeating feature cards
-  &:nth-child(3n+2) &__icon-bg {
-    background-color: $color-saffron;
-  }
-
-  &:nth-child(3n+3) &__icon-bg {
-    background-color: $color-red;
+  &__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $color-primary;
+    margin-bottom: $spacing-sm;
   }
 
   &__title {
-    font-size: $font-size-xl;
+    font-size: $font-size-4xl;
     font-weight: $font-weight-bold;
-    margin-bottom: $spacing-md;
+    line-height: $line-height-tight;
     color: $text-primary;
+    margin-bottom: $spacing-sm;
+
+    span {
+      color: $color-primary;
+    }
+
+    @include mobile {
+      font-size: $font-size-2xl;
+    }
   }
 
-  &__description {
-    @include small-text;
-    margin: 0;
+  &__text {
+    @include body-text;
+    max-width: 40ch;
+    margin: 0 0 $spacing-lg;
+  }
+
+  &__link {
+    @include button-primary;
+    background-color: darken($color-primary, 6%);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
+    border-radius: $border-radius-full;
+    white-space: nowrap;
+  }
+
+  // ----------------------------
+  // Pyramid layout: 3 icons on the first row, 2 centered underneath.
+  // Flex-wrap centers each line independently, so an incomplete last
+  // row (the 2 leftover icons) sits centered under the row of 3.
+  // ----------------------------
+  &__steps {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    gap: $spacing-xl $spacing-lg;
+    max-width: 320px;
+    margin: 0 auto;
+
+    @include mobile {
+      max-width: 230px;
+      gap: $spacing-lg $spacing-md;
+    }
+  }
+
+  &__step {
+    flex: 0 0 auto;
+    width: 88px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-xs;
+
+    @include mobile {
+      width: 64px;
+    }
+  }
+
+  &__step-badge {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background-color: rgba($color-green, 0.1);
+    color: $color-primary;
+    font-size: 1.4rem;
+    flex-direction: column;
+
+    @include mobile {
+      width: 56px;
+      height: 56px;
+      font-size: 1.1rem;
+    }
+  }
+
+  &__step-number {
+    position: absolute;
+    top: -6px;
+    right: -4px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: $color-dark;
+    color: $color-light;
+    font-size: 0.65rem;
+    font-weight: $font-weight-bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__step-label {
+    width: 84px;
+    text-align: center;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $text-primary;
+    margin: $spacing-sm 0 0;
+    align-self: flex-start;
+  }
+
+  &__chevron {
+    color: $color-gray-400;
+    font-size: $font-size-lg;
+    margin: $spacing-xl $spacing-xs 0;
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  &__gallery {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: $spacing-md;
+
+    @include mobile {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include tablet {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &__photo {
+    position: relative;
+    height: 190px;
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    box-shadow: $shadow-md;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform $transition-slow;
+    }
+
+    &:hover img {
+      transform: scale(1.06);
+    }
+  }
+
+  &__photo-caption {
+    position: absolute;
+    left: $spacing-sm;
+    bottom: $spacing-sm;
+    right: $spacing-sm;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $border-radius-md;
+    background-color: rgba($color-dark, 0.55);
+    backdrop-filter: blur(2px);
+    color: $color-light;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
   }
 }
 
-// Featured Section
+// Bottom-right corner wave/blob
+.process__corner {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 220px;
+  height: 220px;
+  z-index: 0;
+  pointer-events: none;
+
+  path {
+    fill: $color-primary;
+    opacity: 0.95;
+  }
+
+  @include mobile {
+    width: 130px;
+    height: 130px;
+  }
+}
+
+// ============================
+// Featured / Signature Dishes — unchanged
+// ============================
 .featured {
   padding: $spacing-3xl $spacing-md;
 
@@ -223,140 +926,411 @@
   }
 }
 
-// Testimonials Section
-.testimonials {
+// ============================
+// Catering
+// ============================
+.catering {
+  position: relative;
   padding: $spacing-3xl $spacing-md;
   background-color: $bg-secondary;
+  overflow: hidden;
 
   @include mobile {
     padding: $spacing-2xl $spacing-md;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
   }
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: 0.8fr 1.2fr;
+    align-items: center;
     gap: $spacing-2xl;
 
     @include mobile {
       grid-template-columns: 1fr;
-      gap: $spacing-lg;
+      gap: $spacing-xl;
     }
   }
-}
 
-.testimonial-card {
-  background-color: $bg-primary;
-  padding: $spacing-2xl;
-  border-radius: $border-radius-lg;
-  box-shadow: $shadow-md;
-  border-left: 4px solid $color-primary;
+  &__visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 $spacing-md $spacing-lg 0;
+  }
 
-  &__stars {
-    font-size: $font-size-lg;
-    margin-bottom: $spacing-md;
+  &__dashed {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    right: -14px;
+    bottom: -14px;
+    border: 2px dashed rgba($color-primary, 0.8);
+    border-radius: $border-radius-xl;
+    z-index: 0;
+  }
+
+  &__img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    height: 320px;
+    object-fit: cover;
+    border-radius: $border-radius-xl;
+    box-shadow: $shadow-xl;
+  }
+
+  &__tag {
+    position: absolute;
+    z-index: 2;
+    bottom: 4px;
+    left: 6%;
+    background-color: $color-primary;
+    color: $color-light;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    padding: $spacing-sm $spacing-lg;
+    border-radius: $border-radius-full;
+    box-shadow: $shadow-md;
+  }
+
+  &__content {
+    @include mobile {
+      text-align: center;
+    }
+  }
+
+  &__eyebrow {
+    display: inline-block;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-green;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__title {
+    font-size: $font-size-5xl;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    line-height: $line-height-tight;
+    margin: 0;
+
+    @include mobile {
+      font-size: $font-size-3xl;
+    }
+  }
+
+  &__subtitle {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    color: $color-primary;
+    margin: 0 0 $spacing-md;
+
+    @include mobile {
+      font-size: $font-size-lg;
+    }
   }
 
   &__text {
     @include body-text;
-    margin-bottom: $spacing-lg;
-    font-style: italic;
+    margin-bottom: $spacing-xl;
+    max-width: 50ch;
+
+    @include mobile {
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
 
-  &__author {
-    h4 {
+  &__list {
+    list-style: none;
+    margin: 0 0 $spacing-2xl;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-md $spacing-xl;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      text-align: left;
+    }
+  }
+
+  &__item {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-sm;
+
+    strong {
+      display: block;
       font-size: $font-size-base;
-      font-weight: $font-weight-bold;
-      margin: 0 0 $spacing-xs 0;
+      font-weight: $font-weight-semibold;
+      color: $text-primary;
     }
 
-    p {
+    em {
       @include small-text;
-      margin: 0;
+      font-style: normal;
     }
+  }
+
+  &__item-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: rgba($color-red, 0.1);
+    color: $color-red;
+    font-size: 1rem;
+  }
+
+  &__cta {
+    @include button-secondary;
+    padding: $spacing-md $spacing-2xl;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
   }
 }
 
-// FAQ Section
-.faq {
+// Bottom-right decorative curve wave, requested for the Catering section
+.catering__corner {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 240px;
+  height: 240px;
+  z-index: 0;
+  pointer-events: none;
+
+  path {
+    fill: $color-saffron;
+    opacity: 0.9;
+  }
+
+  @include mobile {
+    width: 140px;
+    height: 140px;
+  }
+}
+
+// ============================
+// Reviews / Testimonials — two-column sliding carousel.
+// No marquee, no boxed cards: paired testimonials slide horizontally
+// via Framer Motion, navigated with arrows + dots (TestimonialCarousel.jsx).
+// ============================
+.reviews {
   padding: $spacing-3xl $spacing-md;
+  background: linear-gradient(180deg, $bg-secondary 0%, $bg-primary 100%);
 
   @include mobile {
     padding: $spacing-2xl $spacing-md;
   }
 
-  &__list {
-    max-width: 800px;
+  &__carousel {
+    max-width: 960px;
     margin: 0 auto;
   }
 
-  &__item {
-    margin-bottom: $spacing-lg;
-    border: 1px solid $color-gray-200;
-    border-radius: $border-radius-md;
+  &__track {
     overflow: hidden;
+  }
 
-    &[open] {
-      background-color: $bg-secondary;
+  &__slide {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-2xl;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $spacing-xl;
     }
   }
 
-  &__question {
-    padding: $spacing-lg;
-    cursor: pointer;
-    font-weight: $font-weight-semibold;
-    user-select: none;
+  &__nav {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    gap: $spacing-lg;
+    margin-top: $spacing-2xl;
+  }
 
-    &::marker {
-      color: $color-primary;
-    }
+  &__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid $color-primary;
+    background: transparent;
+    color: $color-primary;
+    cursor: pointer;
+    transition: all $transition-base;
 
     &:hover {
-      background-color: $bg-secondary;
+      background-color: $color-primary;
+      color: $color-light;
     }
   }
 
-  &__answer {
-    padding: 0 $spacing-lg $spacing-lg $spacing-lg;
-    @include body-text;
+  &__dots {
+    display: flex;
+    gap: $spacing-xs;
+  }
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: $color-gray-400;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &--active {
+      width: 22px;
+      border-radius: $border-radius-full;
+      background-color: $color-primary;
+    }
   }
 }
 
-// CTA Section
+.testimonial-slide {
+  display: flex;
+  gap: $spacing-lg;
+  align-items: flex-start;
+  padding-bottom: $spacing-lg;
+  border-bottom: 1px solid rgba($color-gray-400, 0.35);
+
+  @include mobile {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  &__avatar-col {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+
+  &__avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color-light;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-lg;
+  }
+
+  &__stars {
+    display: flex;
+    gap: 2px;
+    color: $color-saffron;
+    font-size: 0.7rem;
+  }
+
+  &__body {
+    flex: 1;
+  }
+
+  &__quote-icon {
+    color: rgba($color-primary, 0.2);
+    font-size: 1.5rem;
+    margin-bottom: $spacing-xs;
+  }
+
+  &__text {
+    @include body-text;
+    font-style: italic;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__author {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    margin: 0;
+  }
+
+  &__role {
+    @include small-text;
+    margin: 0;
+  }
+
+  // Cycle the same accent palette used by the reason cards above.
+  &--green .testimonial-slide__avatar {
+    background: linear-gradient(135deg, $color-green, darken($color-green, 12%));
+  }
+
+  &--saffron .testimonial-slide__avatar {
+    background: linear-gradient(135deg, $color-saffron, $color-red);
+  }
+
+  &--red .testimonial-slide__avatar {
+    background: linear-gradient(135deg, $color-red, darken($color-red, 12%));
+  }
+
+  &--blue .testimonial-slide__avatar {
+    background: linear-gradient(135deg, #2563eb, darken(#2563eb, 12%));
+  }
+}
+
+// ============================
+// CTA Section — unchanged
+// ============================
 .cta {
   position: relative;
-  background: linear-gradient(135deg, $color-primary 0%, darken($color-primary, 12%) 100%);
   color: $color-light;
   padding: $spacing-3xl $spacing-md;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
-  &::before {
+  &::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
+    inset: 0;
+    z-index: 0;
     background: linear-gradient(
-      90deg,
-      $color-red 0%,
-      $color-red 33.33%,
-      $color-saffron 33.33%,
-      $color-saffron 66.66%,
-      $color-primary 66.66%,
-      $color-primary 100%
+      135deg,
+      rgba(darken($color-primary, 25%), 0.6) 0%,
+      rgba(#000000, 0.4) 100%
     );
   }
 
   @include mobile {
     padding: $spacing-2xl $spacing-md;
+    min-height: 380px;
   }
 
   &__content {
+    position: relative;
+    z-index: 1;
     text-align: center;
     max-width: 600px;
     margin: 0 auto;
+    width: 100%;
 
     h2 {
       font-size: $font-size-4xl;
@@ -370,6 +1344,7 @@
     p {
       font-size: $font-size-lg;
       margin-bottom: $spacing-2xl;
+      opacity: 0.95;
 
       @include mobile {
         font-size: $font-size-base;
@@ -378,6 +1353,8 @@
   }
 
   &__button {
+    position: relative;
+    z-index: 1;
     @include button-secondary;
     padding: $spacing-md $spacing-2xl;
     font-size: $font-size-lg;
