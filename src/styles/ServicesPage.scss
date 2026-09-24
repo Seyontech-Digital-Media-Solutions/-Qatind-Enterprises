@@ -673,11 +673,12 @@
 
     &-title {
       max-width: 48rem;
-      font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+      font-size: clamp(3.2rem, 5.5vw, 4.2rem);
       font-weight: 900;
       line-height: 1.02;
       letter-spacing: -0.02em;
       color: #fff;
+      text-align: left;
 
       &-highlight {
         background: linear-gradient(90deg, var(--color-saffron), #ffb74d, var(--color-red));

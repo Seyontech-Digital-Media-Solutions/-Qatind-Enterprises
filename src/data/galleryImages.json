@@ -14,5 +14,6 @@
   { "id": "g13", "title": "Veg Pulao", "category": "biryani", "image": "gallery-13.jpg" },
   { "id": "g14", "title": "Gulab Jamun", "category": "snacks", "image": "gallery-14.jpg" },
   { "id": "g15", "title": "Chettinad Chicken", "category": "non-veg", "image": "gallery-15.jpg" },
-  { "id": "g16", "title": "Palak Paneer", "category": "veg", "image": "gallery-16.jpg" }
+  { "id": "g16", "title": "Palak Paneer", "category": "veg", "image": "gallery-16.jpg" },
+  { "id": "g17", "title": "Coconut Cake", "category": "snacks", "image": "gallery-17.jpg" }
 ]

@@ -1,106 +1,208 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiX, FiChevronLeft, FiChevronRight, FiZoomIn } from 'react-icons/fi'
-import galleryData from '../data/galleryImages.json'
+import { FiX, FiChevronLeft, FiChevronRight, FiArrowRight } from 'react-icons/fi'
 import '../components/styles/Gallery.scss'
 
-// Auto-maps every file in src/assets/gallery/ by filename.
-// To use real photos later: drop a file into src/assets/gallery/ with the
-// SAME filename referenced in galleryImages.json — no component changes needed.
+// ── Load all gallery images eagerly ─────────────────────────────────────────
 const galleryAssets = import.meta.glob('../assets/gallery/*.{jpg,jpeg,png}', { eager: true })
 
 function getImageUrl(filename) {
-  const match = Object.entries(galleryAssets).find(([path]) => path.endsWith(`/${filename}`))
-  return match ? match[1].default : undefined
+  const match = Object.entries(galleryAssets).find(([path]) =>
+    path.endsWith(`/${filename}`)
+  )
+  return match ? match[1].default : null
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.05 } }
+// ── Use only images that actually exist in the assets folder ────────────────
+const ALL_IMAGES = Object.entries(galleryAssets).map(([path, mod], i) => {
+  const filename = path.split('/').pop()
+  const name = filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ')
+  return {
+    id: `img-${i}`,
+    title: name.charAt(0).toUpperCase() + name.slice(1),
+    filename,
+    url: mod.default,
+  }
+})
+
+// ── Bento: first 5 images ───────────────────────────────────────────────────
+// 'lshape' replaces the old separate 'sweets' + 'drinks' slots — the space
+// below "Fresh Ingredients" / beside "Freshly Baked" is now one L-shaped image
+// instead of two cells that could render empty.
+const SLOTS  = ['biryani', 'curry', 'salad', 'naan', 'lshape']
+const LABELS = [
+  ['Authentic', 'Homemade Biryani'],
+  ['Rich', '& Flavorful'],
+  ['Fresh', 'Ingredients'],
+  ['Freshly', 'Baked'],
+  ['Sweets', '& Drinks'],
+]
+
+function CurlArrow() {
+  return (
+    <svg className="curl-arrow" width="24" height="18" viewBox="0 0 24 18" fill="none" aria-hidden="true">
+      <path d="M2 2c5 0 7 9 12 9s5-5 7-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <path d="M18 5.5l3.2 2.3-2.6 3.2"    stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+    </svg>
+  )
 }
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 24, scale: 0.96 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4 } }
+function BentoPanel({ img, label, slot, onOpen }) {
+  if (!img?.url) return null
+  return (
+    <button
+      type="button"
+      className={`bento-panel bento-panel--${slot}`}
+      onClick={() => onOpen(img)}
+      aria-label={`Open ${img.title}`}
+    >
+      <img src={img.url} alt={img.title} loading="lazy" />
+      <span className="bento-panel__tag">
+        {label.map(line => <span key={line}>{line}</span>)}
+        <CurlArrow />
+      </span>
+    </button>
+  )
 }
 
 export default function Gallery() {
-  const [lightboxIndex, setLightboxIndex] = useState(null)
+  const [lightboxIdx, setLightboxIdx] = useState(null)
+  const [expanded, setExpanded]       = useState(false)
+  const galleryTopRef = useRef(null)
 
-  const openLightbox = (index) => setLightboxIndex(index)
-  const closeLightbox = () => setLightboxIndex(null)
+  // Always fill all 5 bento slots, even if the assets folder has fewer
+  // than 5 photos — cycle through what exists rather than leaving a
+  // slot (most commonly the L panel, index 4) blank.
+  const bentoImgs = ALL_IMAGES.length > 0
+    ? Array.from({ length: 5 }, (_, i) => ALL_IMAGES[i % ALL_IMAGES.length])
+    : []
+  const marqueeAll = ALL_IMAGES.length > 0 ? ALL_IMAGES : []
 
-  const showNext = useCallback(() => {
-    setLightboxIndex(i => (i + 1) % galleryData.length)
+  const openLightbox = useCallback((img) => {
+    const idx = ALL_IMAGES.findIndex(i => i.id === img.id)
+    setLightboxIdx(idx)
+  }, [])
+  const closeLightbox = () => setLightboxIdx(null)
+  const showNext = useCallback(() => setLightboxIdx(i => (i + 1) % ALL_IMAGES.length), [])
+  const showPrev = useCallback(() => setLightboxIdx(i => (i - 1 + ALL_IMAGES.length) % ALL_IMAGES.length), [])
+
+  // Collapsing the marquee shrinks page height; without this the browser
+  // just clamps the existing scroll position, which can land on the
+  // footer instead of the gallery. Scroll back up to the gallery first.
+  const handleCollapse = useCallback(() => {
+    galleryTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    setExpanded(false)
   }, [])
 
-  const showPrev = useCallback(() => {
-    setLightboxIndex(i => (i - 1 + galleryData.length) % galleryData.length)
-  }, [])
-
-  // Keyboard navigation for the lightbox
   useEffect(() => {
-    if (lightboxIndex === null) return
-    const onKeyDown = (e) => {
-      if (e.key === 'Escape') closeLightbox()
-      if (e.key === 'ArrowRight') showNext()
-      if (e.key === 'ArrowLeft') showPrev()
+    if (lightboxIdx === null) return
+    const onKey = (e) => {
+      if (e.key === 'Escape')      closeLightbox()
+      if (e.key === 'ArrowRight')  showNext()
+      if (e.key === 'ArrowLeft')   showPrev()
     }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [lightboxIndex, showNext, showPrev])
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [lightboxIdx, showNext, showPrev])
 
-  const activeImage = lightboxIndex !== null ? galleryData[lightboxIndex] : null
+  const activeImg = lightboxIdx !== null ? ALL_IMAGES[lightboxIdx] : null
+
+  // Duplicate for seamless loop — need at least 2 copies
+  const rowLeft  = [...marqueeAll, ...marqueeAll, ...marqueeAll]
+  const rowRight = [...[...marqueeAll].reverse(), ...[...marqueeAll].reverse(), ...[...marqueeAll].reverse()]
 
   return (
-    <div className="gallery">
-      <section className="gallery-hero">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-          >
-            <span className="gallery-hero__eyebrow">Qatind Restaurant</span>
-            <h1 className="gallery-hero__title">Our Gallery</h1>
-            <p className="gallery-hero__subtitle">
-              A glimpse into the dishes we love to serve.
-            </p>
-          </motion.div>
+    <div className="gallery-page">
+
+      {/* ── BENTO MOSAIC ─────────────────────────────────── */}
+      <section className="gallery-bento" ref={galleryTopRef}>
+        <div className="bento-intro">
+          <span className="bento-intro__eyebrow">
+            <i />Our Gallery
+          </span>
+          <h1 className="bento-intro__title">
+            Good Food<br />Tells a <em>Story</em>
+          </h1>
+          <span className="bento-intro__rule" />
+          <p className="bento-intro__subtitle">
+            From our kitchen to your table — explore the freshness, flavors and care in every dish we prepare.
+          </p>
         </div>
+
+        {bentoImgs.map((img, i) => (
+          <BentoPanel
+            key={`${img.id}-${SLOTS[i]}`}
+            img={img}
+            label={LABELS[i] || ['Fresh', 'Food']}
+            slot={SLOTS[i]}
+            onOpen={openLightbox}
+          />
+        ))}
+
+        {!expanded && (
+          <button type="button" className="bento-viewmore" onClick={() => setExpanded(true)}>
+            <span>View</span>
+            <span>More <FiArrowRight /></span>
+          </button>
+        )}
       </section>
 
-      <section className="gallery-grid-section">
-        <div className="container">
-          <motion.div
-            className="gallery-grid"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            {galleryData.map((img, index) => (
-              <motion.button
-                key={img.id}
-                className="gallery-grid__item"
-                variants={itemVariants}
-                onClick={() => openLightbox(index)}
-              >
-                <img src={getImageUrl(img.image)} alt={img.title} />
-                <span className="gallery-grid__overlay">
-                  <span className="gallery-grid__zoom-icon">
-                    <FiZoomIn size={22} />
-                  </span>
-                  <span className="gallery-grid__caption">{img.title}</span>
-                </span>
-              </motion.button>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Lightbox */}
+      {/* ── MARQUEE ──────────────────────────────────────── */}
       <AnimatePresence>
-        {activeImage && (
+        {expanded && (
+          <motion.section
+            className="gallery-marquee"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 40 }}
+            transition={{ duration: 0.45, ease: 'easeOut' }}
+          >
+            <h2 className="marquee-heading">All Photos</h2>
+
+            {/* Row 1 — scroll left */}
+            <div className="marquee-row">
+              <div className="marquee-track marquee-track--left">
+                {rowLeft.map((img, i) => (
+                  <button
+                    type="button"
+                    key={`l${i}`}
+                    className="marquee-card"
+                    onClick={() => openLightbox(img)}
+                  >
+                    <img src={img.url} alt={img.title} loading="lazy" />
+                    <span className="marquee-card__label">{img.title}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Row 2 — scroll right */}
+            <div className="marquee-row">
+              <div className="marquee-track marquee-track--right">
+                {rowRight.map((img, i) => (
+                  <button
+                    type="button"
+                    key={`r${i}`}
+                    className="marquee-card"
+                    onClick={() => openLightbox(img)}
+                  >
+                    <img src={img.url} alt={img.title} loading="lazy" />
+                    <span className="marquee-card__label">{img.title}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button type="button" className="marquee-collapse" onClick={handleCollapse}>
+              ← Back to gallery
+            </button>
+          </motion.section>
+        )}
+      </AnimatePresence>
+
+      {/* ── LIGHTBOX ─────────────────────────────────────── */}
+      <AnimatePresence>
+        {activeImg && (
           <motion.div
             className="lightbox"
             initial={{ opacity: 0 }}
@@ -109,39 +211,37 @@ export default function Gallery() {
             onClick={closeLightbox}
           >
             <button className="lightbox__close" onClick={closeLightbox} aria-label="Close">
-              <FiX size={26} />
+              <FiX size={22} />
             </button>
 
             <button
               className="lightbox__nav lightbox__nav--prev"
-              onClick={(e) => { e.stopPropagation(); showPrev() }}
-              aria-label="Previous image"
+              onClick={e => { e.stopPropagation(); showPrev() }}
+              aria-label="Previous"
             >
-              <FiChevronLeft size={28} />
+              <FiChevronLeft size={26} />
             </button>
 
             <motion.div
               className="lightbox__content"
-              key={activeImage.id}
-              initial={{ opacity: 0, scale: 0.9 }}
+              key={activeImg.id}
+              initial={{ opacity: 0, scale: 0.88 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.25 }}
-              onClick={(e) => e.stopPropagation()}
+              exit={{ opacity: 0, scale: 0.88 }}
+              transition={{ duration: 0.22 }}
+              onClick={e => e.stopPropagation()}
             >
-              <img src={getImageUrl(activeImage.image)} alt={activeImage.title} />
-              <p className="lightbox__caption">{activeImage.title}</p>
-              <p className="lightbox__counter">
-                {lightboxIndex + 1} / {galleryData.length}
-              </p>
+              <img src={activeImg.url} alt={activeImg.title} />
+              <p className="lightbox__caption">{activeImg.title}</p>
+              <p className="lightbox__counter">{lightboxIdx + 1} / {ALL_IMAGES.length}</p>
             </motion.div>
 
             <button
               className="lightbox__nav lightbox__nav--next"
-              onClick={(e) => { e.stopPropagation(); showNext() }}
-              aria-label="Next image"
+              onClick={e => { e.stopPropagation(); showNext() }}
+              aria-label="Next"
             >
-              <FiChevronRight size={28} />
+              <FiChevronRight size={26} />
             </button>
           </motion.div>
         )}

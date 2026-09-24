@@ -1,223 +1,471 @@
 @import '../../styles/variables';
 @import '../../styles/mixins';
 
-.navbar {
-  background-color: $bg-primary;
-  box-shadow: $shadow-md;
-  position: sticky;
+$nav-ease   : cubic-bezier(0.4, 0, 0.2, 1);
+$nav-spring : cubic-bezier(0.34, 1.56, 0.64, 1);
+$nav-dur    : 280ms;
+
+// ═══════════════════════════════════════════════════
+//  SHELL
+// ═══════════════════════════════════════════════════
+.site-nav {
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: $z-sticky;
+  background: #ffffff;
+  transition:
+    box-shadow       $nav-dur $nav-ease,
+    background-color $nav-dur $nav-ease,
+    transform         $nav-dur $nav-ease;
+
+  &--scrolled {
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow: 0 1px 0 rgba(0,0,0,.06), 0 4px 24px rgba(0,0,0,.08);
+  }
 
   &__container {
     @include container;
-    @include flex-between;
-    height: 70px;
-    padding-top: $spacing-md;
-    padding-bottom: $spacing-md;
-  }
-
-  &__menu {
-    @include flex-start;
-    gap: $spacing-lg;
-
-    @include mobile {
-      position: absolute;
-      top: 70px;
-      left: 0;
-      right: 0;
-      flex-direction: column;
-      align-items: stretch;
-      background-color: $bg-primary;
-      padding: $spacing-lg;
-      box-shadow: $shadow-lg;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height $transition-base;
-
-      &--active {
-        max-height: 500px;
-        overflow-y: auto;
-      }
-    }
-  }
-
-  &__link {
-    position: relative;
-    color: $text-primary;
-    text-decoration: none;
-    font-weight: $font-weight-semibold;
-    transition: color $transition-base;
-    white-space: nowrap;
-    background: none;
-    border: none;
-    font-family: inherit;
-    font-size: inherit;
-    cursor: pointer;
-    display: inline-flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
-    gap: 4px;
-    padding: 0;
-
-    &::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: -4px;
-      width: 0;
-      height: 2px;
-      background-color: $color-secondary;
-      transition: width $transition-base;
-    }
-
-    &:hover {
-      color: $color-primary;
-
-      &::after {
-        width: 100%;
-      }
-    }
+    gap: $spacing-lg;
+    height: 78px;
 
     @include mobile {
-      width: 100%;
-      padding: $spacing-sm 0;
-      justify-content: space-between;
+      grid-template-columns: auto 1fr auto auto;
+      height: 64px;
     }
   }
 
-  // Menu dropdown wrapper
-  &__dropdown {
-    position: relative;
-
-    @include mobile {
-      width: 100%;
-    }
-  }
-
-  &__dropdown-arrow {
-    width: 16px;
-    height: 16px;
-    transition: transform $transition-base;
-  }
-
-  &__dropdown--open &__dropdown-arrow {
-    transform: rotate(180deg);
-  }
-
-  &__dropdown-panel {
-    position: absolute;
-    top: calc(100% + #{$spacing-md});
-    left: 0;
-    min-width: 180px;
-    background-color: $bg-primary;
-    border-radius: $border-radius-md;
-    box-shadow: $shadow-lg;
-    padding: $spacing-sm;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-6px);
-    transition: opacity $transition-base, transform $transition-base, visibility $transition-base;
-    z-index: $z-sticky + 1;
-
-    @include mobile {
-      position: static;
-      box-shadow: none;
-      padding: 0 0 0 $spacing-md;
-      opacity: 1;
-      visibility: visible;
-      transform: none;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height $transition-base;
-    }
-  }
-
-  &__dropdown--open &__dropdown-panel {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-
-    @include mobile {
-      max-height: 200px;
-      margin-top: $spacing-sm;
-    }
-  }
-
-  &__dropdown-link {
-    display: block;
-    padding: $spacing-sm $spacing-md;
-    color: $text-primary;
-    text-decoration: none;
-    font-weight: $font-weight-semibold;
-    border-radius: $border-radius-sm;
-    transition: background-color $transition-base, color $transition-base;
-    white-space: nowrap;
-
-    &:hover {
-      background-color: $bg-secondary;
-      color: $color-primary;
-    }
-
-    @include mobile {
-      padding: $spacing-sm 0;
-    }
-  }
-
-  &__cta {
-    @include button-primary;
-    gap: $spacing-sm;
-
-    @include mobile {
-      width: 100%;
-      justify-content: center;
-    }
-  }
-
-  &__icon {
-    width: 20px;
-    height: 20px;
-  }
-
-  &__toggle {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: $text-primary;
-
-    @include mobile {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-
+  // ═══════════════════════════════════════════════
+  //  LOGO
+  // ═══════════════════════════════════════════════
   &__logo {
     display: flex;
     align-items: center;
-    gap: $spacing-sm;
-    font-size: $font-size-xl;
+    gap: 12px;
+    text-decoration: none;
+    flex-shrink: 0;
+
+    &:focus-visible {
+      outline: 2px solid $color-secondary;
+      outline-offset: 4px;
+      border-radius: $border-radius-sm;
+    }
+  }
+
+  &__logo-ring {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform $nav-spring $nav-dur * 0.5;
+    flex-shrink: 0;
+
+    .site-nav__logo:hover & {
+      transform: scale(1.06);
+    }
+
+    @include mobile {
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  &__logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  &__logo-copy {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+
+    @include mobile { display: none; }
+  }
+
+  &__logo-name {
+    font-size: $font-size-lg;
     font-weight: $font-weight-bold;
     color: $color-primary;
+    letter-spacing: -0.025em;
+    transition: color $nav-dur $nav-ease;
+
+    .site-nav__logo:hover & { color: $color-accent; }
+  }
+
+  &__logo-tagline {
+    font-size: 10px;
+    font-weight: $font-weight-semibold;
+    color: $text-secondary;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  // ═══════════════════════════════════════════════
+  //  NAV LINKS
+  // ═══════════════════════════════════════════════
+  &__links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+
+    @include mobile {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: min(300px, 86vw);
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 4px;
+      padding: 80px $spacing-md $spacing-xl;
+      background: #ffffff;
+      box-shadow: -10px 0 40px rgba(0,0,0,.16);
+      transform: translateX(110%);
+      transition: transform $nav-dur $nav-ease;
+      z-index: $z-modal;
+      overflow-y: auto;
+
+      &--open { transform: translateX(0); }
+    }
+  }
+
+  // ─── Individual pill ────────────────────────────
+  &__pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 9px 18px;
+    border-radius: $border-radius-full;
+    color: $text-secondary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    font-family: $font-family-sans;
     text-decoration: none;
-    transition: color $transition-base;
+    background: transparent;
+    border: none;
+    cursor: pointer;
     white-space: nowrap;
+    overflow: hidden;
+    transition:
+      color             $nav-dur $nav-ease,
+      background-color  $nav-dur $nav-ease,
+      transform         320ms   $nav-spring,
+      box-shadow        $nav-dur $nav-ease;
+
+    // sliding underline
+    &::after {
+      content: '';
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 5px;
+      height: 2px;
+      border-radius: 2px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform $nav-dur $nav-spring;
+    }
+
+    &-chevron {
+      width: 7px;
+      height: 7px;
+      margin-left: 2px;
+      border-right: 1.6px solid currentColor;
+      border-bottom: 1.6px solid currentColor;
+      transform: rotate(45deg);
+      transition: transform $nav-dur $nav-spring;
+
+      .site-nav__item--drop-open & { transform: rotate(225deg); }
+    }
 
     &:hover {
-      color: $color-accent;
+      color: $color-primary;
+      background-color: rgba($color-primary, 0.08);
+      transform: translateY(-4px) scale(1.04);
+      box-shadow: 0 10px 22px -12px rgba($color-primary, 0.35);
+
+      &::after { transform: scaleX(1); }
+    }
+
+    &:active {
+      transform: translateY(-1px) scale(0.97);
+    }
+
+    &--active {
+      color: #ffffff;
+      background-color: $color-primary;
+      box-shadow: 0 6px 18px rgba($color-primary, 0.4);
+      transform: translateY(-3px);
+
+      &::after { display: none; }
+
+      &:hover {
+        background-color: darken($color-primary, 6%);
+        box-shadow: 0 10px 26px rgba($color-primary, 0.5);
+        transform: translateY(-5px) scale(1.04);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-secondary;
+      outline-offset: 3px;
     }
 
     @include mobile {
+      width: 100%;
+      border-radius: $border-radius-lg;
+      padding: $spacing-sm $spacing-md;
       font-size: $font-size-base;
+      justify-content: flex-start;
+
+      &::after { display: none; }
+      &:hover { transform: translateX(4px); }
     }
   }
 
-  &__logo-icon {
-    height: 42px;
-    width: auto;
-    display: block;
+  // ═══════════════════════════════════════════════
+  //  DROPDOWN
+  // ═══════════════════════════════════════════════
+  &__item {
+    position: relative;
+
+    @include mobile { width: 100%; }
+
+    &--drop {}
+  }
+
+  &__drop-panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px) scale(0.96);
+    min-width: 186px;
+    background: #ffffff;
+    border-radius: $border-radius-lg;
+    box-shadow: 0 8px 32px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.06);
+    border: 1px solid rgba($color-gray-200, 0.7);
+    padding: 6px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity    $nav-dur $nav-ease,
+      transform  $nav-dur $nav-spring,
+      visibility $nav-dur $nav-ease;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -7px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 13px; height: 13px;
+      background: #ffffff;
+      border-left: 1px solid rgba($color-gray-200, 0.7);
+      border-top:  1px solid rgba($color-gray-200, 0.7);
+      border-radius: 2px 0 0 0;
+    }
+
+    .site-nav__item--drop-open & {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
 
     @include mobile {
-      height: 34px;
+      position: static;
+      transform: none;
+      box-shadow: none;
+      border: none;
+      border-radius: 0;
+      padding: 0 0 0 $spacing-md;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height $nav-dur $nav-ease;
+
+      &::before { display: none; }
+
+      .site-nav__item--drop-open & {
+        max-height: 200px;
+        transform: none;
+      }
     }
   }
+
+  &__drop-item {
+    display: flex;
+    align-items: center;
+    padding: 9px $spacing-md;
+    border-radius: $border-radius-md;
+    color: $text-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    text-decoration: none;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition:
+      background-color $nav-dur $nav-ease,
+      color            $nav-dur $nav-ease,
+      padding-left     $nav-dur $nav-ease,
+      opacity          220ms $nav-ease,
+      transform        220ms $nav-spring;
+
+    .site-nav__item--drop-open & {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: calc(var(--i, 0) * 45ms);
+    }
+
+    &:hover {
+      background: rgba($color-primary, 0.08);
+      color: $color-primary;
+      padding-left: $spacing-lg;
+      transform: translateX(2px);
+    }
+
+    &--active {
+      background: rgba($color-primary, 0.1);
+      color: $color-primary;
+      font-weight: $font-weight-bold;
+    }
+
+    @include mobile {
+      opacity: 1;
+      transform: none;
+      padding: $spacing-sm 0;
+      font-size: $font-size-base;
+      &:hover { padding-left: $spacing-sm; transform: none; }
+    }
+  }
+
+  // ═══════════════════════════════════════════════
+  //  CTA — Cart button
+  // ═══════════════════════════════════════════════
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px $spacing-lg;
+    background: $color-saffron;
+    color: #ffffff;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    font-family: $font-family-sans;
+    letter-spacing: 0.04em;
+    border: none;
+    border-radius: $border-radius-full;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition:
+      background-color $nav-dur $nav-ease,
+      transform         280ms   $nav-spring,
+      box-shadow        $nav-dur $nav-ease;
+
+    &-icon {
+      font-size: 17px;
+      transition: transform $nav-dur $nav-spring;
+    }
+
+    &:hover {
+      background: $color-accent;
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 26px -8px rgba($color-accent, 0.5);
+
+      .site-nav__cta-icon { transform: rotate(-12deg) scale(1.15); }
+    }
+
+    &:active {
+      transform: translateY(0) scale(0.96);
+      box-shadow: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-secondary;
+      outline-offset: 3px;
+    }
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  // ═══════════════════════════════════════════════
+  //  BURGER  (mobile only)
+  // ═══════════════════════════════════════════════
+  &__burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    border-radius: $border-radius-md;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: background-color $nav-dur $nav-ease;
+
+    span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: $color-primary;
+      border-radius: 2px;
+      transform-origin: center;
+      transition: transform $nav-dur $nav-ease, opacity $nav-dur $nav-ease, width $nav-dur $nav-ease;
+    }
+
+    &--open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    &--open span:nth-child(2) { opacity: 0; width: 0; }
+    &--open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    &:hover { background: rgba($color-primary, 0.07); }
+
+    @include mobile { display: flex; }
+  }
+
+  // ═══════════════════════════════════════════════
+  //  BACKDROP  (mobile overlay)
+  // ═══════════════════════════════════════════════
+  &__backdrop {
+    display: none;
+
+    @include mobile {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.42);
+      backdrop-filter: blur(3px);
+      z-index: $z-modal - 1;
+      animation: nsFadeIn 220ms $nav-ease;
+    }
+  }
+}
+
+@keyframes nsFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }

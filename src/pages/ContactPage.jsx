@@ -108,7 +108,7 @@ const showcaseCards = [
   {
     title: 'Corporate & Office Feasts',
     tag: 'Daily Delivery',
-    img: img('Services/CorporateEvents.jpg'),
+    img: img('Services/CorporateEvents.png'),
     accent: 'red',
     desc: 'Hot, hygienic, on-time — every day for 500 to 5,000 employees.',
   },

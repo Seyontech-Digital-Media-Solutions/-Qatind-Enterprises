@@ -1,170 +1,417 @@
 @import '../../styles/variables';
 @import '../../styles/mixins';
 
-.gallery-hero {
-  position: relative;
-  background: linear-gradient(135deg, $color-primary 0%, darken($color-primary, 12%) 100%);
-  color: $color-light;
-  text-align: center;
-  padding: $spacing-3xl 0 $spacing-2xl;
+// ─── Page wrapper ────────────────────────────────────────────
+// Offset for fixed navbar (78px desktop / 64px mobile)
+.gallery-page {
+  padding-top: 78px;
+  background: $color-light;
+  min-height: 100vh;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(
-      90deg,
-      $color-red 0%, $color-red 33.33%,
-      $color-saffron 33.33%, $color-saffron 66.66%,
-      $color-primary 66.66%, $color-primary 100%
-    );
+  @include mobile { padding-top: 64px; }
+}
+
+// ============================================================
+//  BENTO MOSAIC
+// ============================================================
+// Layout map (desktop, 4 cols x 3 rows):
+//   intro    curry  curry  salad
+//   biryani  curry  curry   .      <- lshape (explicit placement, spans this cell + the two below)
+//   biryani  naan    .      .      <- lshape continues here (bottom-left + bottom-right arm)
+// naan is now a single, square cell. The two cells marked "." are not
+// named in the template — the .bento-panel--lshape item is placed on
+// top of them explicitly (grid-column/grid-row) and clipped into an L
+// so nothing is ever left visually empty.
+.gallery-bento {
+  @include container;
+  position: relative;
+  padding-top: $spacing-3xl;
+  padding-bottom: $spacing-3xl;
+
+  display: grid;
+  gap: $spacing-md;
+  grid-template-columns: 1.1fr 1.3fr 1fr 0.95fr;
+  grid-template-rows: auto 210px 210px;
+  grid-template-areas:
+    'intro  curry  curry  salad'
+    'biryani curry  curry  .   '
+    'biryani naan   .      .   ';
+
+  @include tablet {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto 190px 190px;
+    grid-template-areas:
+      'intro   intro   intro  '
+      'biryani curry   salad  '
+      'biryani naan    lshape ';
   }
 
+  @include mobile {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    padding-top: $spacing-2xl;
+    padding-bottom: $spacing-2xl;
+  }
+}
+
+// ── Intro copy ───────────────────────────────────────────────
+.bento-intro {
+  grid-area: intro;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: $spacing-lg;
+
   &__eyebrow {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    color: $color-saffron;
-    margin-bottom: $spacing-sm;
+    letter-spacing: 0.14em;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    color: $color-secondary;
+    margin-bottom: $spacing-md;
+
+    i {
+      display: block;
+      width: 28px;
+      height: 2px;
+      background: $color-secondary;
+      border-radius: 2px;
+    }
   }
 
   &__title {
-    font-size: $font-size-5xl;
-    font-weight: $font-weight-bold;
-    margin-bottom: $spacing-sm;
+    font-family: $font-family-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: $font-weight-extrabold;
+    line-height: $line-height-tight;
+    color: $color-dark;
+    margin: 0 0 $spacing-md;
 
-    @include mobile {
-      font-size: $font-size-3xl;
+    em {
+      font-style: italic;
+      color: $color-secondary;
     }
+  }
+
+  &__rule {
+    display: block;
+    width: 44px;
+    height: 3px;
+    background: $color-secondary;
+    border-radius: $border-radius-full;
+    margin-bottom: $spacing-md;
   }
 
   &__subtitle {
-    font-size: $font-size-lg;
-    opacity: 0.9;
+    max-width: 30ch;
+    font-size: $font-size-base;
+    line-height: $line-height-relaxed;
+    color: $text-secondary;
   }
 }
 
-.gallery-grid-section {
-  background-color: $bg-secondary;
-  padding: $spacing-2xl 0 $spacing-3xl;
-}
+// ── Shared panel shell ───────────────────────────────────────
+.bento-panel {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  border-radius: 20px;
+  overflow: hidden;
+  background: $color-gray-200;
+  box-shadow: $shadow-card-elevated;
+  transition:
+    transform       $transition-base,
+    box-shadow      $transition-base;
 
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: $spacing-xs;
+  &:hover {
+    box-shadow: $shadow-card-hover;
+    z-index: 3;
 
-  @include mobile {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 3px;
+    img { transform: scale(1.07); }
   }
 
-  &__item {
-    position: relative;
-    display: block;
-    width: 100%;
-    height: 260px;
-    border: none;
-    padding: 0;
-    background-color: $color-gray-200;
-    border-radius: $border-radius-md;
-    overflow: hidden;
-    cursor: pointer;
-    transition: border-radius $transition-base, transform $transition-base, box-shadow $transition-base;
-
-    @include mobile {
-      height: 130px;
-    }
-
-    &:hover {
-      border-radius: $border-radius-lg;
-      box-shadow: $shadow-xl;
-      transform: scale(1.02);
-      z-index: 1;
-    }
-
-    img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-      transition: transform $transition-slow;
-    }
-
-    &:hover img {
-      transform: scale(1.1);
-    }
-  }
-
-  &__overlay {
+  img {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform $transition-slow;
+  }
+
+  &__tag {
+    position: absolute;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: $spacing-sm;
-    background: linear-gradient(180deg, rgba($color-dark, 0.1) 0%, rgba($color-dark, 0.65) 100%);
-    opacity: 0;
-    transition: opacity $transition-base;
-  }
-
-  &__item:hover &__overlay {
-    opacity: 1;
-  }
-
-  &__zoom-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background-color: $color-secondary;
-    color: $color-dark;
-    transform: scale(0.7);
-    transition: transform $transition-base;
-  }
-
-  &__item:hover &__zoom-icon {
-    transform: scale(1);
-  }
-
-  &__caption {
-    color: $color-light;
+    font-family: $font-family-serif;
+    font-style: italic;
     font-weight: $font-weight-semibold;
-    font-size: $font-size-sm;
-    text-align: center;
-    padding: 0 $spacing-md;
-    transform: translateY(8px);
-    opacity: 0;
-    transition: all $transition-base;
+    font-size: $font-size-lg;
+    line-height: 1.2;
+    color: #ffffff;
+    text-shadow: 0 2px 10px rgba(0,0,0,.6);
+    pointer-events: none;
+
+    .curl-arrow {
+      margin-top: $spacing-xs;
+      color: #ffffff;
+      opacity: 0.9;
+    }
   }
 
-  &__item:hover &__caption {
-    transform: translateY(0);
-    opacity: 1;
+  @include mobile {
+    height: 240px;
+    transform: none !important;
+    border-radius: $border-radius-lg;
   }
 }
 
-// Lightbox
+// ── Per-slot: grid-area + tilt + tag position ────────────────
+.bento-panel--biryani {
+  grid-area: biryani;
+  transform: rotate(-1.2deg);
+  .bento-panel__tag { left: $spacing-lg; bottom: $spacing-lg; }
+}
+
+.bento-panel--curry {
+  grid-area: curry;
+  transform: rotate(1deg);
+  z-index: 2; // sits above the lshape panel's bounding box in their shared corner
+  .bento-panel__tag { left: $spacing-lg; top: $spacing-lg; }
+}
+
+.bento-panel--salad {
+  grid-area: salad;
+  transform: rotate(-1.5deg);
+  .bento-panel__tag { right: $spacing-lg; top: $spacing-lg; align-items: flex-end; text-align: right; }
+}
+
+// Freshly Baked — now a true square, centered in its cell
+.bento-panel--naan {
+  grid-area: naan;
+  transform: rotate(1.2deg);
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  align-self: center;
+  justify-self: center;
+  .bento-panel__tag { left: $spacing-lg; bottom: $spacing-lg; }
+
+  @include tablet {
+    height: 100%;
+    aspect-ratio: auto;
+    max-width: none;
+  }
+  @include mobile {
+    aspect-ratio: auto;
+    max-width: none;
+    height: 240px;
+  }
+}
+
+// Fills the space below "Fresh Ingredients" + beside "Freshly Baked"
+// as a single L-shaped image: explicit placement over a 2x2 box,
+// clipped so only the L remains (the missing corner is .bento-panel--curry).
+.bento-panel--lshape {
+  grid-column: 3 / 5;
+  grid-row: 2 / 4;
+  transform: none;
+  clip-path: polygon(50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 50%, 50% 50%);
+  z-index: 1;
+
+  .bento-panel__tag { right: $spacing-lg; bottom: $spacing-lg; align-items: flex-end; text-align: right; }
+
+  @include tablet {
+    grid-area: lshape;
+    grid-column: auto;
+    grid-row: auto;
+    clip-path: none;
+  }
+  @include mobile {
+    clip-path: none;
+  }
+}
+
+// ── View More circular button ────────────────────────────────
+.bento-viewmore {
+  position: absolute;
+  right: $spacing-lg;
+  bottom: -40px;
+  z-index: 4;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: $color-primary;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba($color-primary, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-family: $font-family-serif;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  transition: transform $transition-base, box-shadow $transition-base;
+
+  span:last-child {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 12px 32px rgba($color-primary, 0.5);
+  }
+
+  @include mobile {
+    position: static;
+    align-self: center;
+    margin-top: $spacing-lg;
+  }
+}
+
+// ============================================================
+//  MARQUEE SECTION
+// ============================================================
+.gallery-marquee {
+  padding: $spacing-3xl 0;
+  background: $color-light;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  overflow: hidden;
+}
+
+.marquee-heading {
+  text-align: center;
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  color: $color-dark;
+  margin: 0 0 $spacing-sm;
+}
+
+// Each row clips its overflowing track
+.marquee-row {
+  width: 100%;
+  overflow: hidden;
+  // stop animation on hover so user can click
+  &:hover .marquee-track { animation-play-state: paused; }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: $spacing-md;
+
+  &--left  { animation: mq-left  40s linear infinite; }
+  &--right { animation: mq-right 48s linear infinite; }
+}
+
+@keyframes mq-left  { from { transform: translateX(0); }    to { transform: translateX(-33.333%); } }
+@keyframes mq-right { from { transform: translateX(-33.333%); } to { transform: translateX(0); } }
+
+// ── Individual marquee card ───────────────────────────────────
+.marquee-card {
+  flex: 0 0 auto;
+  width: 220px;
+  height: 190px;
+  border: none;
+  padding: 0;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: $shadow-md;
+  position: relative;
+  transition: transform $transition-base, box-shadow $transition-base;
+
+  &:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: $shadow-card-hover;
+
+    .marquee-card__label { opacity: 1; transform: translateY(0); }
+    img { transform: scale(1.08); }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform $transition-slow;
+  }
+
+  &__label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: $spacing-sm $spacing-md;
+    background: linear-gradient(transparent, rgba(0,0,0,.65));
+    color: #ffffff;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity $transition-base, transform $transition-base;
+  }
+
+  @include mobile {
+    width: 160px;
+    height: 140px;
+  }
+}
+
+// ── Back button ───────────────────────────────────────────────
+.marquee-collapse {
+  align-self: center;
+  padding: $spacing-sm $spacing-2xl;
+  border: 2px solid $color-primary;
+  border-radius: $border-radius-full;
+  background: transparent;
+  color: $color-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  font-family: $font-family-sans;
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &:hover {
+    background: $color-primary;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba($color-primary, 0.3);
+  }
+}
+
+// ============================================================
+//  LIGHTBOX
+// ============================================================
 .lightbox {
   position: fixed;
   inset: 0;
   z-index: $z-modal;
-  background-color: rgba($color-dark, 0.92);
+  background: rgba($color-dark, 0.93);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: $spacing-xl;
+  gap: $spacing-lg;
 
   &__content {
     max-width: 800px;
@@ -173,7 +420,7 @@
 
     img {
       width: 100%;
-      max-height: 70vh;
+      max-height: 72vh;
       object-fit: contain;
       border-radius: $border-radius-lg;
       box-shadow: $shadow-xl;
@@ -188,7 +435,7 @@
   }
 
   &__counter {
-    color: rgba($color-light, 0.6);
+    color: rgba($color-light, 0.55);
     font-size: $font-size-sm;
     margin-top: $spacing-xs;
   }
@@ -197,67 +444,50 @@
     position: absolute;
     top: $spacing-lg;
     right: $spacing-lg;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,.1);
+    color: #ffffff;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: none;
-    background-color: rgba($color-light, 0.1);
-    color: $color-light;
-    cursor: pointer;
-    transition: all $transition-base;
+    transition: background $transition-base, transform $transition-base;
 
-    &:hover {
-      background-color: $color-red;
-      transform: rotate(90deg);
-    }
+    &:hover { background: $color-accent; transform: rotate(90deg); }
   }
 
   &__nav {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,.1);
+    color: #ffffff;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    border: none;
-    background-color: rgba($color-light, 0.1);
-    color: $color-light;
-    cursor: pointer;
-    transition: all $transition-base;
     flex-shrink: 0;
+    transition: background $transition-base, transform $transition-base;
 
-    &:hover {
-      background-color: $color-secondary;
-      color: $color-dark;
-    }
+    &:hover { background: $color-secondary; color: $color-dark; transform: scale(1.1); }
 
     @include mobile {
-      width: 40px;
-      height: 40px;
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
+      width: 38px;
+      height: 38px;
     }
 
     &--prev {
-      margin-right: $spacing-lg;
-
-      @include mobile {
-        left: $spacing-sm;
-        margin-right: 0;
-      }
+      @include mobile { left: $spacing-sm; }
     }
-
     &--next {
-      margin-left: $spacing-lg;
-
-      @include mobile {
-        right: $spacing-sm;
-        margin-left: 0;
-      }
+      @include mobile { right: $spacing-sm; }
     }
   }
 }

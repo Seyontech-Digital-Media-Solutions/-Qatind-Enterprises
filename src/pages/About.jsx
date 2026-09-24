@@ -1,4 +1,4 @@
-﻿import React, { useRef } from "react";
+import React, { useRef } from "react";
 import {
   motion,
   useScroll,
@@ -70,16 +70,16 @@ function Reveal({
   );
 }
 
-// ─────────────────────────────────────────────────────────────
+// -------------------------------------------------------------
 // CORE PHILOSOPHY
-// ─────────────────────────────────────────────────────────────
+// -------------------------------------------------------------
 
 const pillars = [
   {
     icon: Sprout,
     title: "Farm-to-table freshness",
     text:
-      "Sourced direct from farmers, fishermen, and mills — freshness intact.",
+      "Sourced direct from farmers, fishermen, and mills  freshness intact.",
     accent: "var(--color-primary)",
     iconBg: "rgba(20, 108, 54, 0.12)",
     cardBg: "#ffffff",
@@ -89,7 +89,7 @@ const pillars = [
     icon: Leaf,
     title: "Nothing artificial",
     text:
-      "No shortcuts or artificial flavours — just ingredients you can trust.",
+      "No shortcuts or artificial flavours just ingredients you can trust.",
     accent: "#996111",
     iconBg: "rgba(255, 153, 51, 0.14)",
     cardBg: "#fffdf8",
@@ -117,9 +117,9 @@ const pillars = [
   },
 ];
 
-// ─────────────────────────────────────────────────────────────
+// -------------------------------------------------------------
 // VISION FEATURES
-// ─────────────────────────────────────────────────────────────
+// -------------------------------------------------------------
 
 const visionFeatures = [
   {
@@ -136,9 +136,9 @@ const visionFeatures = [
   },
 ];
 
-// ─────────────────────────────────────────────────────────────
+// -------------------------------------------------------------
 // MISSION FEATURES
-// ─────────────────────────────────────────────────────────────
+// -------------------------------------------------------------
 
 const missionFeatures = [
   {
@@ -155,9 +155,9 @@ const missionFeatures = [
   },
 ];
 
-// ─────────────────────────────────────────────────────────────
+// -------------------------------------------------------------
 // JOURNEY
-// ─────────────────────────────────────────────────────────────
+// -------------------------------------------------------------
 
 const milestones = [
   {
@@ -194,19 +194,19 @@ const milestones = [
   },
 ];
 
-// ─────────────────────────────────────────────────────────────
+// -------------------------------------------------------------
 // PARTNERS
-// ─────────────────────────────────────────────────────────────
+// -------------------------------------------------------------
 // Drop your real logo files into /public/About/partners/ using the
 // filenames below (transparent PNG/SVG, ~200px wide works best).
 
 const partners = [
-  { name: "Aptiv", logo: "../aptiv.png" },
-  { name: "DLF", logo: "../DLF.jpg" },
-  { name: "Keppel corporation", logo: "../Keppel.png" },
-  { name: "L&T", logo: "../L&T.jpg" },
-  { name: "RMZ", logo: "../RMZ.png" },
-  { name: "propel", logo: "../propel.png" },
+  { name: "Aptiv", logo: "aptiv.png" },
+  { name: "DLF", logo: "DLF.jpg" },
+  { name: "Keppel corporation", logo: "keppel.png" },
+  { name: "L&T", logo: "L&T.jpg" },
+  { name: "RMZ", logo: "RMZ.png" },
+  { name: "propel", logo: "propel.png" },
 ];
 
 export default function AboutPage() {
@@ -261,7 +261,7 @@ export default function AboutPage() {
 
           <Reveal delay={0.16}>
             <p className="about-hero__text">
-              Real food, real farmers, and honest flavours —
+              Real food, real farmers, and honest flavoursS
               crafted the way home-cooked meals are meant to be
               shared.
             </p>
@@ -318,7 +318,7 @@ export default function AboutPage() {
               }}
             >
               <img
-                src= "./public/About/about-hero.jpg"
+                src={`${import.meta.env.BASE_URL}About/about-hero.jpg`}
                 alt="Curated Indian dining platter"
               />
             </motion.div>
@@ -366,17 +366,22 @@ export default function AboutPage() {
       <section className="about-director section-shell">
         <Reveal>
           <div className="director-panel">
-
+               
             <div className="director-panel__portrait">
               <motion.div
                 className="director-panel__portrait-frame"
                 whileHover={{ scale: 1.05, rotate: 3 }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               >
-                <User
+                <img
+      src={`${import.meta.env.BASE_URL}About/MDphoto.jpeg`}
+      alt="Rosalind Sathya Kumar, Managing Director"
+      className="director-panel__portrait-img"
+    />
+                {/* <User
                   size={64}
                   strokeWidth={1.3}
-                />
+                /> */}
               </motion.div>
             </div>
 
@@ -399,7 +404,7 @@ export default function AboutPage() {
 
 With years of culinary expertise and an endless love for delicious food, she has turned every dish into a beautiful celebration of taste, tradition, and creativity.
 
-From the first bite to the last, Qatind promises a flavor experience that delights your senses and keeps you craving for more! ❤️🔥 
+From the first bite to the last, Qatind promises a flavor experience that delights your senses and keeps you craving for more! ???? 
               </p>
 
               <div className="director-panel__signature">
@@ -494,7 +499,7 @@ From the first bite to the last, Qatind promises a flavor experience that deligh
 
                 <p>
                   To become the kitchen Indian families trust
-                  most — where fresh, local, and transparent
+                  most where fresh, local, and transparent
                   food creates a better table for everyone.
                 </p>
 
@@ -833,7 +838,7 @@ From the first bite to the last, Qatind promises a flavor experience that deligh
                 }}
               >
                 <motion.img
-                  src={`./public/About/partners/${partner.logo}`}
+                  src={`${import.meta.env.BASE_URL}About/${partner.logo}`}
                   alt={partner.name}
                   animate={{ y: [0, -8, 0] }}
                   transition={{
@@ -881,7 +886,7 @@ From the first bite to the last, Qatind promises a flavor experience that deligh
 
             <p>
               We believe food tastes better when it is honest,
-              personal, and made with care — from the very
+              personal, and made with care  from the very
               first ingredient to the last plate served.
             </p>
 

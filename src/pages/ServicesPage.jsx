@@ -134,7 +134,7 @@ const serviceMenu = [
     description: 'Curated hampers with bakery favourites, sweets and savouries — perfect for gifting, festivals and corporate giving.',
     highlights: ['Custom curation', 'Festive hampers', 'Corporate gifting', 'Eggless & veg options'],
     icon: RiGiftLine,
-    image: img('Services/GiftHampers.jpg'),
+    image: img('Services/GiftHampers.png'),
     accent: BRAND.green,
   },
 ]
@@ -164,12 +164,12 @@ const showcasePlates = [
   { id: 'bakery', name: 'Lemonrice', tag: 'Bakery', image: img('Services/Lemonrice.png'), },
 ]
 
-const faqs = [
-  { question: 'How far ahead should I book?', answer: 'Office meals can be arranged with 24–48 hours notice. Weddings and large events are best booked 10–15 days ahead so we can plan the menu and staffing.' },
-  { question: 'Can I get both veg and non-veg on one order?', answer: 'Yes. Most menus, including the bakery counter, run separate veg and non-veg lines, prepared and served separately.' },
-  { question: 'Do you cater to dietary restrictions?', answer: 'We build Jain, low-oil and eggless menus on request, across corporate, hospital and event catering.' },
-  { question: 'Is the bakery counter available on its own?', answer: 'Yes — cakes, pastries and snacks can be ordered separately from full catering, for offices, parties or gifting.' },
-]
+// const faqs = [
+//   { question: 'How far ahead should I book?', answer: 'Office meals can be arranged with 24–48 hours notice. Weddings and large events are best booked 10–15 days ahead so we can plan the menu and staffing.' },
+//   { question: 'Can I get both veg and non-veg on one order?', answer: 'Yes. Most menus, including the bakery counter, run separate veg and non-veg lines, prepared and served separately.' },
+//   { question: 'Do you cater to dietary restrictions?', answer: 'We build Jain, low-oil and eggless menus on request, across corporate, hospital and event catering.' },
+//   { question: 'Is the bakery counter available on its own?', answer: 'Yes — cakes, pastries and snacks can be ordered separately from full catering, for offices, parties or gifting.' },
+// ]
 
 const tickerRows = [
   { items: ['Home-Style Food', 'Corporate Meals', 'Wedding Feasts', 'Live Chaat', 'Fresh Drinks', 'Bakery', 'Veg', 'Non-Veg'], cls: 'services-page__ticker-row--a' },

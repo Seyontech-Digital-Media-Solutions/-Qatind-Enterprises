@@ -35,6 +35,13 @@
   }
 }
 
+
+  // Matches Tailwind's selection:bg-*/selection:text-* utilities
+  & ::selection {
+    background: var(--color-saffron);
+    color: var(--color-espresso);
+  }
+
 // ============================================================================
 // SHARED SHELLS
 // ============================================================================
@@ -456,7 +463,7 @@
 
   p {
     margin: 0 0 1rem;
-
+    text-align:justify;
     font-family: $font-family-sans;
 
     color: var(--about-soft);
@@ -525,6 +532,8 @@
 
   border-radius: 50%;
 
+  overflow: hidden;          // ← new: clips the photo to the circle
+
   display: flex;
 
   align-items: center;
@@ -547,6 +556,16 @@
     width: 160px;
     height: 160px;
   }
+}
+
+.director-panel__portrait-img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center top;   // adjust if the face gets cropped oddly
+
+  display: block;
 }
 
 .director-panel__content {
@@ -596,7 +615,7 @@
   margin: 0 0 1.5rem;
 
   font-family: $font-family-sans;
-
+  text-align:justify;
   font-size: $font-size-lg;
 
   font-style: italic;
@@ -1177,7 +1196,7 @@
 
 .values-card__content p {
   max-width: 470px;
-
+  text-align:justify;
   margin: 0;
 
   font-family: $font-family-sans;
@@ -1772,7 +1791,7 @@
   font-family: $font-family-sans;
 
   font-size: $font-size-sm;
-
+ text-align:justify;
   line-height: 1.65;
 
   color: var(--about-soft);
