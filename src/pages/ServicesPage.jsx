@@ -86,7 +86,7 @@ const serviceMenu = [
     description: 'Fresh home-style meals for offices, meetings, team lunches and corporate gatherings — planned around your schedule and served with consistency.',
     highlights: ['Daily meal programs', 'Meeting lunches', 'Bulk orders', 'Veg & non-veg options'],
     icon: FiBriefcase,
-    image: img('Services/CorporateEvents.jpg'),
+    image: img('Services/CorporateEvents.png'),
     accent: BRAND.red,
   },
 
@@ -224,7 +224,7 @@ function HeroVisual({ prefersReducedMotion }) {
 
       <div className="services-page__hero-blob">
         <img
-          src={img('Services/ScaleQatind.jpg')}
+          src={img('Services/service-hero.jpg')}
           alt="Freshly prepared Qatind spread, served hot"
           loading="eager"
         />
@@ -1194,7 +1194,7 @@ export default function ServicesPage() {
           >
             <div className="services-page__cta-blob-shape">
               <img
-                src={img('Services/WeddingCatering.png')}
+                src={img('Services/service-cta.jpg')}
                 alt="Guests enjoying a Qatind-catered spread"
                 loading="lazy"
               />
