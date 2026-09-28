@@ -1,0 +1,143 @@
+[
+  {
+    "id": "rice",
+    "name": "Rice",
+    "icon": "FiBox",
+    "items": [
+      { "id": "rice-ghee-rice", "name": "Ghee Rice", "price": 120, "image": "ghee-rice.png", "description": "Ghee Rice" },
+      { "id": "rice-white-rice", "name": "White Rice", "price": 90, "image": "white-rice.png", "description": "White Rice" },
+      { "id": "rice-sambar-rice", "name": "Sambar Rice", "price": 110, "image": "sambar-rice.png", "description": "Sambar Rice" },
+      { "id": "rice-curd-rice", "name": "Curd Rice", "price": 100, "image": "curd-rice.png", "description": "Curd Rice" },
+      { "id": "rice-lemon-rice", "name": "Lemon Rice", "price": 110, "image": "lemon-rice.png", "description": "Lemon Rice" },
+      { "id": "rice-tomato-rice", "name": "Tomato Rice", "price": 110, "image": "tomato-rice.png", "description": "Tomato Rice" },
+      { "id": "rice-white-brinji", "name": "White Brinji", "price": 130, "image": "white-brinji.png", "description": "White Brinji" },
+      { "id": "rice-jeera-rice", "name": "Jeera Rice", "price": 120, "image": "jeera-rice.png", "description": "Jeera Rice" },
+      { "id": "rice-kaju-pulav", "name": "Kaju Pulav", "price": 180, "image": "kaju-pulav.png", "description": "Kaju Pulav" }
+    ]
+  },
+  {
+    "id": "biryani",
+    "name": "Biryani",
+    "icon": "FiBox",
+    "items": [
+      { "id": "biryani-mutton-biryani", "name": "Mutton Biryani", "price": 280, "image": "mutton-biryani.jpg", "description": "Mutton Biryani" },
+      { "id": "biryani-chicken-biryani", "name": "Chicken Biryani", "price": 220, "image": "chicken-biryani.jpg", "description": "Chicken Biryani" },
+      { "id": "biryani-kongu-rice", "name": "Kongu Rice", "price": 200, "image": "kongu-rice.png", "description": "Kongu Rice" },
+      { "id": "biryani-prawn-biryani", "name": "Prawn Biryani", "price": 320, "image": "prawn-biryani.png", "description": "Prawn Biryani" },
+      { "id": "biryani-egg-biryani", "name": "Egg Biryani", "price": 180, "image": "egg-biryani.png", "description": "Egg Biryani" },
+      { "id": "biryani-khushka", "name": "Khushka", "price": 150, "image": "khushka.png", "description": "Khushka" }
+    ]
+  },
+  {
+    "id": "veg-starters",
+    "name": "Veg Starters",
+    "icon": "FiFeather",
+    "items": [
+      { "id": "veg-starters-mint-gobi-fry", "name": "Mint Gobi Fry", "price": 160, "image": "MintGobiFry.jpg", "description": "Mint Gobi Fry" },
+      { "id": "veg-starters-schezwan-yam", "name": "Schezwan Yam", "price": 170, "image": "Sezhwanyam.png", "description": "Schezwan Yam" },
+      { "id": "veg-starters-chilly-potato", "name": "Chilly Potato", "price": 150, "image": "chillipotato.jpg", "description": "Chilly Potato" },
+      { "id": "veg-starters-mushroom-65", "name": "Mushroom 65", "price": 180, "image": "Mushroom65.jpg", "description": "Mushroom 65" },
+      { "id": "veg-starters-paneer-65", "name": "Paneer 65", "price": 190, "image": "Panner65.png", "description": "Paneer 65" },
+      { "id": "veg-starters-paneer-tikka", "name": "Paneer Tikka", "price": 200, "image": "PaneerTikka.jpg", "description": "Paneer Tikka" },
+      { "id": "veg-starters-chilly-sweet-potato", "name": "Chilly Sweet Potato", "price": 160, "image": "ChillySweetPotato.jpg", "description": "Chilly Sweet Potato" },
+      { "id": "veg-starters-tandoori-potato", "name": "Tandoori Potato", "price": 170, "image": "TandooriPotato.jpg", "description": "Tandoori Potato" },
+      { "id": "veg-starters-grilled-mushroom", "name": "Grilled Mushroom", "price": 180, "image": "GrilledMushroom.jpg", "description": "Grilled Mushroom" }
+    ]
+  },
+  {
+    "id": "non-veg-starters",
+    "name": "Non-Veg Starters",
+    "icon": "FiTarget",
+    "items": [
+      { "id": "non-veg-starters-chicken-65", "name": "Chicken 65", "price": 220, "image": "Chicken65.jpg", "description": "Chicken 65" },
+      { "id": "non-veg-starters-fish-fry", "name": "Fish Fry", "price": 250, "image": "FishFry.jpg", "description": "Fish Fry" },
+      { "id": "non-veg-starters-prawn-fry", "name": "Prawn Fry", "price": 280, "image": "PrawnFry.jpg", "description": "Prawn Fry" },
+      { "id": "non-veg-starters-garlic-prawn", "name": "Garlic Prawn", "price": 300, "image": "GarlicPrawn.jpg", "description": "Garlic Prawn" },
+      { "id": "non-veg-starters-orange-chicken", "name": "Orange Chicken", "price": 240, "image": "OrangeChicken.jpg", "description": "Orange Chicken" }
+    ]
+  },
+  {
+    "id": "gravy-veg",
+    "name": "Gravy Veg",
+    "icon": "FiCircle",
+    "items": [
+      { "id": "gravy-veg-chettinadu-karunai", "name": "Chettinadu Karunai", "price": 160, "image": "ChettinaduKarunai.jpg", "description": "Chettinadu Karunai" },
+      { "id": "gravy-veg-paneer-tikka-masala", "name": "Paneer Tikka Masala", "price": 200, "image": "PaneerTikkaMasala.jpg", "description": "Paneer Tikka Masala" },
+      { "id": "gravy-veg-mushroom-masala", "name": "Mushroom Masala", "price": 180, "image": "MushroomMasala.jpg", "description": "Mushroom Masala" },
+      { "id": "gravy-veg-paneer-butter-masala", "name": "Paneer Butter Masala", "price": 210, "image": "PaneerButterMasala.jpg", "description": "Paneer Butter Masala" },
+      { "id": "gravy-veg-dal-fry", "name": "Dal Fry", "price": 140, "image": "Dal Fry.jpg", "description": "Dal Fry" },
+      { "id": "gravy-veg-mix-veg-masala", "name": "Mix Veg Masala", "price": 160, "image": "MixVegMasala.jpg", "description": "Mix Veg Masala" },
+      { "id": "gravy-veg-white-kurma", "name": "White Kurma", "price": 150, "image": "WhiteKurma.jpg", "description": "White Kurma" },
+      { "id": "gravy-veg-kathrika-andhra-thokku", "name": "Kathrika Andhra Thokku", "price": 160, "image": "KathrikaAndhraThokku.jpg", "description": "Kathrika Andhra Thokku" },
+      { "id": "gravy-veg-konda-kadala-masala", "name": "Konda Kadala Masala", "price": 170, "image": "KondaKadalaMasala.jpg", "description": "Konda Kadala Masala" }
+    ]
+  },
+  {
+    "id": "gravy-non-veg",
+    "name": "Gravy Non-Veg",
+    "icon": "FiCircle",
+    "items": [
+      { "id": "gravy-non-veg-chicken-tikka-masala", "name": "Chicken Tikka Masala", "price": 240, "image": "chicken-tikka-masala.jpg", "description": "Chicken Tikka Masala" },
+      { "id": "gravy-non-veg-chicken-thokku", "name": "Chicken Thokku", "price": 230, "image": "chicken-thokku.jpg", "description": "Chicken Thokku" },
+      { "id": "gravy-non-veg-mutton-curry", "name": "Mutton Curry", "price": 280, "image": "mutton-curry.jpg", "description": "Mutton Curry" },
+      { "id": "gravy-non-veg-prawn-masala", "name": "Prawn Masala", "price": 300, "image": "prawn-masala.jpg", "description": "Prawn Masala" },
+      { "id": "gravy-non-veg-cashew-chicken-masala", "name": "Cashew Chicken Masala", "price": 260, "image": "cashew-chicken-masala.jpg", "description": "Cashew Chicken Masala" },
+      { "id": "gravy-non-veg-mutton-stew", "name": "Mutton Stew", "price": 270, "image": "mutton-stew.jpg", "description": "Mutton Stew" },
+      { "id": "gravy-non-veg-chicken-kurma", "name": "Chicken Kurma", "price": 220, "image": "chicken-kurma.jpg", "description": "Chicken Kurma" },
+      { "id": "gravy-non-veg-meen-kuzhambu", "name": "Meen Kuzhambu", "price": 240, "image": "meen-kuzhambu.jpg", "description": "Meen Kuzhambu" }
+    ]
+  },
+  {
+    "id": "breakfast-dinner",
+    "name": "Break Fast & Dinner",
+    "icon": "FiSunrise",
+    "items": [
+      { "id": "breakfast-dinner-idly-with-sambar-and-chutney", "name": "Idly with Sambar and Chutney", "price": 60, "image": "idly-sambar-chutney.jpg", "description": "Idly with Sambar and Chutney" },
+      { "id": "breakfast-dinner-set-dosa-with-vadacurry", "name": "Set Dosa with Vadacurry", "price": 80, "image": "set-dosa-vadacurry.jpg", "description": "Set Dosa with Vadacurry" },
+      { "id": "breakfast-dinner-poori-masala", "name": "Poori & Masala", "price": 70, "image": "poori-masala.jpg", "description": "Poori & Masala" },
+      { "id": "breakfast-dinner-pongal-masala", "name": "Pongal & Masala", "price": 70, "image": "pongal-masala.jpg", "description": "Pongal & Masala" },
+      { "id": "breakfast-dinner-rava-kichadi-thenga-chutney", "name": "Rava Kichadi & Thenga Chutney", "price": 75, "image": "rava-kichadi-thenga-chutney.jpg", "description": "Rava Kichadi & Thenga Chutney" },
+      { "id": "breakfast-dinner-upma-kara-chutney", "name": "Upma & Kara Chutney", "price": 65, "image": "upma-kara-chutney.jpg", "description": "Upma & Kara Chutney" },
+      { "id": "breakfast-dinner-kichadi-with-chutney", "name": "Kichadi with Chutney", "price": 65, "image": "kichadi-chutney.jpg", "description": "Kichadi with Chutney" },
+      { "id": "breakfast-dinner-rava-pongal-thenga-chutney", "name": "Rava Pongal & Thenga Chutney", "price": 70, "image": "rava-pongal-thenga-chutney.jpg", "description": "Rava Pongal & Thenga Chutney" },
+      { "id": "breakfast-dinner-idiyappam-kurma", "name": "Idiyappam & Kurma", "price": 90, "image": "idiyappam-kurma.jpg", "description": "Idiyappam & Kurma" },
+      { "id": "breakfast-dinner-sambar-idly", "name": "Sambar Idly", "price": 65, "image": "sambar-idly.jpg", "description": "Sambar Idly" },
+      { "id": "breakfast-dinner-chappati-and-dal", "name": "Chappati and Dal", "price": 80, "image": "chappati-dal.jpg", "description": "Chappati and Dal" },
+      { "id": "breakfast-dinner-rava-idly-with-puthina-chutney", "name": "Rava Idly with Puthina Chutney", "price": 70, "image": "rava-idly-puthina-chutney.jpg", "description": "Rava Idly with Puthina Chutney" },
+      { "id": "breakfast-dinner-adai-with-kara-chutney", "name": "Adai with Kara Chutney", "price": 75, "image": "adai-kara-chutney.jpg", "description": "Adai with Kara Chutney" },
+      { "id": "breakfast-dinner-vada-with-chutney", "name": "Vada with Chutney", "price": 60, "image": "vada-chutney.jpg", "description": "Vada with Chutney" }
+    ]
+  },
+  {
+    "id": "snacks",
+    "name": "Snacks",
+    "icon": "FiCoffee",
+    "items": [
+      { "id": "snacks-ragi-semiya", "name": "Ragi Semiya", "price": 60, "image": "ragi-semiya.jpg", "description": "Ragi Semiya" },
+      { "id": "snacks-peanut-sundal", "name": "Peanut Sundal", "price": 50, "image": "peanut-sundal.jpg", "description": "Peanut Sundal" },
+      { "id": "snacks-karapaniyaram", "name": "Karapaniyaram", "price": 55, "image": "karapaniyaram.jpg", "description": "Karapaniyaram" },
+      { "id": "snacks-black-channa-sundal", "name": "Black Channa Sundal", "price": 55, "image": "black-channa-sundal.jpg", "description": "Black Channa Sundal" },
+      { "id": "snacks-samosa-sundal", "name": "Samosa Sundal", "price": 70, "image": "samosa-sundal.jpg", "description": "Samosa Sundal" },
+      { "id": "snacks-muffins", "name": "Muffins", "price": 80, "image": "muffins.jpg", "description": "Muffins" },
+      { "id": "snacks-fruit-salad", "name": "Fruit Salad", "price": 90, "image": "fruit-salad.jpg", "description": "Fruit Salad" },
+      { "id": "snacks-kara-vada-with-chutney", "name": "Kara Vada with Chutney", "price": 65, "image": "kara-vada-chutney.jpg", "description": "Kara Vada with Chutney" },
+      { "id": "snacks-medhuvada-with-chutney", "name": "Medhuvada with Chutney", "price": 65, "image": "medhuvada-chutney.jpg", "description": "Medhuvada with Chutney" }
+    ]
+  },
+  {
+    "id": "confectionery",
+    "name": "Confectionery",
+    "icon": "FiGift",
+    "items": [
+      { "id": "confectionery-orange-ginger-cake", "name": "Orange Ginger Cake", "price": 120, "image": "orange-ginger-cake.jpg", "description": "Orange Ginger Cake" },
+      { "id": "confectionery-coconut-cake", "name": "Coconut Cake", "price": 130, "image": "coconut-cake.jpg", "description": "Coconut Cake" },
+      { "id": "confectionery-almond-cake", "name": "Almond Cake", "price": 150, "image": "almond-cake.jpg", "description": "Almond Cake" },
+      { "id": "confectionery-truffled-brownie", "name": "Truffled Brownie", "price": 160, "image": "truffled-brownie.jpg", "description": "Truffled Brownie" },
+      { "id": "confectionery-brownie", "name": "Brownie", "price": 140, "image": "brownie.jpg", "description": "Brownie" },
+      { "id": "confectionery-pound-cake", "name": "Pound Cake", "price": 120, "image": "pound-cake.jpg", "description": "Pound Cake" },
+      { "id": "confectionery-cashew-biscuits", "name": "Cashew Biscuits", "price": 110, "image": "cashew-biscuits.jpg", "description": "Cashew Biscuits" },
+      { "id": "confectionery-cookie-sticks", "name": "Cookie Sticks", "price": 100, "image": "cookie-sticks.jpg", "description": "Cookie Sticks" },
+      { "id": "confectionery-walnut-cake", "name": "Walnut Cake", "price": 160, "image": "walnut-cake.jpg", "description": "Walnut Cake" }
+    ]
+  }
+]

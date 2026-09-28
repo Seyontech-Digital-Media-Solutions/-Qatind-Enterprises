@@ -1,0 +1,1170 @@
+@import './variables';
+@import './mixins';
+
+// ============================================================================
+// PAGE ROOT
+// ============================================================================
+
+.about-page {
+  --about-bg:    #{$color-light};
+  --about-panel: #fffaf4;
+  --about-text:  #1c1c1c;
+  --about-soft:  #5b4636;
+  --about-card:  rgba(255, 255, 255, 0.78);
+  --about-line:  #{rgba($color-primary, 0.12)};
+
+  background:   var(--about-bg);
+  color:        var(--about-text);
+  font-family:  $font-family-sans;
+  overflow-x:   hidden;
+
+  *,
+  *::before,
+  *::after { font-family: inherit; }
+
+  svg { font-family: inherit; }
+
+  & ::selection {
+    background: var(--color-saffron);
+    color:      var(--color-espresso);
+  }
+}
+
+// ============================================================================
+// SHARED SHELLS
+// ============================================================================
+
+.section-shell {
+  width:      100%;
+  max-width:  1280px;
+  margin:     0 auto;
+  padding:    72px 28px;
+
+  @include tablet { padding: 64px 24px; }
+  @include mobile { padding: 48px 16px; }
+}
+
+.light-shell {
+  background:    rgba($color-primary, 0.03);
+  border-top:    1px solid var(--about-line);
+  border-bottom: 1px solid var(--about-line);
+  max-width:     100%;
+
+  > * {
+    max-width:    1280px;
+    margin-left:  auto;
+    margin-right: auto;
+  }
+}
+
+// ============================================================================
+// SECTION KICKER
+// ============================================================================
+
+.section-kicker {
+  display:         inline-flex;
+  align-items:     center;
+  gap:             0.5rem;
+  font-family:     $font-family-sans;
+  font-size:       $font-size-sm;
+  letter-spacing:  0.14em;
+  text-transform:  uppercase;
+  font-weight:     $font-weight-bold;
+  color:           var(--color-primary);
+
+  &.accent { color: var(--color-secondary); }
+}
+
+// ============================================================================
+// SECTION HEADER
+// ============================================================================
+
+.section-header {
+  text-align:    center;
+  margin-bottom: 3rem;
+
+  h2 {
+    margin:         1rem auto 0;
+    max-width:      760px;
+    font-family:    $font-family-sans;
+    font-size:      clamp(2rem, 4vw, 3.6rem);
+    font-weight:    $font-weight-extrabold;
+    line-height:    1.04;
+    letter-spacing: -0.055em;
+    color:          $color-dark;
+  }
+
+  @include mobile { margin-bottom: 2rem; }
+}
+
+// ============================================================================
+// HERO
+// ============================================================================
+
+.about-hero {
+  max-width:   1280px;
+  margin:      0 auto;
+  padding:     88px 28px 40px;
+  display:     grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap:         3rem;
+  align-items: center;
+
+  @include tablet {
+    padding: 72px 24px 36px;
+    gap:     2rem;
+  }
+
+  @include mobile {
+    grid-template-columns: 1fr;
+    padding: 52px 16px 32px;
+    gap:     2.5rem;
+  }
+}
+
+// ── content col ──────────────────────────────────────────────
+.about-hero__content {
+  h1 {
+    margin:         1.1rem 0 1rem;
+    font-family:    $font-family-sans;
+    font-size:      clamp(3rem, 6vw, 6.2rem);
+    font-weight:    $font-weight-extrabold;
+    line-height:    0.96;
+    letter-spacing: -0.07em;
+    color:          $color-dark;
+
+    @include mobile { font-size: clamp(2.4rem, 10vw, 3.4rem); }
+  }
+}
+
+.about-hero__text {
+  max-width:   540px;
+  font-size:   $font-size-lg;
+  line-height: $line-height-relaxed;
+  color:       var(--about-soft);
+
+  @include mobile { font-size: $font-size-base; }
+}
+
+.about-hero__actions {
+  display:    flex;
+  flex-wrap:  wrap;
+  gap:        1rem;
+  margin-top: 2rem;
+}
+
+// ── stat cards ────────────────────────────────────────────────
+.about-hero__meta {
+  display:    flex;
+  flex-wrap:  wrap;
+  gap:        $spacing-md;
+  margin-top: 2.4rem;
+}
+
+.about-hero__stat-card {
+  display:        flex;
+  flex-direction: column;
+  min-width:      110px;
+  padding:        $spacing-md $spacing-lg;
+  background:     $bg-primary;
+  border:         1px solid rgba($color-primary, 0.12);
+  border-radius:  $border-radius-lg;
+  box-shadow:     $shadow-card-elevated;
+  cursor:         default;
+
+  strong {
+    display:        block;
+    font-family:    $font-family-sans;
+    font-size:      clamp(1.5rem, 2.4vw, 2.2rem);
+    font-weight:    $font-weight-extrabold;
+    color:          var(--color-primary);
+    letter-spacing: -0.04em;
+  }
+
+  span {
+    display:        block;
+    margin-top:     0.3rem;
+    font-family:    $font-family-sans;
+    font-size:      $font-size-xs;
+    font-weight:    $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color:          var(--about-soft);
+  }
+
+  @include mobile { padding: $spacing-sm $spacing-md; min-width: 90px; }
+}
+
+// ── visual col ───────────────────────────────────────────────
+.about-hero__visual {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+}
+
+.about-blob {
+  position:      relative;
+  width:         min(560px, 100%);
+  aspect-ratio:  1;
+  padding:       1rem;
+  border-radius: 31% 69% 63% 37% / 42% 31% 69% 58%;
+  background:    rgba($color-primary, 0.06);
+  box-shadow:    inset 0 0 0 1px rgba($color-primary, 0.08);
+
+  &::before {
+    content:        '';
+    position:       absolute;
+    inset:          10% 12% 12% 8%;
+    border-radius:  50%;
+    background:     rgba($color-secondary, 0.08);
+    border:         12px solid rgba($color-secondary, 0.18);
+    pointer-events: none;
+    z-index:        0;
+  }
+
+  img {
+    position:      relative;
+    z-index:       1;
+    width:         100%;
+    height:        100%;
+    display:       block;
+    object-fit:    cover;
+    border-radius: 31% 69% 63% 37% / 42% 31% 69% 58%;
+    box-shadow:    0 30px 80px -40px rgba(32, 22, 14, 0.52);
+  }
+
+  // floating badge
+  &__badge {
+    position:        absolute;
+    bottom:          10%;
+    left:            -6%;
+    z-index:         3;
+    display:         inline-flex;
+    align-items:     center;
+    gap:             $spacing-xs;
+    padding:         $spacing-sm $spacing-md;
+    background:      $bg-primary;
+    border:          1px solid rgba($color-primary, 0.15);
+    border-radius:   $border-radius-full;
+    box-shadow:      $shadow-card-elevated;
+    font-size:       $font-size-xs;
+    font-weight:     $font-weight-bold;
+    color:           $color-primary;
+    white-space:     nowrap;
+
+    svg { color: $color-accent; flex-shrink: 0; }
+
+    @include mobile {
+      bottom: 6%;
+      left:   2%;
+      font-size: 0.65rem;
+    }
+  }
+}
+
+// ============================================================================
+// BUTTONS
+// ============================================================================
+
+.primary-button,
+.secondary-button {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  gap:             0.55rem;
+  border:          1px solid transparent;
+  border-radius:   $border-radius-full;
+  padding:         0.9rem 1.6rem;
+  font-family:     $font-family-sans;
+  font-size:       $font-size-base;
+  font-weight:     $font-weight-bold;
+  cursor:          pointer;
+  transition:      all $transition-base;
+
+  @include mobile { padding: 0.75rem 1.2rem; font-size: $font-size-sm; }
+}
+
+.primary-button {
+  background:  $color-primary;
+  color:       #fff;
+  box-shadow:  $shadow-green-glow;
+
+  &:hover { box-shadow: 0 14px 32px -10px rgba($color-primary, 0.5); }
+}
+
+.secondary-button {
+  background:    transparent;
+  border-color:  rgba($color-primary, 0.22);
+  color:         $color-primary;
+
+  &:hover { background: rgba($color-primary, 0.06); }
+}
+
+// ============================================================================
+// STORY
+// ============================================================================
+
+.story-copy {
+  max-width:   700px;
+  margin:      0 auto;
+  padding-left: $spacing-xl;
+  border-left:  3px solid rgba($color-primary, 0.25);
+
+  h2 {
+    margin:         1rem 0 1.25rem;
+    font-family:    $font-family-sans;
+    font-size:      clamp(2rem, 4vw, 3.4rem);
+    font-weight:    $font-weight-extrabold;
+    line-height:    1.05;
+    letter-spacing: -0.055em;
+    color:          $color-dark;
+  }
+
+  p {
+    margin:      0 0 1rem;
+    text-align:  justify;
+    font-size:   $font-size-lg;
+    line-height: 1.8;
+    color:       var(--about-soft);
+
+    &:last-child { margin-bottom: 0; }
+
+    @include mobile { font-size: $font-size-base; }
+  }
+
+  @include mobile { padding-left: $spacing-md; }
+}
+
+// ============================================================================
+// MANAGING DIRECTOR
+// ============================================================================
+
+.director-panel {
+  display:     grid;
+  grid-template-columns: 240px 1fr;
+  gap:         $spacing-2xl;
+  align-items: center;
+  background:  $bg-primary;
+  border:      1px solid rgba($color-primary, 0.1);
+  border-radius: $border-radius-xl;
+  padding:     $spacing-2xl;
+  box-shadow:  $shadow-lg;
+
+  @include tablet {
+    grid-template-columns: 180px 1fr;
+    gap: $spacing-xl;
+    padding: $spacing-xl;
+  }
+
+  @include mobile {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding:    $spacing-xl $spacing-md;
+  }
+}
+
+.director-panel__portrait {
+  display:         flex;
+  justify-content: center;
+}
+
+.director-panel__portrait-frame {
+  width:           200px;
+  height:          200px;
+  border-radius:   50%;
+  overflow:        hidden;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  background:      linear-gradient(160deg, rgba($color-primary, 0.14), rgba($color-secondary, 0.12));
+  border:          2px solid rgba($color-primary, 0.18);
+  color:           var(--color-primary);
+
+  @include tablet { width: 150px; height: 150px; }
+  @include mobile { width: 130px; height: 130px; }
+}
+
+.director-panel__portrait-img {
+  width:           100%;
+  height:          100%;
+  object-fit:      cover;
+  object-position: center top;
+  display:         block;
+}
+
+.director-panel__content {
+  position: relative;
+
+  h2 {
+    margin:         0.75rem 0 1.25rem;
+    font-family:    $font-family-sans;
+    font-size:      clamp(1.6rem, 2.8vw, 2.6rem);
+    font-weight:    $font-weight-extrabold;
+    line-height:    1.1;
+    letter-spacing: -0.045em;
+    color:          $color-dark;
+  }
+}
+
+.director-panel__quote-mark {
+  position: absolute;
+  top:      -0.5rem;
+  left:     -0.25rem;
+  width:    34px;
+  height:   34px;
+  color:    rgba($color-secondary, 0.35);
+
+  @include mobile { position: static; margin-bottom: 0.5rem; }
+}
+
+.director-panel__quote {
+  margin:      0 0 1.5rem;
+  font-size:   $font-size-lg;
+  font-style:  italic;
+  line-height: 1.7;
+  text-align:  justify;
+  color:       var(--about-soft);
+  max-width:   62ch;
+
+  @include mobile {
+    max-width:   none;
+    font-size:   $font-size-base;
+  }
+}
+
+.director-panel__signature {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.2rem;
+
+  strong {
+    font-size:   $font-size-base;
+    font-weight: $font-weight-bold;
+    color:       $color-dark;
+  }
+
+  span {
+    font-size:      $font-size-sm;
+    font-weight:    $font-weight-semibold;
+    color:          var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.08rem;
+  }
+}
+
+// ============================================================================
+// VISION & MISSION
+// ============================================================================
+
+.about-values {
+  position:       relative;
+  overflow:       hidden;
+  padding-top:    90px;
+  padding-bottom: 90px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 440px; height: 440px;
+    top: -200px; left: -180px;
+    border-radius: 50%;
+    background: rgba($color-primary, 0.045);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    right: -180px; bottom: -190px;
+    border-radius: 50%;
+    background: rgba($color-secondary, 0.055);
+    pointer-events: none;
+  }
+
+  @include mobile { padding-top: 56px; padding-bottom: 56px; }
+}
+
+// ── heading block ─────────────────────────────────────────────
+.values-heading {
+  position:   relative;
+  z-index:    2;
+  max-width:  760px;
+  margin:     0 auto 3.5rem;
+  text-align: center;
+
+  @include mobile { margin-bottom: 2.5rem; }
+}
+
+.values-eyebrow {
+  display:         inline-flex;
+  align-items:     center;
+  gap:             0.55rem;
+  padding:         0.55rem 1rem;
+  border:          1px solid rgba($color-primary, 0.18);
+  border-radius:   $border-radius-full;
+  background:      rgba($color-primary, 0.045);
+  color:           $color-primary;
+  font-size:       $font-size-xs;
+  font-weight:     $font-weight-bold;
+  letter-spacing:  0.15rem;
+  text-transform:  uppercase;
+
+  svg { flex-shrink: 0; }
+}
+
+.values-heading h2 {
+  margin:         1.25rem 0 1rem;
+  font-size:      clamp(2.4rem, 5vw, 4.6rem);
+  font-weight:    $font-weight-extrabold;
+  line-height:    0.98;
+  letter-spacing: -0.065em;
+  color:          $color-dark;
+
+  span {
+    margin:      0 0.18em;
+    color:       $color-secondary;
+    font-weight: $font-weight-medium;
+  }
+
+  @include mobile { font-size: clamp(2rem, 8vw, 2.6rem); }
+}
+
+.values-intro {
+  max-width:   600px;
+  margin:      0 auto;
+  font-size:   $font-size-lg;
+  line-height: $line-height-relaxed;
+  color:       $color-gray-600;
+
+  @include mobile { font-size: $font-size-base; }
+}
+
+// ── card wrapper ──────────────────────────────────────────────
+.values-cards {
+  position:         relative;
+  z-index:          2;
+  display:          grid;
+  grid-template-columns: 1fr 1fr;
+  max-width:        1220px;
+  min-height:       570px;
+  margin:           0 auto;
+  border-radius:    $border-radius-xl;
+  box-shadow:       $shadow-card-elevated;
+  isolation:        isolate;
+
+  @include tablet  { min-height: 520px; }
+  @include mobile  {
+    grid-template-columns: 1fr;
+    min-height:  auto;
+    border-radius: $border-radius-xl;
+  }
+}
+
+// ── shared card shell ─────────────────────────────────────────
+.values-card {
+  position:       relative;
+  min-height:     570px;
+  padding:        $spacing-3xl;
+  overflow:       hidden;
+  display:        flex;
+  flex-direction: column;
+
+  @include tablet { min-height: 520px; padding: $spacing-2xl; }
+  @include mobile { min-height: 460px; padding: $spacing-xl $spacing-md; }
+}
+
+// ── vision card ───────────────────────────────────────────────
+.values-card--vision {
+  background:   radial-gradient(circle at 90% 5%, rgba(255,255,255,.09), transparent 30%),
+                linear-gradient(145deg, #0d4722 0%, $color-primary 55%, #103c22 100%);
+  color:        $color-light;
+  box-shadow:   inset 0 0 0 1px rgba(255,255,255,.08), inset 0 -100px 120px rgba(0,0,0,.08);
+  border-radius: $border-radius-xl 0 0 $border-radius-xl;
+
+  @include mobile { border-radius: $border-radius-xl $border-radius-xl 0 0; }
+}
+
+// ── mission card ──────────────────────────────────────────────
+.values-card--mission {
+  background:    $color-light;
+  color:         $color-dark;
+  border-radius: 0 $border-radius-xl $border-radius-xl 0;
+  box-shadow:    inset 0 0 0 1px rgba($color-secondary,.08),
+                 inset 0 -100px 120px rgba($color-secondary,.025);
+
+  @include mobile { border-radius: 0 0 $border-radius-xl $border-radius-xl; }
+}
+
+// ── decorative leaf ───────────────────────────────────────────
+.values-card__pattern {
+  position:       absolute;
+  right:          -25px;
+  top:            -20px;
+  color:          rgba(255,255,255,.07);
+  transform:      rotate(12deg);
+  pointer-events: none;
+  svg { display: block; }
+}
+
+// ── mission bg image ──────────────────────────────────────────
+.values-card__food-image {
+  position: absolute;
+  inset:    0;
+  z-index:  0;
+  img { width:100%; height:100%; display:block; object-fit:cover; opacity:.18; filter:saturate(.9) contrast(.96); }
+}
+
+.values-card__overlay {
+  position: absolute;
+  inset:    0;
+  z-index:  1;
+  background: linear-gradient(145deg, rgba(255,255,255,.98) 0%, rgba(249,246,240,.94) 58%, rgba(255,153,51,.1) 100%);
+}
+
+// ── card top row ──────────────────────────────────────────────
+.values-card__top {
+  position:    relative;
+  z-index:     3;
+  display:     flex;
+  align-items: center;
+  gap:         0.8rem;
+  margin-bottom: 2.5rem;
+
+  @include mobile { margin-bottom: 1.5rem; }
+}
+
+.values-card__icon {
+  width:           52px;
+  height:          52px;
+  flex-shrink:     0;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  border-radius:   50%;
+  background:      rgba(255,255,255,.12);
+  border:          1px solid rgba(255,255,255,.25);
+  color:           $color-light;
+
+  .values-card--mission & {
+    background:   rgba($color-red,.08);
+    border-color: rgba($color-red,.2);
+    color:        $color-red;
+  }
+
+  @include mobile { width: 42px; height: 42px; }
+}
+
+.values-card__label {
+  font-size:      $font-size-xs;
+  font-weight:    $font-weight-bold;
+  letter-spacing: 0.16rem;
+  text-transform: uppercase;
+  opacity:        0.82;
+}
+
+// ── card copy ─────────────────────────────────────────────────
+.values-card__content {
+  position: relative;
+  z-index:  3;
+  max-width: 500px;
+
+  p {
+    max-width:   470px;
+    text-align:  justify;
+    margin:      0;
+    font-size:   $font-size-lg;
+    line-height: 1.75;
+    color:       rgba(255,255,255,.84);
+
+    .values-card--mission & { color: rgba($color-dark,.72); }
+
+    @include mobile { font-size: $font-size-base; }
+  }
+}
+
+.vision,
+.Mission {
+  margin:         0;
+  font-size:      clamp(2.2rem, 4vw, 3.8rem);
+  font-weight:    $font-weight-extrabold;
+  line-height:    1;
+  letter-spacing: -0.065em;
+}
+
+.vision  { color: $color-light; }
+.Mission { color: $color-red;   }
+
+.values-card__line {
+  display:      flex;
+  align-items:  center;
+  width:        120px;
+  height:       18px;
+  margin:       1rem 0 1.15rem;
+
+  &::before { content:''; width:48px; height:2px; background:$color-secondary; }
+  span       { width:7px; height:7px; margin-left:7px; border-radius:50%; background:$color-secondary; }
+}
+
+// ── feature row ───────────────────────────────────────────────
+.values-card__features {
+  position:              relative;
+  z-index:               3;
+  display:               grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:                   1rem;
+  margin-top:            auto;
+  padding-top:           2.5rem;
+  border-top:            1px solid rgba(255,255,255,.14);
+
+  .values-card--mission & { border-top-color: rgba($color-dark,.1); }
+
+  @include mobile { gap: 0.5rem; padding-top: 1.5rem; }
+}
+
+.values-feature {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            0.55rem;
+  text-align:     center;
+  cursor:         default;
+
+  span {
+    max-width:      105px;
+    font-size:      0.64rem;
+    font-weight:    $font-weight-bold;
+    line-height:    1.35;
+    letter-spacing: 0.035rem;
+    text-transform: uppercase;
+    color:          rgba(255,255,255,.78);
+    .values-card--mission & { color: rgba($color-dark,.68); }
+  }
+}
+
+.values-feature__icon {
+  width:           40px;
+  height:          40px;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  border-radius:   50%;
+  background:      rgba(255,255,255,.1);
+  border:          1px solid rgba(255,255,255,.22);
+  color:           $color-light;
+
+  .values-card--mission & {
+    background:   rgba($color-red,.08);
+    border-color: rgba($color-red,.2);
+    color:        $color-red;
+  }
+
+  @include mobile { width: 34px; height: 34px; }
+}
+
+// ── centre badge ──────────────────────────────────────────────
+.values-center-badge {
+  position:  absolute;
+  z-index:   10;
+  top:       50%;
+  left:      50%;
+  transform: translate(-50%, -50%);
+  width:     88px;
+  height:    88px;
+  padding:   7px;
+  border-radius: 50%;
+  background: $color-light;
+  box-shadow: 0 18px 45px rgba(0,0,0,.18), 0 0 0 8px rgba(255,255,255,.32);
+
+  @include mobile { display: none; }
+}
+
+.values-center-badge__inner {
+  width:           100%;
+  height:          100%;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  border-radius:   50%;
+  border:          1px solid rgba($color-primary,.2);
+  background:      linear-gradient(145deg, rgba($color-primary,.08), rgba($color-secondary,.08));
+  color:           $color-primary;
+}
+
+// ── bottom tagline ────────────────────────────────────────────
+.values-bottom-message {
+  position:        relative;
+  z-index:         2;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  gap:             0.7rem;
+  width:           fit-content;
+  margin:          2.5rem auto 0;
+  padding:         0.75rem 1.35rem;
+  border:          1px solid rgba($color-primary,.13);
+  border-radius:   $border-radius-full;
+  background:      rgba(255,255,255,.72);
+  box-shadow:      $shadow-sm;
+  color:           $color-gray-600;
+  font-size:       $font-size-sm;
+  font-weight:     $font-weight-semibold;
+  cursor:          default;
+
+  svg:first-child { color: $color-primary; }
+  svg:last-child  { color: $color-accent;  }
+
+  @include mobile { width: calc(100% - 1rem); font-size: $font-size-xs; text-align: center; }
+}
+
+// ============================================================================
+// FOUR PILLARS
+// ============================================================================
+
+.about-pillars { overflow: visible; }
+
+.diamonds-row {
+  display:         flex;
+  justify-content: center;
+  align-items:     center;
+  gap:             2rem;
+  flex-wrap:       wrap;
+  padding:         40px 0 60px;
+
+  @include tablet { gap: 1.5rem; }
+  @include mobile { gap: 1rem; padding: 20px 0 40px; }
+}
+
+.diamond-wrapper {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            1rem;
+}
+
+.diamond-card {
+  width:     220px;
+  height:    220px;
+  transform: rotate(45deg);
+  border:    2px solid;
+  border-radius: 8px;
+  display:   flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 40px -16px rgba(20,20,20,.22), inset 0 0 0 6px rgba(255,255,255,.6);
+  cursor:    default;
+
+  @include tablet { width: 190px; height: 190px; }
+  @include mobile { width: 148px; height: 148px; }
+}
+
+.diamond-card__inner {
+  transform:       rotate(-45deg);
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  justify-content: center;
+  text-align:      center;
+  width:           155px;
+  padding:         0.5rem;
+
+  @include tablet { width: 130px; }
+  @include mobile { width: 104px; }
+}
+
+.diamond-card__icon {
+  width:           48px;
+  height:          48px;
+  border-radius:   50%;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  flex-shrink:     0;
+  margin-bottom:   0.7rem;
+
+  @include mobile { width: 36px; height: 36px; }
+}
+
+.diamond-card__inner h3 {
+  font-size:      0.82rem;
+  font-weight:    $font-weight-bold;
+  line-height:    1.25;
+  letter-spacing: -0.01em;
+  margin:         0 0 0.35rem;
+
+  @include mobile { font-size: 0.7rem; }
+}
+
+.diamond-card__inner p {
+  font-size:   0.7rem;
+  line-height: 1.5;
+  color:       var(--about-soft);
+  margin:      0;
+
+  @include mobile { display: none; }
+}
+
+// ============================================================================
+// TIMELINE
+// ============================================================================
+
+.about-milestones {
+  padding-top:    72px;
+  padding-bottom: 80px;
+
+  @include mobile { padding-top: 48px; padding-bottom: 56px; }
+}
+
+.timeline-row {
+  display:               grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:                   $spacing-lg;
+  margin-top:            2rem;
+  align-items:           start;
+
+  @include tablet { grid-template-columns: repeat(2, 1fr); row-gap: 3rem; }
+  @include mobile { grid-template-columns: 1fr; row-gap: 2rem; }
+}
+
+.timeline-col { display: flex; }
+
+.timeline-item {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  width:          100%;
+}
+
+.timeline-connector {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+
+  &--top    { margin-bottom: 0.9rem; }
+  &--bottom { margin-top:    0.9rem; }
+}
+
+.timeline-connector__dot {
+  width:         10px;
+  height:        10px;
+  border-radius: 50%;
+  background:    var(--color-accent);
+  flex-shrink:   0;
+}
+
+.timeline-connector__line {
+  width:      2px;
+  height:     40px;
+  background: rgba($color-accent, 0.28);
+}
+
+.timeline-card {
+  width:         100%;
+  background:    #fff;
+  border:        1px solid rgba($color-accent, 0.1);
+  border-radius: $border-radius-lg;
+  padding:       $spacing-xl $spacing-lg;
+  text-align:    center;
+  box-shadow:    0 20px 44px -32px rgba(20,20,20,.28);
+  cursor:        default;
+
+  @include mobile { padding: $spacing-lg $spacing-md; }
+}
+
+.timeline-card__icon {
+  width:           52px;
+  height:          52px;
+  margin:          0 auto $spacing-md;
+  border-radius:   50%;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  background:      var(--color-accent);
+  color:           #fff;
+
+  @include mobile { width: 42px; height: 42px; }
+}
+
+.timeline-card__year {
+  display:        block;
+  font-size:      $font-size-sm;
+  font-weight:    $font-weight-bold;
+  letter-spacing: 0.06rem;
+  color:          var(--color-accent);
+  margin-bottom:  0.4rem;
+}
+
+.timeline-card h3 {
+  font-size:      $font-size-base;
+  font-weight:    $font-weight-bold;
+  letter-spacing: -0.02em;
+  color:          $color-dark;
+  margin:         0 0 0.6rem;
+  line-height:    1.3;
+}
+
+.timeline-card p {
+  font-size:   $font-size-sm;
+  text-align:  justify;
+  line-height: 1.65;
+  color:       var(--about-soft);
+  margin:      0;
+}
+
+// ============================================================================
+// PARTNERS
+// ============================================================================
+
+.about-partners {
+  padding-top:    72px;
+  padding-bottom: 72px;
+
+  @include mobile { padding-top: 48px; padding-bottom: 48px; }
+}
+
+.partners-intro {
+  max-width:   560px;
+  margin:      1rem auto 0;
+  font-size:   $font-size-base;
+  line-height: $line-height-relaxed;
+  color:       var(--about-soft);
+  text-align:  center;
+}
+
+.partners-strip {
+  display:         flex;
+  flex-wrap:       wrap;
+  align-items:     center;
+  justify-content: center;
+  gap:             3rem;
+  margin-top:      1rem;
+  padding:         2rem 1rem;
+
+  @include tablet { gap: 2rem; }
+  @include mobile { gap: 1.5rem; padding: 1.5rem 0.5rem; }
+}
+
+.partner-item {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+
+  img {
+    height:      112px;
+    width:       auto;
+    max-width:   150px;
+    object-fit:  contain;
+    filter:      grayscale(1) opacity(0.55);
+    transition:  filter $transition-base, transform $transition-base;
+    cursor:      default;
+  }
+
+  @include tablet { img { height: 72px; max-width: 120px; } }
+  @include mobile { img { height: 44px; max-width: 100px; } }
+}
+
+.partner-divider {
+  width:      1px;
+  height:     34px;
+  background: rgba($color-primary, 0.14);
+  flex-shrink: 0;
+
+  @include mobile { display: none; }
+}
+
+// ============================================================================
+// BRAND PROMISE
+// ============================================================================
+
+.about-brand { padding-bottom: 80px; }
+
+.brand-panel {
+  display:              grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap:                  2rem;
+  background:           rgba(255,255,255,.75);
+  border:               1px solid rgba($color-primary,.08);
+  border-radius:        2rem;
+  overflow:             hidden;
+  box-shadow:           0 30px 64px -48px rgba(28,28,28,.5);
+  cursor:               default;
+
+  @include tablet { grid-template-columns: 1fr; }
+  @include mobile { grid-template-columns: 1fr; }
+}
+
+.brand-panel__content {
+  padding: 2.5rem 2rem;
+
+  h2 {
+    margin:         1rem 0;
+    font-size:      clamp(1.8rem, 3vw, 3rem);
+    font-weight:    $font-weight-extrabold;
+    line-height:    1.05;
+    letter-spacing: -0.055em;
+    color:          $color-dark;
+  }
+
+  p {
+    margin:      0;
+    color:       var(--about-soft);
+    line-height: 1.8;
+    font-size:   $font-size-base;
+  }
+
+  @include mobile { padding: $spacing-xl $spacing-md; }
+}
+
+.brand-panel__stats {
+  display:    flex;
+  flex-wrap:  wrap;
+  gap:        1rem;
+  margin-top: 1.5rem;
+
+  div {
+    display:      inline-flex;
+    align-items:  center;
+    gap:          0.55rem;
+    padding:      0.8rem 1rem;
+    border-radius: $border-radius-full;
+    background:   rgba($color-primary,.05);
+    color:        var(--color-primary);
+    font-weight:  $font-weight-semibold;
+    font-size:    $font-size-sm;
+    cursor:       default;
+  }
+}
+
+.brand-panel__visual {
+  min-height: 420px;
+  background: linear-gradient(135deg, rgba($color-primary,.1), rgba($color-secondary,.08)),
+              url('./public/About/Qatindpromise.jpg') center / cover no-repeat;
+  border-left: 1px solid rgba($color-primary,.08);
+
+  @include tablet {
+    min-height: 280px;
+    border-left: 0;
+    border-top:  1px solid rgba($color-primary,.08);
+  }
+
+  @include mobile {
+    min-height: 220px;
+    border-left: 0;
+    border-top:  1px solid rgba($color-primary,.08);
+  }
+}
+
+// ============================================================================
+// REDUCED MOTION
+// ============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  .about-page *,
+  .about-page *::before,
+  .about-page *::after {
+    animation-duration:         0.001ms !important;
+    animation-iteration-count:  1       !important;
+    transition-duration:        0.001ms !important;
+    scroll-behavior:            auto    !important;
+  }
+}
