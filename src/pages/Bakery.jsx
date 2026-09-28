@@ -11,7 +11,6 @@ import { Link } from 'react-router-dom'
 import '../components/styles/Bakery.scss'
 import PlumCakeHeroLayer from './PlumCakeHeroLayer'
 
-
 // ─────────────────────────────────────────────────────────
 import placeholder1 from '../assets/plum-cake.png'
 import placeholder2 from '../assets/gift-humber.png'
@@ -154,12 +153,6 @@ const features = [
   }
 ]
 
-const storyPoints = [
-  'Traditional recipes, baked the slow and honest way.',
-  'Small batches every day — never mass-produced.',
-  'Ingredients sourced for flavor, not shortcuts.'
-]
-
 // Generates a stable random-ish field of ambient particles once per mount.
 function useParticleField(count, config) {
   return useMemo(
@@ -281,7 +274,6 @@ export default function Bakery() {
 
   return (
     <div className="bakery">
-      
       <section
         className="bakery-hero"
         ref={heroRef}
@@ -342,7 +334,6 @@ export default function Bakery() {
           ))}
         </div>
 
-        
         <PlumCakeHeroLayer startDelay={0.6} heroRef={heroRef} />
 
         <div className="container">
@@ -358,29 +349,34 @@ export default function Bakery() {
               Qatind Bakery
             </motion.span>
 
+            {/*
+              The heading, subtitle and buttons below are PLAIN elements on
+              purpose. PlumCakeHeroLayer (GSAP) animates them, so Framer Motion
+              must not also control them or they can get stuck invisible.
+            */}
             <h1 className="bakery-hero__title">
-              <motion.span className="bakery-hero__title-line" variants={heroChildVariants}>
+              <span className="bakery-hero__title-line">
                 Baked <span className="bakery-hero__highlight">Fresh</span>.
-              </motion.span>
+              </span>
               <br />
-              <motion.span className="bakery-hero__title-line" variants={heroChildVariants}>
+              <span className="bakery-hero__title-line">
                 Made With <span className="bakery-hero__highlight">Love</span>.
-              </motion.span>
+              </span>
             </h1>
 
-            <motion.p className="bakery-hero__subtitle" variants={heroChildVariants}>
+            <p className="bakery-hero__subtitle">
               From crusty sourdough to delicate pastries — every bake is crafted
               daily with premium ingredients and old-world technique.
-            </motion.p>
+            </p>
 
-            <motion.div className="bakery-hero__actions" variants={heroChildVariants}>
+            <div className="bakery-hero__actions">
               <Link to="/menu" className="bakery-btn bakery-btn--primary">
                 Order Now
               </Link>
               <a href="#bakery-products" className="bakery-btn bakery-btn--outline">
                 View Bakes
               </a>
-            </motion.div>
+            </div>
           </motion.div>
         </div>
       </section>
@@ -417,10 +413,10 @@ export default function Bakery() {
                 <div className="bakery-festive__media">
                   <motion.div
                     className="bakery-festive__media-frame"
-                     variants={{
-          hidden: { clipPath: 'inset(0 100% 0 0)' },
-          visible: { clipPath: 'inset(0 0% 0 0)' }  // ← driven by parent
-        }}
+                    variants={{
+                      hidden: { clipPath: 'inset(0 100% 0 0)' },
+                      visible: { clipPath: 'inset(0 0% 0 0)' } // driven by parent row
+                    }}
                     transition={{ duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
                   >
                     <img src={item.image} alt={item.name} className="bakery-festive__image" />

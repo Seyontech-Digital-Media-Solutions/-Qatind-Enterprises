@@ -24,13 +24,13 @@ import {
   RiLeafLine,
   RiCupLine,
   RiGiftLine,
+  RiStarFill,
 } from 'react-icons/ri'
 import { FiBriefcase, FiUsers, FiClock, FiPhone } from 'react-icons/fi'
 import { BsPatchCheck, BsShieldCheck } from 'react-icons/bs'
 import { LuChefHat, LuUtensilsCrossed } from 'react-icons/lu'
-import { MdDeliveryDining, MdOutlineRestaurantMenu } from 'react-icons/md'
+import { MdDeliveryDining } from 'react-icons/md'
 import { HiOutlineClipboardList } from 'react-icons/hi'
-import { AiOutlineSafetyCertificate } from 'react-icons/ai'
 
 import MouseGlowCursor from '../components/common/MouseGlowCursor'
 import MagneticButton from '../components/animations/MagneticButton'
@@ -71,9 +71,16 @@ const journeyChapters = [
   { icon: RiSparklingLine, label: 'EXPERIENCE', title: 'Food Experiences', copy: 'Live chaat, fresh drinks, bakery counters — the part of the event people talk about after.' },
 ]
 
+const heroStats = [
+  { icon: FiUsers, num: '500+', label: 'Events Catered' },
+  { icon: RiStarFill, num: '4.9/5', label: 'Client Rating' },
+  { icon: FiClock, num: '10+ yrs', label: 'Serving Trust' },
+]
+
 const serviceMenu = [
   {
     id: 'corporate',
+    num: '01',
     label: 'Corporate Events',
     title: 'Office Food That Feels Like Lunch at Home',
     description: 'Fresh home-style meals for offices, meetings, team lunches and corporate gatherings — planned around your schedule and served with consistency.',
@@ -85,6 +92,7 @@ const serviceMenu = [
 
   {
     id: 'hospitals',
+    num: '02',
     label: 'Hospital Catering',
     title: 'Thoughtful Meals for Care & Recovery',
     description: 'Freshly prepared food designed around the needs of hospitals, patients, attendants and staff.',
@@ -96,6 +104,7 @@ const serviceMenu = [
 
   {
     id: 'schools',
+    num: '03',
     label: 'Schools & Colleges',
     title: 'Good Food for Busy Campuses',
     description: 'Reliable meal solutions for schools, colleges, students, staff and campus events.',
@@ -107,6 +116,7 @@ const serviceMenu = [
 
   {
     id: 'weddings',
+    num: '04',
     label: 'Weddings',
     title: 'Make the Feast Part of the Celebration',
     description: 'From traditional favourites to live counters, Qatind creates memorable wedding food experiences for every guest.',
@@ -118,6 +128,7 @@ const serviceMenu = [
 
   {
     id: 'parties',
+    num: '05',
     label: 'Parties',
     title: 'Bring Everyone Together Around Good Food',
     description: 'Birthdays, family gatherings, housewarmings and celebrations deserve food people remember.',
@@ -129,6 +140,7 @@ const serviceMenu = [
 
   {
     id: 'hampers',
+    num: '06',
     label: 'Gift Hampers',
     title: 'Thoughtful Food Gifts for Every Occasion',
     description: 'Curated hampers with bakery favourites, sweets and savouries — perfect for gifting, festivals and corporate giving.',
@@ -147,13 +159,11 @@ const plateSteps = [
   { num: '05', title: 'Serve & Enjoy', copy: 'Hot food, well-timed service, and one less thing for you to manage.', icon: RiSparklingLine, image: img('Services/serve&enjoy.webp') },
 ]
 
-const qualityPillars = [
-  { num: '01', label: 'FRESH', title: 'Fresh Ingredients', desc: 'Sourced the same morning, never held over.', icon: RiLeafLine },
-  { num: '02', label: 'CAREFUL', title: 'Home-Style Recipes', desc: 'Recipes from real home kitchens, not a factory line.', icon: BsPatchCheck },
-  { num: '03', label: 'CONSISTENT', title: 'Hygiene & Care', desc: 'Audited kitchens, sealed packaging, every batch.', icon: BsShieldCheck },
-  { num: '04', label: 'READY', title: 'Timely Delivery', desc: 'Slot-based dispatch, tracked door to door.', icon: FiClock },
-  { num: '05', label: 'FLEXIBLE', title: 'Veg & Non-Veg', desc: 'Separate lines, prepared and served apart.', icon: MdOutlineRestaurantMenu },
-  { num: '06', label: 'EVENT-READY', title: 'Event-Ready Service', desc: 'Staffed setup for anything bigger than a delivery.', icon: AiOutlineSafetyCertificate },
+const ctaFeatures = [
+  { icon: RiLeafLine, label: 'Fresh & Hygienic' },
+  { icon: BsPatchCheck, label: 'Home-Style Taste' },
+  { icon: BsShieldCheck, label: 'Hygiene & Care' },
+  { icon: FiClock, label: 'Timely Delivery' },
 ]
 
 const showcasePlates = [
@@ -163,13 +173,6 @@ const showcasePlates = [
   { id: 'wedding', name: 'ChickenBriyani', tag: 'Weddings', image: img('Services/chickenBriyani.jpg'), },
   { id: 'bakery', name: 'Lemonrice', tag: 'Bakery', image: img('Services/Lemonrice.png'), },
 ]
-
-// const faqs = [
-//   { question: 'How far ahead should I book?', answer: 'Office meals can be arranged with 24–48 hours notice. Weddings and large events are best booked 10–15 days ahead so we can plan the menu and staffing.' },
-//   { question: 'Can I get both veg and non-veg on one order?', answer: 'Yes. Most menus, including the bakery counter, run separate veg and non-veg lines, prepared and served separately.' },
-//   { question: 'Do you cater to dietary restrictions?', answer: 'We build Jain, low-oil and eggless menus on request, across corporate, hospital and event catering.' },
-//   { question: 'Is the bakery counter available on its own?', answer: 'Yes — cakes, pastries and snacks can be ordered separately from full catering, for offices, parties or gifting.' },
-// ]
 
 const tickerRows = [
   { items: ['Home-Style Food', 'Corporate Meals', 'Wedding Feasts', 'Live Chaat', 'Fresh Drinks', 'Bakery', 'Veg', 'Non-Veg'], cls: 'services-page__ticker-row--a' },
@@ -183,10 +186,97 @@ const tickerRows = [
 */
 const STEP_ACCENTS = [BRAND.red, BRAND.saffron, BRAND.saffron, BRAND.green, BRAND.green]
 
+/* Small hook: true once viewport width drops to/under a breakpoint.
+   Used only to switch a few numeric layout constants (never colours or
+   the leaf shape itself) so the curved-process section stays legible
+   on phones instead of overflowing. */
+function useIsBreakpoint(maxWidth) {
+  const [isBelow, setIsBelow] = useState(
+    typeof window !== 'undefined' ? window.innerWidth <= maxWidth : false,
+  )
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${maxWidth}px)`)
+    const onChange = () => setIsBelow(mq.matches)
+    onChange()
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [maxWidth])
+  return isBelow
+}
+
+/* =====================================================================
+   HERO VISUAL — organic morphing blob (replaces the old leaf clip-path
+   photo frame). Uses an animated CSS border-radius instead of an SVG
+   clip-path, so the shape never renders jagged or gets cut off at any
+   screen size — it just gently morphs between rounded blob outlines.
+===================================================================== */
+function HeroVisual({ prefersReducedMotion }) {
+  return (
+    <motion.div
+      className="services-page__hero-visual"
+      initial={{ opacity: 0, scale: 0.9, y: 24 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <div className="services-page__hero-ring" />
+      <div className="services-page__hero-glow services-page__hero-glow--a" />
+      <div className="services-page__hero-glow services-page__hero-glow--b" />
+
+      <div className="services-page__hero-blob">
+        <img
+          src={img('Services/ScaleQatind.jpg')}
+          alt="Freshly prepared Qatind spread, served hot"
+          loading="eager"
+        />
+        <div className="services-page__hero-blob-tint" />
+      </div>
+
+      <motion.div
+        className="services-page__hero-float-card services-page__hero-float-card--rating"
+        initial={{ opacity: 0, y: -12, scale: 0.85 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6, delay: 0.85, ease: [0.16, 1, 0.3, 1] }}
+        whileHover={prefersReducedMotion ? undefined : { y: -4 }}
+      >
+        <span className="services-page__hero-float-card-icon"><RiStarFill /></span>
+        <span>
+          <span className="services-page__hero-float-card-title">4.9 / 5 Rating</span>
+          <span className="services-page__hero-float-card-sub">200+ Reviews</span>
+        </span>
+      </motion.div>
+
+      <motion.div
+        className="services-page__hero-float-card services-page__hero-float-card--stat"
+        initial={{ opacity: 0, y: 12, scale: 0.85 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6, delay: 1.05, ease: [0.16, 1, 0.3, 1] }}
+        whileHover={prefersReducedMotion ? undefined : { y: -4 }}
+      >
+        <span className="services-page__hero-float-card-icon"><FiUsers /></span>
+        <span>
+          <span className="services-page__hero-float-card-title">500+ Events</span>
+          <span className="services-page__hero-float-card-sub">Served with love</span>
+        </span>
+      </motion.div>
+    </motion.div>
+  )
+}
+
 /* =====================================================================
    STEP UNIT — single row inside CurvedProcess
 ===================================================================== */
-function StepUnit({ step, index, isLeft, accent, rowH, bubbleSize, svgW, leftBX, rightBX, prefersReducedMotion }) {
+/* Compact (below `lg`) layout is applied with INLINE styles so it never
+   depends on CSS overrides winning against the desktop absolute layout. */
+const COMPACT_ROW = {
+  position: 'relative', display: 'flex', flexDirection: 'column',
+  alignItems: 'center', textAlign: 'center', gap: '1.25rem',
+  padding: '2rem 0', width: '100%',
+}
+const COMPACT_TEXT = {
+  position: 'static', maxWidth: '22rem', width: '100%', textAlign: 'center',
+}
+
+function StepUnit({ step, index, isLeft, accent, rowH, bubbleSize, svgW, leftBX, rightBX, prefersReducedMotion, isCompact }) {
   const rowRef = useRef(null)
   const isInView = useInView(rowRef, { once: true, margin: '0px' })
 
@@ -201,20 +291,24 @@ function StepUnit({ step, index, isLeft, accent, rowH, bubbleSize, svgW, leftBX,
     <div
       ref={rowRef}
       className="services-page__process-step-row"
-      style={{ top: index * rowH, height: rowH }}
+      style={isCompact ? { ...COMPACT_ROW, borderTop: index ? '1px dashed rgba(36,22,8,.12)' : 'none' } : { top: index * rowH, height: rowH }}
     >
       {/* ── Bubble image ──────────────────────────────────────────────── */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.65, rotate: isLeft ? -12 : 12 }}
+        initial={{ opacity: 0, scale: 0.65, rotate: isCompact ? 0 : isLeft ? -12 : 12 }}
         animate={isInView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
         transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: 0.04 }}
         className="services-page__process-step-bubble"
-        style={{
-          width: bubbleSize,
-          height: bubbleSize,
-          left: `calc(${bubbleCentrePercX} - ${bubbleSize / 2}px)`,
-          top: `calc(50% - ${bubbleSize / 2}px)`,
-        }}
+        style={
+          isCompact
+            ? { position: 'relative', width: bubbleSize, height: bubbleSize, flexShrink: 0 }
+            : {
+                width: bubbleSize,
+                height: bubbleSize,
+                left: `calc(${bubbleCentrePercX} - ${bubbleSize / 2}px)`,
+                top: `calc(50% - ${bubbleSize / 2}px)`,
+              }
+        }
       >
         {/* Pulse rings */}
         {!prefersReducedMotion && (
@@ -259,10 +353,11 @@ function StepUnit({ step, index, isLeft, accent, rowH, bubbleSize, svgW, leftBX,
 
       {/* ── Text block ────────────────────────────────────────────────── */}
       <motion.div
-        initial={{ opacity: 0, x: isLeft ? 72 : -72 }}
+        initial={{ opacity: 0, x: isCompact ? 0 : isLeft ? 72 : -72 }}
         animate={isInView ? { opacity: 1, x: 0 } : {}}
         transition={{ duration: 0.72, ease: [0.16, 1, 0.3, 1], delay: 0.18 }}
         className={`services-page__process-step-text ${isLeft ? 'services-page__process-step-text--left' : 'services-page__process-step-text--right'}`}
+        style={isCompact ? COMPACT_TEXT : undefined}
       >
         {/* Big step number */}
         <motion.p
@@ -300,7 +395,7 @@ function StepUnit({ step, index, isLeft, accent, rowH, bubbleSize, svgW, leftBX,
           initial={{ opacity: 0, scale: 0.7 }}
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ type: 'spring', stiffness: 300, damping: 22, delay: 0.46 }}
-          className={`services-page__process-step-chip ${isLeft ? '' : 'services-page__process-step-chip--reverse'}`}
+          className={`services-page__process-step-chip ${isLeft || isCompact ? '' : 'services-page__process-step-chip--reverse'}`}
           style={{
             background: `${accent}18`,
             color: accent,
@@ -320,10 +415,34 @@ function StepUnit({ step, index, isLeft, accent, rowH, bubbleSize, svgW, leftBX,
 ===================================================================== */
 function CurvedProcess({ steps, prefersReducedMotion }) {
   const sectionRef = useRef(null)
-  /* Layout constants */
-  const ROW_H = 290
-  const BUBBLE = 210
-  const SVG_W = 600
+  const canvasRef = useRef(null)
+  // Real rendered width of the canvas, so the SVG viewBox is 1:1 with CSS
+  // pixels. A hard-coded viewBox width (was 600) never matched the real
+  // container, so with `preserveAspectRatio="meet"` the path was letterboxed
+  // and drifted away from the percentage-positioned bubbles.
+  const [canvasW, setCanvasW] = useState(896)
+  useEffect(() => {
+    const el = canvasRef.current
+    if (!el) return
+    const update = () => setCanvasW(Math.round(el.getBoundingClientRect().width) || 896)
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+  // 991px matches $breakpoint-lg - 1 in _variables.scss — the same cutoff
+  // the SCSS media query now uses to switch to the simple stacked layout,
+  // so phones and tablets are treated identically here.
+  const isCompact = useIsBreakpoint(991)
+
+  /* Layout constants — scaled down below `lg` so the bubbles, the
+     winding path and the text columns never overflow. Below `lg` the
+     SCSS switches the rows to a stacked flex layout (and forces the
+     bubble to a fixed 150px), so these numbers only really matter at
+     `lg` and above. */
+  const ROW_H = isCompact ? 210 : 290
+  const BUBBLE = isCompact ? 150 : 210
+  const SVG_W = canvasW
   const LEFT_BX = SVG_W * 0.27
   const RIGHT_BX = SVG_W * 0.73
 
@@ -373,13 +492,14 @@ function CurvedProcess({ steps, prefersReducedMotion }) {
         </motion.div>
 
         {/* Steps canvas */}
-        <div className="services-page__process-canvas" style={{ height: svgH }}>
+        <div ref={canvasRef} className="services-page__process-canvas" style={isCompact ? undefined : { height: svgH }}>
 
           {/* ── Winding SVG path ──────────────────────────────────────── */}
+          {!isCompact && (
           <svg
             viewBox={`0 0 ${SVG_W} ${svgH}`}
             className="services-page__process-svg"
-            preserveAspectRatio="xMidYMin meet"
+            preserveAspectRatio="none"
           >
             <defs>
               <linearGradient id="qatind-cpath-grad" x1="0" y1="0" x2="0" y2="1">
@@ -427,6 +547,7 @@ function CurvedProcess({ steps, prefersReducedMotion }) {
               )
             })}
           </svg>
+          )}
 
           {/* ── Step rows ─────────────────────────────────────────────── */}
           {steps.map((step, i) => (
@@ -442,6 +563,7 @@ function CurvedProcess({ steps, prefersReducedMotion }) {
               leftBX={LEFT_BX}
               rightBX={RIGHT_BX}
               prefersReducedMotion={prefersReducedMotion}
+              isCompact={isCompact}
             />
           ))}
         </div>
@@ -510,6 +632,10 @@ function FoodShowcase({ plates, prefersReducedMotion }) {
   const [index, setIndex] = useState(0)
   const count = plates.length
   const AUTOPLAY_MS = 4500
+  // 575px matches $breakpoint-sm (576px) in _variables.scss / the
+  // `@include sm` mixin, so this switches at the same point the SCSS
+  // plate sizing does (services-page__showcase-plate).
+  const isMobile = useIsBreakpoint(575)
 
   useEffect(() => {
     if (prefersReducedMotion) return
@@ -526,6 +652,10 @@ function FoodShowcase({ plates, prefersReducedMotion }) {
     return diff
   }
 
+  /* Smaller horizontal spread on phones so side cards don't get clipped
+     out of view entirely. */
+  const STEP_X = isMobile ? 130 : 230
+
   return (
     <section className="services-page__showcase">
       <div className="services-page__showcase-header">
@@ -540,7 +670,7 @@ function FoodShowcase({ plates, prefersReducedMotion }) {
           const offset = getOffset(i)
           if (Math.abs(offset) > 2) return null
           const isActive = offset === 0
-          const x = offset * 230
+          const x = offset * STEP_X
           const rotate = offset * 10
           const scale = isActive ? 1 : 0.78
           const zIndex = 10 - Math.abs(offset)
@@ -656,9 +786,6 @@ export default function ServicesPage() {
   const heroImgY = useTransform(heroProgress, [0, 1], ['0%', prefersReducedMotion ? '0%' : '22%'])
   const heroFloatY = useTransform(heroProgress, [0, 1], ['0%', prefersReducedMotion ? '0%' : '38%'])
 
-  const { scrollYProgress: pageProgress } = useScroll()
-  const progressBar = useSpring(pageProgress, { stiffness: 120, damping: 24 })
-
   const activeItem = useMemo(
     () => serviceMenu.find((s) => s.id === activeService) ?? serviceMenu[0],
     [activeService],
@@ -690,12 +817,6 @@ export default function ServicesPage() {
     <div className="services-page">
       <MouseGlowCursor />
 
-      {/* Reading-progress bar */}
-      <motion.div
-        style={{ scaleX: progressBar }}
-        className="services-page__progress"
-      />
-
       {/* ================================================================
           1 — HERO
       ================================================================ */}
@@ -704,8 +825,8 @@ export default function ServicesPage() {
         onMouseMove={handleHeroMouseMove}
         className="services-page__hero"
       >
-        <div className="services-page__grain" />
         <div className="services-page__hero-bg" />
+        <div className="services-page__hero-dots" />
         <div className="services-page__hero-aura services-page__hero-aura--red" />
         <div className="services-page__hero-aura services-page__hero-aura--green" />
 
@@ -716,39 +837,69 @@ export default function ServicesPage() {
             transition={{ duration: 0.6 }}
             className="services-page__hero-badge"
           >
-            <RiSparklingLine />
+            <span className="services-page__hero-badge-dot" />
             Home-Style • Fresh • Made With Care
           </motion.span>
 
           <div className="services-page__hero-grid">
-            <motion.h1
-              initial="hidden"
-              animate="show"
-              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
-              className="services-page__hero-title"
-            >
-              {['Home-style food.', 'Made for every occasion.'].map((line) => (
+            <div className="services-page__hero-content">
+              <motion.h1
+                initial="hidden"
+                animate="show"
+                variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
+                className="services-page__hero-title"
+              >
                 <motion.span
-                  key={line}
                   variants={{ hidden: { opacity: 0, y: 26 }, show: { opacity: 1, y: 0 } }}
                   transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  {line}
+                  Home-style food.
                 </motion.span>
-              ))}
-            </motion.h1>
+                <motion.span
+                  variants={{ hidden: { opacity: 0, y: 26 }, show: { opacity: 1, y: 0 } }}
+                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  Made for every{' '}
+                  <span className="services-page__hero-title-highlight">occasion.</span>
+                </motion.span>
+              </motion.h1>
 
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.4 }}
-              className="services-page__hero-copy-wrap"
-            >
-              <p className="services-page__hero-copy">
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.35 }}
+                className="services-page__hero-copy"
+              >
                 From everyday office meals to weddings, celebrations and live food
                 counters — Qatind brings the comfort of home cooking to every table.
-              </p>
-              <div className="services-page__hero-actions">
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.5 }}
+                className="services-page__hero-stats"
+              >
+                {heroStats.map((stat, i) => (
+                  <div key={stat.label} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                    {i > 0 && <span className="services-page__hero-stat-divider" />}
+                    <div className="services-page__hero-stat">
+                      <span className="services-page__hero-stat-icon"><stat.icon /></span>
+                      <span>
+                        <span className="services-page__hero-stat-num">{stat.num}</span>
+                        <span className="services-page__hero-stat-label">{stat.label}</span>
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.62 }}
+                className="services-page__hero-actions"
+              >
                 <MagneticButton>
                   <motion.a
                     whileTap={{ scale: 0.96 }}
@@ -769,8 +920,11 @@ export default function ServicesPage() {
                     <RiArrowRightLine />
                   </motion.a>
                 </MagneticButton>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
+
+            {/* Right-side visual — morphing blob with floating stat cards */}
+            <HeroVisual prefersReducedMotion={prefersReducedMotion} />
           </div>
         </div>
 
@@ -965,51 +1119,88 @@ export default function ServicesPage() {
       <FoodShowcase plates={showcasePlates} prefersReducedMotion={prefersReducedMotion} />
 
       {/* ================================================================
-          8 — QUALITY PILLARS
+          8 — CTA (replaces the old Quality Pillars grid)
       ================================================================ */}
-      <section className="services-page__quality">
-        <div className="services-page__grain services-page__quality-grain" />
-        <div className="services-page__quality-glow" />
+      <section className="services-page__cta">
+        <div className="services-page__cta-blob services-page__cta-blob--a" />
+        <motion.div
+          className="services-page__cta-blob services-page__cta-blob--b"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={
+            prefersReducedMotion
+              ? { opacity: 1, scale: 1 }
+              : { opacity: [0, 0.85, 0.6, 0.85], scale: [0.8, 1.08, 1, 1.08], rotate: [0, 6, 0, 6] }
+          }
+          transition={
+            prefersReducedMotion
+              ? { duration: 0.6 }
+              : { duration: 7, repeat: Infinity, ease: 'easeInOut' }
+          }
+        />
+        <span className="services-page__cta-sparkle services-page__cta-sparkle--left"><RiSparklingLine /></span>
+        <span className="services-page__cta-sparkle services-page__cta-sparkle--right"><RiSparklingLine /></span>
 
-        <div className="services-page__quality-inner">
-          <p className="services-page__eyebrow services-page__eyebrow--saffron">Quality, promised</p>
-          <h2 className="services-page__heading services-page__heading--lg services-page__heading--white services-page__quality-heading">
-            Home-style at heart. Professional in every detail.
-          </h2>
+        <div className="services-page__container services-page__cta-grid">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="services-page__cta-content"
+          >
+            <h2 className="services-page__cta-heading">
+              <span>Let's Feed</span>
+              <span>
+                Your Next{' '}
+                <span className="services-page__cta-heading-highlight">Occasion</span>
+              </span>
+            </h2>
 
-          <div className="services-page__quality-grid">
-            {qualityPillars.map((pillar, i) => (
-              <motion.div
-                key={pillar.num}
-                initial={{ opacity: 1, y: 0 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.55, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] }}
-                whileHover={{ y: -6 }}
-                onMouseMove={handleTilt}
-                onMouseLeave={resetTilt}
-                className="services-page__tilt services-page__shine services-page__quality-pillar"
-              >
-                <div className="services-page__quality-pillar-top">
-                  <motion.span
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: i * 0.06 + 0.15 }}
-                    className="services-page__quality-pillar-num"
-                  >
-                    {pillar.num}
-                  </motion.span>
-                  <motion.span whileHover={{ rotate: 12, scale: 1.15 }} transition={{ type: 'spring', stiffness: 300, damping: 15 }}>
-                    <pillar.icon className="services-page__quality-pillar-icon" />
-                  </motion.span>
+            <p className="services-page__cta-copy">
+              From daily meals to milestone celebrations — tell us the occasion,
+              and we'll handle the menu, the kitchen and the delivery.
+            </p>
+
+            <div className="services-page__cta-features">
+              {ctaFeatures.map((feature, i) => (
+                <div key={feature.label} style={{ display: 'flex', alignItems: 'stretch', gap: '1.5rem' }}>
+                  {i > 0 && <span className="services-page__cta-feature-divider" />}
+                  <div className="services-page__cta-feature">
+                    <span className="services-page__cta-feature-icon"><feature.icon /></span>
+                    <span className="services-page__cta-feature-label">{feature.label}</span>
+                  </div>
                 </div>
-                <p className="services-page__quality-pillar-label">{pillar.label}</p>
-                <h3>{pillar.title}</h3>
-                <p>{pillar.desc}</p>
-              </motion.div>
-            ))}
-          </div>
+              ))}
+            </div>
+
+            <MagneticButton>
+              <motion.a
+                whileTap={{ scale: 0.96 }}
+                href="tel:+917305461104"
+                className="services-page__btn services-page__btn--primary services-page__cta-btn"
+              >
+                Order Now
+                <RiArrowRightLine />
+              </motion.a>
+            </MagneticButton>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 24 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="services-page__cta-visual"
+          >
+            <div className="services-page__cta-blob-shape">
+              <img
+                src={img('Services/WeddingCatering.png')}
+                alt="Guests enjoying a Qatind-catered spread"
+                loading="lazy"
+              />
+            </div>
+            <RiLeafLine className="services-page__cta-leaf-deco" />
+          </motion.div>
         </div>
       </section>
 

@@ -12,7 +12,9 @@ import {
   FiSunrise,
   FiCoffee,
   FiGift,
+  FiShoppingCart,
 } from 'react-icons/fi'
+import { useCart } from '../hooks/useCart'
 
 import categories from '../data/menuCategories.json'
 import '../components/styles/Menu.scss'
@@ -28,6 +30,23 @@ const iconMap = {
   FiSunrise,
   FiCoffee,
   FiGift,
+}
+
+/**
+ * Format a numeric price as Indian Rupees.
+ * Uses the en-IN locale so thousands are grouped the Indian way
+ * (e.g. ₹1,00,000) and always shows exactly 2 decimal places.
+ *
+ * @param {number} amount
+ * @returns {string}  e.g. "₹13.99" or "₹1,299.00"
+ */
+function formatINR(amount) {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount)
 }
 
 const menuImages = import.meta.glob(
@@ -46,6 +65,7 @@ function getImageUrl(filename) {
 }
 
 export default function Menu() {
+  const { addItem } = useCart()
   const [activeCategory, setActiveCategory] = useState(
     categories[0]?.id
   )
@@ -654,6 +674,25 @@ export default function Menu() {
                       </span>
 
                     </h4>
+
+                    <div className="menu-item-card__footer">
+                      <span className="menu-item-card__price">{formatINR(item.price)}</span>
+                      <button
+                        type="button"
+                        className="menu-item-card__add-btn"
+                        onClick={() => addItem({
+                          id: item.id,
+                          name: item.name,
+                          price: item.price,
+                          image: item.image,
+                          categoryId: category.id,
+                        })}
+                        aria-label={`Add ${item.name} to cart`}
+                      >
+                        <FiShoppingCart size={15} aria-hidden="true" />
+                        <span>Add</span>
+                      </button>
+                    </div>
 
                   </article>
                 )

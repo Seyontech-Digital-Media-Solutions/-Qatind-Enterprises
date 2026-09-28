@@ -20,9 +20,10 @@ import {
   FaArrowRight
 } from 'react-icons/fa'
 import FoodCard from '../components/cards/FoodCard'
-// import TestimonialCarousel from '../components/TestimonialCarousel'
+import TestimonialMarquee from './Testimonial'
 import heroData from '../data/hero.json'
-import menuData from '../data/menu.json'
+import menuCategories from '../data/menuCategories.json'
+import testimonialsData from '../data/testimonials.json'
 import mainImg from '../assets/main-img.png'
 import img1 from '../assets/img-1.jpeg'
 import img2 from '../assets/img-2.jpeg'
@@ -36,6 +37,25 @@ import quality from '../assets/quality.jpg'
 import packing from '../assets/packing.jpg'
 import delivery from '../assets/delivery.jpg'
 import catering from '../assets/catering.jpg'
+
+// ---------------------------------------------------------------------
+// Featured dishes shown on the Home page.
+// Ids come from src/data/menuCategories.json — change them to feature
+// any other dish.
+// ---------------------------------------------------------------------
+const featuredIds = [
+  'biryani-chicken-biryani',
+  'veg-starters-paneer-tikka',
+  'non-veg-starters-chicken-65'
+]
+
+const allMenuItems = menuCategories.flatMap(cat =>
+  cat.items.map(item => ({ ...item, categoryId: cat.id }))
+)
+
+const featuredItems = featuredIds
+  .map(id => allMenuItems.find(item => item.id === id))
+  .filter(Boolean)
 
 // ---------------------------------------------------------------------
 // Static content for the new sections. Swap these for real data/JSON
@@ -68,16 +88,6 @@ const occasions = [
   { icon: <FaUsers />, title: 'Get-Togethers', text: 'Good food, great company' }
 ]
 
-// `tint` cycles through the same palette used by the reason cards so the
-// testimonial carousel reads as one consistent design system.
-// const testimonials = [
-//   { id: 1, name: 'Ananya R.', role: 'Corporate Client', rating: 5, text: 'Qatind catered our office anniversary and every plate came back empty. Genuinely home-style food.', tint: 'saffron' },
-//   { id: 2, name: 'Vikram S.', role: 'Wedding Host', rating: 5, text: 'From tasting to the big day, the team was on time and the food tasted like it was made with love.', tint: 'green' },
-//   { id: 3, name: 'Priya M.', role: 'Regular Customer', rating: 4, text: 'Order weekly for the family — consistently fresh and hygienically packed.', tint: 'red' },
-//   { id: 4, name: 'Rahul K.', role: 'College Fest Organiser', rating: 5, text: 'Fed 300 students on time without a single complaint. Will book again.', tint: 'blue' },
-//   { id: 5, name: 'Deepa N.', role: 'Birthday Host', rating: 5, text: 'The snacks were the highlight of the party. Everyone asked where we ordered from.', tint: 'saffron' }
-// ]
-
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
@@ -93,11 +103,13 @@ const reasonVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } }
 }
 
+// Food photos standing in for customer avatars, matched 1:1 to
+// testimonials.json in order. Reuses images already imported for the
+// hero and process sections, so no new assets are needed.
+const testimonialImages = [mainImg, img1, img2, img3, fresh, cook, quality]
+
 export default function Home() {
   const [whyImgFailed, setWhyImgFailed] = useState(false)
-
-  // Get first item from each category
-  const featuredItems = menuData.categories.slice(0, 3).map(cat => cat.items[0])
 
   return (
     <div className="home">
@@ -302,7 +314,6 @@ export default function Home() {
               </Link>
             </motion.div>
 
-
             {/* Pyramid: 3 icons wrap to a first row, the remaining 2
                 center themselves on the row below (see Home.scss). */}
             <motion.div
@@ -347,7 +358,7 @@ export default function Home() {
         </svg>
       </section>
 
-      {/* Signature Dishes — unchanged */}
+      {/* Signature Dishes */}
       <section className="featured">
         <div className="container">
           <h2 className="section__title">Featured Dishes</h2>
@@ -427,16 +438,29 @@ export default function Home() {
         </svg>
       </section>
 
-      {/* Reviews / Testimonials — two-column carousel (no marquee, no
-          boxed cards): swipe/click through paired testimonials, sliding
-          horizontally with arrow + dot navigation. */}
-      {/* <section className="reviews">
+      {/* Reviews / Testimonials — staggered bento grid. Each card pairs
+          a food-dish photo (standing in for the customer's avatar) with
+          a name, role and quote, arranged in an offset four-column grid
+          with soft glow blobs behind it (TestimonialMarquee.jsx). */}
+      <section className="reviews">
         <div className="container">
-          <h2 className="section__title">What Our Customers Say</h2>
-          <TestimonialCarousel testimonials={testimonials} />
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+          >
+            <h2 className="section__title">What Our Customers Say</h2>
+            <p className="reviews__subtitle">
+              Real stories from the people who taste the Qatind difference every week.
+            </p>
+          </motion.div>
         </div>
-      </section> */}
-
+        <TestimonialMarquee
+          testimonials={testimonialsData.testimonials}
+          images={testimonialImages}
+        />
+      </section>
 
       {/* CTA Section — unchanged */}
       <section className="cta" style={{ backgroundImage: `url(${ctaImg})` }}>

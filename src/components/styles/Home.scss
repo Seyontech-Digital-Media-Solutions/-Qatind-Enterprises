@@ -1125,171 +1125,221 @@ $font-script: 'Caveat', 'Segoe Script', cursive;
 }
 
 // ============================
-// Reviews / Testimonials — two-column sliding carousel.
-// No marquee, no boxed cards: paired testimonials slide horizontally
-// via Framer Motion, navigated with arrows + dots (TestimonialCarousel.jsx).
+// Reviews / Testimonials — staggered bento grid.
+// Four columns, each offset vertically so cards form a loose, organic
+// arrangement rather than a strict table (TestimonialMarquee.jsx).
+// Avatars are food-dish photos rather than customer headshots, with a
+// small star badge in the corner. Soft blurred glow blobs sit behind
+// the whole grid for the bento-card ambience from the reference.
 // ============================
 .reviews {
-  padding: $spacing-3xl $spacing-md;
+  padding: $spacing-3xl 0;
   background: linear-gradient(180deg, $bg-secondary 0%, $bg-primary 100%);
 
   @include mobile {
-    padding: $spacing-2xl $spacing-md;
+    padding: $spacing-2xl 0;
   }
 
-  &__carousel {
-    max-width: 960px;
-    margin: 0 auto;
+  .container {
+    margin-bottom: $spacing-xl;
   }
 
-  &__track {
-    overflow: hidden;
-  }
-
-  &__slide {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: $spacing-2xl;
+  &__subtitle {
+    @include body-text;
+    text-align: center;
+    max-width: 46ch;
+    margin: calc(-1 * #{$spacing-2xl}) auto 0;
+    color: $text-secondary;
 
     @include mobile {
-      grid-template-columns: 1fr;
-      gap: $spacing-xl;
-    }
-  }
-
-  &__nav {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: $spacing-lg;
-    margin-top: $spacing-2xl;
-  }
-
-  &__arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: 2px solid $color-primary;
-    background: transparent;
-    color: $color-primary;
-    cursor: pointer;
-    transition: all $transition-base;
-
-    &:hover {
-      background-color: $color-primary;
-      color: $color-light;
-    }
-  }
-
-  &__dots {
-    display: flex;
-    gap: $spacing-xs;
-  }
-
-  &__dot {
-    width: 8px;
-    height: 8px;
-    padding: 0;
-    border: none;
-    border-radius: 50%;
-    background-color: $color-gray-400;
-    cursor: pointer;
-    transition: all $transition-base;
-
-    &--active {
-      width: 22px;
-      border-radius: $border-radius-full;
-      background-color: $color-primary;
+      margin-top: calc(-1 * #{$spacing-lg});
+      font-size: $font-size-sm;
     }
   }
 }
 
-.testimonial-slide {
-  display: flex;
-  gap: $spacing-lg;
-  align-items: flex-start;
-  padding-bottom: $spacing-lg;
-  border-bottom: 1px solid rgba($color-gray-400, 0.35);
+.testimonial-bento {
+  position: relative;
+  padding: $spacing-2xl $spacing-md $spacing-3xl;
+  overflow: hidden;
 
   @include mobile {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    padding: $spacing-lg $spacing-md $spacing-2xl;
   }
 
-  &__avatar-col {
-    flex-shrink: 0;
+  &__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: $spacing-xl $spacing-lg;
+    max-width: 1320px;
+    margin: 0 auto;
+
+    @include tablet {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $spacing-2xl;
+      max-width: 340px;
+    }
+  }
+
+  &__column {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: $spacing-sm;
+    gap: $spacing-3xl;
+
+    @include tablet {
+      margin-top: 0 !important;
+    }
+
+    @include mobile {
+      margin-top: 0 !important;
+      gap: $spacing-2xl;
+    }
+
+    // Vertical stagger per column, matching the reference: column 3
+    // sits highest, then 2, then 4, then 1.
+    &--1 {
+      margin-top: 7rem;
+    }
+
+    &--2 {
+      margin-top: 2rem;
+    }
+
+    &--3 {
+      margin-top: 0;
+    }
+
+    &--4 {
+      margin-top: 3rem;
+    }
+  }
+}
+
+// Decorative blurred color blobs behind the grid.
+.testimonial-glow {
+  position: absolute;
+  z-index: 0;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+
+  @include mobile {
+    display: none;
+  }
+
+  &--pink {
+    background: rgba($color-red, 0.35);
+  }
+
+  &--peach {
+    background: rgba($color-saffron, 0.4);
+  }
+
+  &--purple {
+    background: rgba(#7c3aed, 0.3);
+  }
+
+  &--blue {
+    background: rgba(#2563eb, 0.3);
+  }
+}
+
+.bento-card {
+  position: relative;
+  width: 100%;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  &__avatar-wrap {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    margin-bottom: $spacing-sm;
   }
 
   &__avatar {
-    width: 56px;
-    height: 56px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: 3px solid $bg-primary;
+    box-shadow: $shadow-md;
+  }
+
+  &__badge {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #2563eb;
     color: $color-light;
-    font-weight: $font-weight-bold;
-    font-size: $font-size-lg;
+    font-size: 0.55rem;
+    border: 2px solid $bg-primary;
   }
 
-  &__stars {
-    display: flex;
-    gap: 2px;
-    color: $color-saffron;
-    font-size: 0.7rem;
-  }
-
-  &__body {
-    flex: 1;
-  }
-
-  &__quote-icon {
-    color: rgba($color-primary, 0.2);
-    font-size: 1.5rem;
-    margin-bottom: $spacing-xs;
-  }
-
-  &__text {
-    @include body-text;
-    font-style: italic;
-    margin-bottom: $spacing-sm;
-  }
-
-  &__author {
+  &__name {
+    margin: 0;
     font-size: $font-size-base;
     font-weight: $font-weight-bold;
     color: $text-primary;
-    margin: 0;
   }
 
   &__role {
-    @include small-text;
-    margin: 0;
+    display: block;
+    margin: 2px 0 $spacing-md;
+    font-size: 0.65rem;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $text-secondary;
   }
 
-  // Cycle the same accent palette used by the reason cards above.
-  &--green .testimonial-slide__avatar {
-    background: linear-gradient(135deg, $color-green, darken($color-green, 12%));
+  &__quote {
+    position: relative;
+    width: 100%;
+    background-color: $bg-primary;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-card-elevated;
+    padding: $spacing-md $spacing-lg;
+
+    p {
+      @include body-text;
+      font-size: $font-size-sm;
+      font-style: italic;
+      color: $text-primary;
+      margin: 0;
+    }
   }
 
-  &--saffron .testimonial-slide__avatar {
-    background: linear-gradient(135deg, $color-saffron, $color-red);
-  }
-
-  &--red .testimonial-slide__avatar {
-    background: linear-gradient(135deg, $color-red, darken($color-red, 12%));
-  }
-
-  &--blue .testimonial-slide__avatar {
-    background: linear-gradient(135deg, #2563eb, darken(#2563eb, 12%));
+  // Small connector tab linking the name/role above to the quote card,
+  // like a flag-peg rather than a speech-bubble triangle.
+  &__tab {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px;
+    height: 12px;
+    border-radius: 3px 3px 0 0;
+    background-color: $bg-primary;
   }
 }
 

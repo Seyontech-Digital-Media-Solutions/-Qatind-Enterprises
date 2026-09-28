@@ -1,18 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { CustomEase } from 'gsap/CustomEase'
-import { SplitText } from 'gsap/SplitText'
-
-gsap.registerPlugin(MotionPathPlugin, ScrollTrigger, CustomEase, SplitText)
-
-// Smooth "luxury" ease — gentle acceleration, soft landing
-CustomEase.create('luxeOut', '0.16, 1, 0.3, 1')
-CustomEase.create('luxeInOut', '0.45, 0, 0.2, 1')
 
 import cakeMain from '../assets/plumcake/plum-cake-main.png'
-import overlaySteam from '../assets/plumcake/steam-overlay1.png'
 import ingRaisins from '../assets/plumcake/raisins.png'
 import ingCashews from '../assets/plumcake/cashews.png'
 import ingAlmonds from '../assets/plumcake/almonds.png'
@@ -23,10 +15,20 @@ import ingCinnamon from '../assets/plumcake/orange-fruite.png'
 import ingStarAnise from '../assets/plumcake/figgg.png'
 import overlayCrumbs from '../assets/plumcake/cake-crumbs.png'
 
+gsap.registerPlugin(MotionPathPlugin, ScrollTrigger, CustomEase)
+
+// Smooth "luxury" ease — gentle acceleration, soft landing
+CustomEase.create('luxeOut', '0.16, 1, 0.3, 1')
+CustomEase.create('luxeInOut', '0.45, 0, 0.2, 1')
+
 const ORBIT_RADIUS = 165
 const deg2rad = d => (d * Math.PI) / 180
 const orbitX = (angle, radius) => Math.cos(deg2rad(angle)) * radius
 const orbitY = (angle, radius) => Math.sin(deg2rad(angle)) * radius
+
+// When (in seconds, after startDelay) the heading / subtitle / buttons
+// fade in. Small number = text appears early, alongside the cake animation.
+const TEXT_AT = 0.1
 
 const INGREDIENTS = [
   { id: 'raisins', src: ingRaisins, alt: 'Raisins', angle: 0, size: 42, spinDuration: 6,
@@ -63,21 +65,20 @@ export default function PlumCakeHeroLayer({ startDelay = 0.6, heroRef }) {
   const orbitRef = useRef(null)
   const glowRef = useRef(null)
   const flashRef = useRef(null)
-  const steamRef = useRef(null)
   const lightRef = useRef(null)
   const ingredientRefs = useRef({})
   const crumbRefs = useRef({})
   const sparkleRefs = useRef([])
   const ambientTweens = useRef([])
   const tlRef = useRef(null)
-  const splitRef = useRef(null)
   const hasPlayedOnce = useRef(false)
   const reducedMotion = useRef(
     typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches
   )
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    // Reduced motion: show the cake, leave all text as-is (visible).
     if (reducedMotion.current) {
       gsap.set(cakeRef.current, { opacity: 1, scale: 1 })
       gsap.set(shadowRef.current, { opacity: 1 })
@@ -86,11 +87,15 @@ export default function PlumCakeHeroLayer({ startDelay = 0.6, heroRef }) {
 
     const ctx = gsap.context(() => {
       const heroSection = layerRef.current?.closest('.bakery-hero')
-      const headingEl = heroSection?.querySelector('.bakery-hero__title')
+      // The two heading lines are animated directly (no SplitText), so React's
+      // DOM is never rebuilt or cloned.
+      const titleLines = heroSection
+        ? Array.from(heroSection.querySelectorAll('.bakery-hero__title-line'))
+        : []
       const subtitleEl = heroSection?.querySelector('.bakery-hero__subtitle')
       const actionsEl = heroSection?.querySelector('.bakery-hero__actions')
 
-      // ── kill any running ambient loops (self-spin, crumbs, float, steam, sparkles) ──
+      // ── kill any running ambient loops (self-spin, crumbs, float, sparkles) ──
       function killAmbient() {
         ambientTweens.current.forEach(t => t.kill && t.kill())
         ambientTweens.current = []
@@ -109,19 +114,14 @@ export default function PlumCakeHeroLayer({ startDelay = 0.6, heroRef }) {
         gsap.set(flashRef.current, { opacity: 0 })
         gsap.set(cakeRef.current, { opacity: 0, scale: 0.6, rotate: -6, y: 0 })
         gsap.set(shadowRef.current, { opacity: 0, scaleX: 0.6 })
-        gsap.set(steamRef.current, { opacity: 0 })
 
-        if (splitRef.current) {
-          splitRef.current.revert()
-          splitRef.current = null
-        }
-        if (headingEl) gsap.set(headingEl, { opacity: 1 })
+        if (titleLines.length) gsap.set(titleLines, { opacity: 0, y: 28 })
         if (subtitleEl) gsap.set(subtitleEl, { opacity: 0, y: 16 })
         if (actionsEl) gsap.set(actionsEl, { opacity: 0, y: 20 })
       }
 
       // ── build (or rebuild) the full intro timeline ──
-      function playIntro(withDelay = 0, includeText = true) {
+      function playIntro(withDelay = 0) {
         if (tlRef.current) tlRef.current.kill()
         killAmbient()
         resetVisual()
@@ -133,8 +133,25 @@ export default function PlumCakeHeroLayer({ startDelay = 0.6, heroRef }) {
         const tl = gsap.timeline({ delay: withDelay })
         tlRef.current = tl
 
-        tl.to(glowRef.current, { opacity: 1, scale: 1, duration: 1.2, ease: 'luxeOut' })
+        // ── text: appears early, independent of the cake sequence ──
+        if (titleLines.length) {
+          tl.to(
+            titleLines,
+            { opacity: 1, y: 0, duration: 0.7, stagger: 0.15, ease: 'luxeOut' },
+            TEXT_AT
+          )
+        }
+        if (subtitleEl) {
+          tl.to(subtitleEl, { opacity: 1, y: 0, duration: 0.6, ease: 'luxeOut' }, TEXT_AT + 0.5)
+        }
+        if (actionsEl) {
+          tl.to(actionsEl, { opacity: 1, y: 0, duration: 0.6, ease: 'luxeOut' }, TEXT_AT + 0.7)
+        }
 
+        // ── glow ──
+        tl.to(glowRef.current, { opacity: 1, scale: 1, duration: 1.2, ease: 'luxeOut' }, 0)
+
+        // ── ingredients fly in ──
         INGREDIENTS.forEach(cfg => {
           const el = ingredientRefs.current[cfg.id]
           if (!el) return
@@ -181,6 +198,7 @@ export default function PlumCakeHeroLayer({ startDelay = 0.6, heroRef }) {
 
         const settledAt = 2.8 + 1.1 + 0.2
 
+        // ── ingredients spiral inward ──
         const orbitProxy = { angle: 0, radiusScale: 1 }
         const orbitTargets = INGREDIENTS.map(cfg => ({
           el: ingredientRefs.current[cfg.id],
@@ -209,6 +227,7 @@ export default function PlumCakeHeroLayer({ startDelay = 0.6, heroRef }) {
 
         const collapseAt = settledAt + 3.4
 
+        // ── collapse burst ──
         tl.to(orbitRef.current, { filter: 'blur(6px)', duration: 0.35, ease: 'power1.in' }, collapseAt)
         sparkleRefs.current.forEach((el, i) => {
           if (!el) return
@@ -229,25 +248,12 @@ export default function PlumCakeHeroLayer({ startDelay = 0.6, heroRef }) {
         )
         tl.to(glowRef.current, { scale: 2, opacity: 0, duration: 0.6, ease: 'power2.out' }, collapseAt + 0.2)
 
+        // ── cake reveal ──
         const revealAt = collapseAt + 0.55
         tl.to(cakeRef.current, { opacity: 1, scale: 1, rotate: 0, duration: 1, ease: 'back.out(1.4)' }, revealAt)
         tl.to(shadowRef.current, { opacity: 1, scaleX: 1, duration: 0.7, ease: 'luxeOut' }, revealAt + 0.15)
-        tl.to(steamRef.current, { opacity: 0.7, duration: 1, ease: 'luxeInOut' }, revealAt + 0.5)
 
         tl.call(() => startAmbientLoops(), [], revealAt + 0.6)
-
-        if (headingEl) {
-          const split = new SplitText(headingEl, { type: 'lines', linesClass: 'bakery-hero__split-line' })
-          splitRef.current = split
-          gsap.set(split.lines, { opacity: 0, y: 28 })
-          tl.to(split.lines, { opacity: 1, y: 0, duration: 0.7, stagger: 0.15, ease: 'luxeOut' }, revealAt + 1.0)
-        }
-        if (subtitleEl) {
-          tl.to(subtitleEl, { opacity: 1, y: 0, duration: 0.6, ease: 'luxeOut' }, revealAt + 1.5)
-        }
-        if (actionsEl) {
-          tl.to(actionsEl, { opacity: 1, y: 0, duration: 0.6, ease: 'luxeOut' }, revealAt + 1.7)
-        }
 
         return tl
       }
@@ -299,30 +305,21 @@ export default function PlumCakeHeroLayer({ startDelay = 0.6, heroRef }) {
         ambientTweens.current.push(
           gsap.to(cakeRef.current, { y: -8, duration: 4, ease: 'luxeInOut', yoyo: true, repeat: -1 })
         )
-
-        ambientTweens.current.push(
-          gsap.to(steamRef.current, {
-            y: -14,
-            opacity: 0.4,
-            duration: 2.6,
-            ease: 'sine.inOut',
-            yoyo: true,
-            repeat: -1
-          })
-        )
       }
 
-      // ── initial paint (first time hero is on screen, e.g. page load) ──
+      // Is the intro still playing (or waiting for its start delay)?
+      const introRunning = () => tlRef.current && tlRef.current.progress() < 1
+
+      // ── initial paint ──
       playIntro(startDelay)
       hasPlayedOnce.current = true
 
-      // ── replay whenever the hero re-enters the viewport, either
-      //    direction (scrolling down onto it, or scrolling back up onto it) ──
+      // ── replay whenever the hero re-enters the viewport ──
       const replayTrigger = ScrollTrigger.create({
         trigger: heroRef?.current || layerRef.current,
         start: 'top 75%',
         onEnter: () => {
-          if (hasPlayedOnce.current) playIntro(0)
+          if (hasPlayedOnce.current && !introRunning()) playIntro(0)
         },
         onEnterBack: () => {
           playIntro(0)
@@ -355,7 +352,7 @@ export default function PlumCakeHeroLayer({ startDelay = 0.6, heroRef }) {
     // ── mouse interaction: parallax + light reflection, max 5deg cake tilt ──
     const heroEl = heroRef?.current
     let quickCake, quickIngredients, quickSparkles, quickLight
-    if (heroEl && !reducedMotion.current) {
+    if (heroEl) {
       quickCake = {
         x: gsap.quickTo(cakeRef.current, 'x', { duration: 0.6, ease: 'power3' }),
         y: gsap.quickTo(cakeRef.current, 'y', { duration: 0.6, ease: 'power3' }),
@@ -412,7 +409,6 @@ export default function PlumCakeHeroLayer({ startDelay = 0.6, heroRef }) {
         heroEl.removeEventListener('mouseleave', handleLeave)
         ambientTweens.current.forEach(t => t.kill && t.kill())
         if (tlRef.current) tlRef.current.kill()
-        if (splitRef.current) splitRef.current.revert()
         ctx.revert()
       }
     }
@@ -420,7 +416,6 @@ export default function PlumCakeHeroLayer({ startDelay = 0.6, heroRef }) {
     return () => {
       ambientTweens.current.forEach(t => t.kill && t.kill())
       if (tlRef.current) tlRef.current.kill()
-      if (splitRef.current) splitRef.current.revert()
       ctx.revert()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -443,8 +438,6 @@ export default function PlumCakeHeroLayer({ startDelay = 0.6, heroRef }) {
           />
         ))}
       </div>
-
-      {/* <img ref={steamRef} src={overlaySteam} alt="" className="bakery-hero__cake-steam" /> */}
 
       <img
         ref={cakeRef}

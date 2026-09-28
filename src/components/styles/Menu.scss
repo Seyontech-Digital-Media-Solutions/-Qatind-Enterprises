@@ -186,4 +186,39 @@
       line-height: $line-height-normal;
     }
   }
+
+  &__footer {
+    @include flex-between;
+    padding: $spacing-sm $spacing-md $spacing-md;
+    flex-shrink: 0;
+  }
+
+  &__price {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+  }
+
+  &__add-btn {
+    @include flex-center;
+    gap: $spacing-xs;
+    padding: $spacing-xs $spacing-md;
+    border-radius: $border-radius-full;
+    border: 2px solid $color-primary;
+    background: transparent;
+    color: $color-primary;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    font-family: $font-family-sans;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+      background: $color-primary;
+      color: $color-light;
+      transform: scale(1.05);
+    }
+
+    &:active { transform: scale(0.97); }
+  }
 }

@@ -10,6 +10,8 @@ import Menu from './pages/Menu'
 import DailyMenu from './pages/DailyMenu'
 import Gallery from './pages/Gallery'
 import Bakery from './pages/Bakery'
+import Cart from './pages/Cart'
+import ScrollToTop from './components/common/ScrollToTop'
 
 import './styles/main.scss'
 
@@ -21,6 +23,7 @@ function App() {
       basename={import.meta.env.BASE_URL}
       future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
     >
+      <ScrollToTop />
       <Navbar />
       <main>
         <Routes>
@@ -35,6 +38,7 @@ function App() {
           <Route path="/bakery" element={<Bakery />} />
           <Route path="/ContactPage" element={<ContactPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </main>
