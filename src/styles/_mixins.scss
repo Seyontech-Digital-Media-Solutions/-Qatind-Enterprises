@@ -96,7 +96,7 @@
 
 @mixin hover-lift {
   transition: transform $transition-base, box-shadow $transition-base;
-  
+
   &:hover {
     transform: translateY(-4px);
     box-shadow: $shadow-lg;
@@ -121,7 +121,7 @@
   font-size: $font-size-5xl;
   font-weight: $font-weight-bold;
   line-height: $line-height-tight;
-  
+
   @include mobile {
     font-size: $font-size-3xl;
   }
@@ -131,7 +131,7 @@
   font-size: $font-size-4xl;
   font-weight: $font-weight-bold;
   line-height: $line-height-tight;
-  
+
   @include mobile {
     font-size: $font-size-2xl;
   }
@@ -141,7 +141,7 @@
   font-size: $font-size-3xl;
   font-weight: $font-weight-bold;
   line-height: $line-height-tight;
-  
+
   @include mobile {
     font-size: $font-size-xl;
   }
@@ -168,25 +168,25 @@
   padding-right: $spacing-md;
   margin-left: auto;
   margin-right: auto;
-  
+
   @include sm {
     max-width: 540px;
   }
-  
+
   @include md {
     max-width: 720px;
     padding-left: $spacing-lg;
     padding-right: $spacing-lg;
   }
-  
+
   @include lg {
     max-width: 960px;
   }
-  
+
   @include xl {
     max-width: 1140px;
   }
-  
+
   @include bp-2xl {
     max-width: 1320px;
   }
@@ -197,11 +197,11 @@
   display: grid;
   grid-template-columns: repeat($cols-mobile, 1fr);
   gap: $spacing-lg;
-  
+
   @include tablet {
     grid-template-columns: repeat($cols-tablet, 1fr);
   }
-  
+
   @include desktop {
     grid-template-columns: repeat($cols-desktop, 1fr);
   }
@@ -221,7 +221,7 @@
   cursor: pointer;
   transition: all $transition-base;
   text-decoration: none;
-  
+
   &:active {
     transform: scale(0.98);
   }
@@ -231,7 +231,7 @@
   @include button-base;
   background-color: $color-primary;
   color: $color-light;
-  
+
   &:hover {
     background-color: darken($color-primary, 10%);
     box-shadow: $shadow-md;
@@ -242,7 +242,7 @@
   @include button-base;
   background-color: $color-secondary;
   color: $color-dark;
-  
+
   &:hover {
     background-color: darken($color-secondary, 10%);
     box-shadow: $shadow-md;
@@ -254,7 +254,7 @@
   background-color: transparent;
   color: $color-primary;
   border: 2px solid $color-primary;
-  
+
   &:hover {
     background-color: $color-primary;
     color: $color-light;

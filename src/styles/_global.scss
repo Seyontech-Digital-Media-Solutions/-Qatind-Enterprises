@@ -182,3 +182,9 @@ button {
 .gap-md {
   gap: $spacing-md;
 }
+
+  // Matches Tailwind's selection:bg-*/selection:text-* utilities
+  & ::selection {
+    background: var(--color-saffron);
+    color: var(--color-espresso);
+  }

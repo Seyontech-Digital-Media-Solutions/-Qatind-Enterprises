@@ -2,39 +2,45 @@
   "features": [
     {
       "id": "feature-1",
-      "title": "Fresh Ingredients",
-      "description": "We source only the finest, freshest ingredients daily",
-      "icon": "FiShoppingCart"
+      "title": "Quality You Can Trust",
+      "description": "We focus on maintaining consistent food quality and delivering a reliable experience across every service.",
+    
+      "image": "feature-5.png"
     },
     {
       "id": "feature-2",
-      "title": "Fast Delivery",
-      "description": "Hot meals delivered to your door in 30 minutes",
-      "icon": "FiTruck"
+      "title": "Freshly Prepared Food",
+      "description": "Our menu is designed around flavour, freshness and variety, offering options for different occasions and preferences.",
+   
+      "image": "feature-2.png"
     },
     {
       "id": "feature-3",
-      "title": "Expert Chefs",
-      "description": "Prepared by experienced culinary professionals",
-      "icon": "FiUsers"
+      "title": "Professional Catering",
+      "description": "From planning to execution, our catering services are designed to meet the practical requirements of every event.",
+     
+      "image": "feature-7.png"
     },
     {
       "id": "feature-4",
-      "title": "Premium Quality",
-      "description": "Every dish meets our high-quality standards",
-      "icon": "FiStar"
+      "title": "Flexible Solutions",
+      "description": "Our services can be adapted to suit schools, colleges, universities, offices, industries, hospitals, parties and outdoor events.",
+    
+      "image": "feature-4.png"
     },
     {
       "id": "feature-5",
-      "title": "Easy Ordering",
-      "description": "Simple, fast, and secure online ordering",
-      "icon": "FiZap"
+      "title": "Hygiene & Safety",
+      "description": "We follow responsible food preparation and handling practices to maintain high standards of cleanliness and hygiene.",
+     
+      "image": "feature-3.png"
     },
     {
       "id": "feature-6",
-      "title": "24/7 Support",
-      "description": "Customer support available round the clock",
-      "icon": "FiHeadphones"
+      "title": "Customer-Focused Service",
+      "description": "Your requirements come first. We work closely with clients to understand their needs and deliver a smooth dining experience.",
+      
+      "image": "feature-6.png"
     }
   ]
 }

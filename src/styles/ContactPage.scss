@@ -1,0 +1,1468 @@
+// =====================================================================
+// ContactPage.scss — Qatind Enterprises (v5 — light hero + paper-tear reveal)
+// Full-width, high-end, responsive — uses shared variables & mixins
+// =====================================================================
+@use 'sass:color';
+@use './variables' as vars;
+@use './mixins' as mixins;
+
+$weight-black: 900;
+
+// ============================= PAGE SHELL =============================
+
+.contact-page {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: vars.$color-light;
+  color: vars.$text-primary;
+  font-family: vars.$font-family-sans;
+
+  ::selection {
+    background-color: vars.$color-saffron;
+    color: vars.$color-dark;
+  }
+}
+
+.cp-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  height: 3px;
+  transform-origin: left;
+  background: vars.$gradient-brand-tricolor;
+}
+
+// ─── Shared Atoms ─────────────────────────────────────────────────────
+
+.cp-eyebrow {
+  display: inline-block;
+  font-size: vars.$font-size-xs;
+  font-weight: vars.$font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: vars.$color-red;
+}
+
+.cp-section-title {
+  margin-top: vars.$spacing-md;
+  font-weight: $weight-black;
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  color: vars.$text-primary;
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  text-align: center;
+
+  &--left {
+    text-align: left;
+  }
+}
+
+.cp-section-header {
+  max-width: 44rem;
+  margin: 0 auto vars.$spacing-3xl;
+  text-align: center;
+}
+
+// ─── Shared Buttons ───────────────────────────────────────────────────
+
+%cp-btn-base {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-radius: vars.$border-radius-full;
+  padding: 0.85rem 1.75rem;
+  font-size: vars.$font-size-sm;
+  font-weight: vars.$font-weight-bold;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    transform vars.$transition-base,
+    box-shadow vars.$transition-base,
+    background-color vars.$transition-base;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+}
+
+.contact-btn {
+  &--whatsapp {
+    @extend %cp-btn-base;
+    color: vars.$text-light;
+    background: linear-gradient(100deg, #0d7a3e, #146c36 50%, #0a2e18);
+    box-shadow: vars.$shadow-green-glow;
+
+    svg {
+      font-size: 1.2rem;
+      color: #3ee07a;
+    }
+
+    &:hover {
+      box-shadow: 0 12px 32px -4px rgba(20, 108, 54, 0.5);
+    }
+  }
+
+  &--call {
+    @extend %cp-btn-base;
+    color: vars.$text-light;
+    background-color: rgba(238, 77, 49, 0.4);
+    border: 1.5px solid rgba(230, 110, 59, 0.16);
+    backdrop-filter: blur(12px);
+
+    svg {
+      color: vars.$color-saffron;
+      font-size: 1.1rem;
+    }
+
+    &:hover {
+      background-color: rgba(18, 24, 20, 0.12);
+      border-color: rgba(18, 24, 20, 0.28);
+    }
+  }
+
+  &--cta-primary {
+    @extend %cp-btn-base;
+    color: vars.$color-dark;
+    background: linear-gradient(90deg, vars.$color-saffron, color.adjust(vars.$color-saffron, $lightness: -5%), vars.$color-red);
+    box-shadow: vars.$shadow-saffron-glow;
+
+    &:hover {
+      box-shadow: 0 16px 40px -6px rgba(255, 153, 51, 0.55);
+    }
+  }
+
+  &--cta-outline {
+    @extend %cp-btn-base;
+    color: #ffffff;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    background-color: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(12px);
+
+    svg {
+      color: #3ee07a;
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+  }
+}
+
+// ─── Inner Wrap ───────────────────────────────────────────────────────
+
+%cp-wrap {
+  position: relative;
+  z-index: 10;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 82rem;
+  padding-left: vars.$spacing-lg;
+  padding-right: vars.$spacing-lg;
+
+  @include mixins.lg {
+    padding-left: vars.$spacing-2xl;
+    padding-right: vars.$spacing-2xl;
+  }
+}
+
+// ============================== HERO ==================================
+// Light theme hero. The background photo "tears" into two slanted
+// shards that slide off to opposite corners, revealing the next photo
+// underneath — then the cycle repeats.
+
+.contact-hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: vars.$bg-primary;
+  padding: vars.$spacing-3xl vars.$spacing-lg;
+}
+
+// Parallax background
+.contact-hero-bg-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.contact-hero-bg-reel {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+// Base layer — the incoming image, always shown full-bleed beneath the shards
+// Left essentially unfiltered so the photos stay true and visible; only
+// a faint lift keeps whites from looking dull under the light overlay.
+.contact-hero-bg-img,
+.contact-hero-bg-img--base {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: saturate(1.10) brightness(1.02);
+}
+
+// Torn shard layers — the outgoing image, split on a slant
+.contact-hero-bg-shard {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: saturate(1.05) brightness(1.02);
+  will-change: transform, opacity;
+
+  &--left {
+    clip-path: polygon(0 0, 58% 0, 42% 100%, 0 100%);
+  }
+
+  &--right {
+    clip-path: polygon(58% 0, 100% 0, 100% 100%, 42% 100%);
+  }
+}
+
+// Barely-there wash — just enough to keep the copy from disappearing
+// into a bright patch of photo, while the image itself stays the star.
+.contact-hero-bg-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 40%, rgba(vars.$color-dark, 0.1) 0%, rgba(vars.$color-dark, 0) 68%),
+    linear-gradient(to bottom, rgba(vars.$color-dark, 0.02) 0%, rgba(vars.$color-dark, 0.22) 100%);
+}
+
+// No card, no halo — the photo runs edge to edge. Legibility now comes
+// from the text treatment itself (masked reveal + shadow), not a wash
+// laid over the image.
+.contact-hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 52rem;
+  padding: vars.$spacing-2xl vars.$spacing-xl;
+}
+
+.contact-hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 1rem;
+  border-radius: vars.$border-radius-full;
+  border: 1px solid rgba(255, 153, 51, 0.4);
+  background: rgba(255, 255, 255, 0.75);
+  font-size: vars.$font-size-xs;
+  font-weight: vars.$font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: color.adjust(vars.$color-saffron, $lightness: -18%);
+  backdrop-filter: blur(6px);
+  box-shadow: vars.$shadow-sm;
+
+  svg {
+    font-size: 1rem;
+  }
+}
+
+// Each line sits in an overflow-hidden mask; the inner span is what
+// framer-motion actually translates, so the line appears to wipe up
+// from behind a hidden edge — a nod to the shard reveal in the photo.
+.contact-hero-title-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em; // keeps descenders (g, y) from clipping
+}
+
+.contact-hero-title-line-inner {
+  display: inline-block;
+  will-change: transform;
+}
+
+.contact-hero-title {
+  margin-top: vars.$spacing-xl;
+  font-weight: $weight-black;
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+  color: vars.$text-primary;
+  font-size: clamp(1.8rem, 9vw, 4.5rem);
+  // Dual-layer shadow — a soft white glow plus a faint dark contour —
+  // so the glyphs read against both light and dark patches of photo
+  // now that there's no wash sitting over the image.
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95),
+    0 3px 22px rgba(255, 255, 255, 0.75),
+    0 1px 3px rgba(18, 24, 20, 0.25),
+    0 12px 38px rgba(18, 24, 20, 0.12);
+}
+
+.contact-hero-title-em {
+  background: linear-gradient(100deg, vars.$color-saffron 10%, vars.$color-saffron 45%, vars.$color-red 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: vars.$color-green;
+}
+
+.contact-hero-sub {
+  margin-top: vars.$spacing-xl;
+  max-width: 34rem;
+  font-size: clamp(vars.$font-size-base, 2vw, vars.$font-size-xl);
+  line-height: 1.85;
+  color: vars.$color-light;
+  text-shadow: 0 1px 16px rgba(240, 51, 51, 0.85), 0 1px 2px rgba(225, 20, 20, 0.9);
+}
+
+.contact-hero-word {
+  display: inline-block;
+}
+
+.contact-hero-actions {
+  margin-top: vars.$spacing-2xl;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: vars.$spacing-md;
+}
+
+.contact-hero-action-item {
+  display: inline-flex;
+}
+
+.contact-hero-scroll {
+  margin-top: vars.$spacing-3xl;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  color: vars.$text-secondary;
+  font-size: vars.$font-size-xs;
+  font-weight: vars.$font-weight-semibold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 12px rgba(255, 255, 255, 0.85);
+
+  svg {
+    font-size: 1.25rem;
+  }
+}
+
+// ============================== STATS ==================================
+
+.cp-stats-section {
+  padding: vars.$spacing-3xl vars.$spacing-lg;
+  background-color: #ffffff;
+  border-bottom: 1px solid rgba(18, 24, 20, 0.06);
+
+  @include mixins.lg {
+    padding-left: vars.$spacing-2xl;
+    padding-right: vars.$spacing-2xl;
+  }
+}
+
+.cp-stats-inner {
+  @extend %cp-wrap;
+  display: grid;
+  gap: vars.$spacing-md;
+  grid-template-columns: repeat(2, 1fr);
+
+  @include mixins.lg {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.cp-stat-card {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-md;
+  border-radius: vars.$border-radius-xl;
+  border: 1px solid rgba(18, 24, 20, 0.07);
+  background: #ffffff;
+  padding: vars.$spacing-lg;
+  box-shadow: vars.$shadow-card-elevated;
+  transition: box-shadow vars.$transition-base, transform vars.$transition-base;
+
+  &:hover {
+    box-shadow: vars.$shadow-card-hover;
+    transform: translateY(-3px);
+  }
+}
+
+.cp-stat-icon {
+  display: flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: vars.$border-radius-md;
+  font-size: 1.3rem;
+
+  &--saffron {
+    background: vars.$color-saffron-light;
+    color: vars.$color-saffron;
+  }
+
+  &--green {
+    background: vars.$color-green-light;
+    color: vars.$color-green;
+  }
+
+  &--red {
+    background: vars.$color-red-light;
+    color: vars.$color-red;
+  }
+}
+
+.cp-stat-value {
+  font-size: clamp(vars.$font-size-xl, 2.5vw, vars.$font-size-2xl);
+  font-weight: $weight-black;
+  color: vars.$text-primary;
+  line-height: 1.1;
+}
+
+.cp-stat-label {
+  margin-top: 0.15rem;
+  font-size: vars.$font-size-xs;
+  font-weight: vars.$font-weight-semibold;
+  color: vars.$text-secondary;
+}
+
+// ============================ CHANNELS =================================
+
+.cp-channels-section {
+  padding: vars.$spacing-3xl + 1rem vars.$spacing-lg;
+  background: vars.$color-light;
+
+  @include mixins.lg {
+    padding-left: vars.$spacing-2xl;
+    padding-right: vars.$spacing-2xl;
+  }
+}
+
+.cp-channels-inner {
+  @extend %cp-wrap;
+}
+
+.cp-channels-grid {
+  display: grid;
+  gap: vars.$spacing-lg;
+  grid-template-columns: 1fr;
+
+  @include mixins.sm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mixins.lg {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.contact-channel-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: vars.$border-radius-xl;
+  border: 1.5px solid rgba(18, 24, 20, 0.08);
+  background: #ffffff;
+  padding: vars.$spacing-xl;
+  box-shadow: vars.$shadow-card-elevated;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    box-shadow vars.$transition-base,
+    border-color vars.$transition-base;
+
+  &:hover {
+    box-shadow: vars.$shadow-card-hover;
+  }
+
+  &--red:hover {
+    border-color: rgba(193, 39, 45, 0.35);
+  }
+
+  &--saffron:hover {
+    border-color: rgba(255, 153, 51, 0.45);
+  }
+
+  &--green:hover {
+    border-color: rgba(20, 108, 54, 0.35);
+  }
+}
+
+.contact-channel-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: vars.$spacing-lg;
+}
+
+.contact-channel-icon {
+  display: flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: vars.$border-radius-md;
+  font-size: 1.3rem;
+  transition: transform vars.$transition-base;
+
+  .contact-channel-card:hover & {
+    transform: scale(1.08);
+  }
+
+  &--red {
+    background: vars.$color-red-light;
+    color: vars.$color-red;
+  }
+
+  &--saffron {
+    background: vars.$color-saffron-light;
+    color: vars.$color-saffron;
+  }
+
+  &--green {
+    background: vars.$color-green-light;
+    color: vars.$color-green;
+  }
+}
+
+.contact-channel-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: vars.$border-radius-full;
+  font-size: 0.62rem;
+  font-weight: vars.$font-weight-extrabold;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+
+  &--red {
+    background: vars.$color-red-light;
+    color: vars.$color-red;
+  }
+
+  &--saffron {
+    background: vars.$color-saffron-light;
+    color: color.adjust(vars.$color-saffron, $lightness: -20%);
+  }
+
+  &--green {
+    background: vars.$color-green-light;
+    color: vars.$color-green;
+  }
+}
+
+.contact-channel-title {
+  font-size: vars.$font-size-xl;
+  font-weight: $weight-black;
+  color: vars.$text-primary;
+  transition: color vars.$transition-base;
+
+  .contact-channel-card:hover & {
+    color: vars.$color-red;
+  }
+}
+
+.contact-channel-value {
+  margin-top: 0.3rem;
+  font-size: vars.$font-size-sm;
+  font-weight: vars.$font-weight-bold;
+  color: vars.$text-secondary;
+}
+
+.contact-channel-sub {
+  margin-top: vars.$spacing-sm;
+  font-size: vars.$font-size-xs;
+  color: rgba(75, 85, 99, 0.75);
+  flex: 1;
+}
+
+.contact-channel-stat-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-top: vars.$spacing-lg;
+  padding-top: vars.$spacing-md;
+  border-top: 1px solid rgba(18, 24, 20, 0.07);
+}
+
+.contact-channel-stat {
+  font-size: vars.$font-size-xl;
+  font-weight: $weight-black;
+
+  &--red {
+    color: vars.$color-red;
+  }
+
+  &--saffron {
+    color: vars.$color-saffron;
+  }
+
+  &--green {
+    color: vars.$color-green;
+  }
+}
+
+.contact-channel-stat-label {
+  font-size: vars.$font-size-xs;
+  color: vars.$text-secondary;
+}
+
+.contact-channel-cta {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: vars.$spacing-md;
+  font-size: vars.$font-size-xs;
+  font-weight: vars.$font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: vars.$color-red;
+}
+
+.contact-channel-arrow {
+  display: flex;
+  align-items: center;
+  font-size: vars.$font-size-sm;
+}
+
+// ============================= FORM + INFO =============================
+
+.cp-form-section {
+  padding: vars.$spacing-3xl + 1rem vars.$spacing-lg;
+  background: #ffffff;
+
+  @include mixins.lg {
+    padding-left: vars.$spacing-2xl;
+    padding-right: vars.$spacing-2xl;
+  }
+}
+
+.cp-form-inner {
+  @extend %cp-wrap;
+  display: grid;
+  gap: vars.$spacing-3xl;
+
+  @include mixins.lg {
+    grid-template-columns: 1fr 0.75fr;
+    align-items: start;
+    gap: vars.$spacing-3xl + 1rem;
+  }
+}
+
+.cp-form-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.cp-form {
+  margin-top: vars.$spacing-xl;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-lg;
+}
+
+.cp-field-row {
+  display: grid;
+  gap: vars.$spacing-lg;
+
+  @include mixins.sm {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  &--mt {
+    margin-top: 0;
+  }
+}
+
+.cp-field-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  &--mt {
+    margin-top: 0;
+  }
+}
+
+.cp-field-label {
+  font-size: vars.$font-size-xs;
+  font-weight: vars.$font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: vars.$text-secondary;
+}
+
+.cp-field {
+  width: 100%;
+  background: vars.$color-light;
+  border: 1.5px solid rgba(18, 24, 20, 0.1);
+  border-radius: vars.$border-radius-lg;
+  padding: 0.75rem 1rem;
+  font-size: vars.$font-size-sm;
+  color: vars.$text-primary;
+  font-family: vars.$font-family-sans;
+  transition: border-color vars.$transition-fast, box-shadow vars.$transition-fast, background vars.$transition-fast;
+
+  &::placeholder {
+    color: vars.$text-secondary;
+    opacity: 0.55;
+  }
+
+  &:focus {
+    outline: none;
+    background: #ffffff;
+    border-color: vars.$color-saffron;
+    box-shadow: 0 0 0 4px rgba(255, 153, 51, 0.14);
+  }
+}
+
+.cp-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  padding-right: 2.4rem;
+}
+
+.cp-textarea {
+  resize: none;
+  line-height: 1.65;
+}
+
+.cp-occasion-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cp-chips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+
+  @include mixins.sm {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.cp-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.6rem 0.4rem;
+  border-radius: vars.$border-radius-md;
+  border: 1.5px solid rgba(18, 24, 20, 0.08);
+  background: vars.$color-light;
+  color: vars.$text-secondary;
+  font-size: 0.6rem;
+  font-weight: vars.$font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all vars.$transition-fast;
+
+  svg {
+    font-size: 1rem;
+    color: vars.$color-saffron;
+  }
+
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  &:hover {
+    border-color: vars.$color-saffron;
+    background: vars.$color-saffron-light;
+  }
+
+  &--active {
+    background: vars.$color-dark;
+    border-color: vars.$color-dark;
+    color: #ffffff;
+    box-shadow: vars.$shadow-md;
+
+    svg {
+      color: vars.$color-saffron;
+    }
+  }
+}
+
+.cp-submit-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.cp-submit-btn {
+  display: inline-flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  cursor: pointer;
+  border-radius: vars.$border-radius-full;
+  padding: 0.9rem 2rem;
+  font-size: vars.$font-size-base;
+  font-weight: vars.$font-weight-extrabold;
+  color: vars.$color-dark;
+  background: linear-gradient(90deg, vars.$color-saffron, color.adjust(vars.$color-saffron, $lightness: -4%), vars.$color-red);
+  box-shadow: vars.$shadow-saffron-glow;
+  transition: transform vars.$transition-base, box-shadow vars.$transition-base, opacity vars.$transition-base;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px -6px rgba(255, 153, 51, 0.5);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.cp-submit-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cp-submit-note {
+  text-align: center;
+  font-size: vars.$font-size-xs;
+  color: vars.$text-secondary;
+  line-height: 1.5;
+}
+
+// ─── Info Column ──────────────────────────────────────────────────────
+
+.cp-info-col {
+  position: relative;
+
+  @include mixins.lg {
+    position: sticky;
+    top: vars.$spacing-xl;
+  }
+}
+
+.cp-info-card {
+  background: vars.$color-dark;
+  border-radius: vars.$border-radius-xl;
+  padding: vars.$spacing-xl;
+  color: #ffffff;
+  overflow: hidden;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -4rem;
+    right: -4rem;
+    width: 12rem;
+    height: 12rem;
+    border-radius: 50%;
+    background: rgba(217, 138, 0, 0.15);
+    filter: blur(60px);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -3rem;
+    left: -3rem;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
+    background: rgba(193, 39, 45, 0.12);
+    filter: blur(50px);
+    pointer-events: none;
+  }
+}
+
+.cp-info-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: vars.$border-radius-full;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: vars.$font-size-xs;
+  font-weight: vars.$font-weight-bold;
+  color: vars.$color-saffron;
+  backdrop-filter: blur(24px);
+}
+
+.cp-info-title {
+  margin-top: vars.$spacing-xl;
+  font-size: vars.$font-size-lg;
+  font-weight: $weight-black;
+  color: #ffffff;
+
+  &--mt {
+    margin-top: vars.$spacing-xl;
+  }
+}
+
+.cp-hours-list {
+  margin-top: vars.$spacing-md;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.cp-hours-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+
+  &--active .cp-hours-time {
+    color: vars.$color-saffron;
+  }
+}
+
+.cp-hours-day {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: vars.$font-size-sm;
+  color: rgba(255, 255, 255, 0.7);
+
+  svg {
+    color: vars.$color-saffron;
+    font-size: vars.$font-size-base;
+  }
+}
+
+.cp-hours-time {
+  font-size: vars.$font-size-sm;
+  font-weight: vars.$font-weight-bold;
+  color: #ffffff;
+}
+
+.cp-address {
+  margin-top: vars.$spacing-md;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: vars.$font-size-sm;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-size: 1.1rem;
+    color: vars.$color-saffron;
+  }
+}
+
+.cp-address-note {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: vars.$font-size-xs;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.cp-info-image-wrap {
+  margin-top: vars.$spacing-lg;
+  border-radius: vars.$border-radius-lg;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.cp-info-image {
+  display: block;
+  width: 100%;
+  height: 9rem;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+
+  .cp-info-image-wrap:hover & {
+    transform: scale(1.04);
+  }
+}
+
+.cp-info-image-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.cp-social-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: vars.$spacing-xl;
+  padding-top: vars.$spacing-lg;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cp-social-label {
+  font-size: vars.$font-size-xs;
+  font-weight: vars.$font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.cp-social-icons {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.cp-social-icon {
+  display: flex;
+  height: 2.4rem;
+  width: 2.4rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+  transition: all vars.$transition-fast;
+
+  &:hover {
+    border-color: vars.$color-saffron;
+    color: vars.$color-saffron;
+    background: rgba(255, 153, 51, 0.1);
+  }
+}
+
+// ============================= SHOWCASE ================================
+
+.cp-showcase-section {
+  padding: vars.$spacing-3xl + 1rem vars.$spacing-lg;
+  background: vars.$color-light;
+
+  @include mixins.lg {
+    padding-left: vars.$spacing-2xl;
+    padding-right: vars.$spacing-2xl;
+  }
+}
+
+.cp-showcase-inner {
+  @extend %cp-wrap;
+}
+
+.cp-showcase-grid {
+  display: grid;
+  gap: vars.$spacing-lg;
+  grid-template-columns: 1fr;
+
+  @include mixins.sm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mixins.lg {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.contact-showcase-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: vars.$border-radius-xl;
+  background: #ffffff;
+  border: 1px solid rgba(18, 24, 20, 0.08);
+  box-shadow: vars.$shadow-card-elevated;
+  cursor: pointer;
+  transition: box-shadow vars.$transition-base, transform vars.$transition-base;
+
+  &:hover {
+    box-shadow: vars.$shadow-card-hover;
+    transform: translateY(-5px);
+  }
+}
+
+.contact-showcase-image-wrap {
+  position: relative;
+  height: 18rem;
+  overflow: hidden;
+}
+
+.contact-showcase-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+// Cinematic base shade
+.contact-showcase-shade-base {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(5, 10, 7, 0.92) 0%, rgba(5, 10, 7, 0.2) 55%, transparent 100%);
+  pointer-events: none;
+  will-change: opacity;
+}
+
+// Color-tinted overshade
+.contact-showcase-shade-color {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.contact-showcase-tag {
+  position: absolute;
+  top: vars.$spacing-md;
+  left: vars.$spacing-md;
+  padding: 0.2rem 0.7rem;
+  border-radius: vars.$border-radius-full;
+  font-size: 0.65rem;
+  font-weight: vars.$font-weight-extrabold;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #ffffff;
+  backdrop-filter: blur(12px);
+
+  &--red {
+    background: vars.$color-red;
+  }
+
+  &--saffron {
+    background: vars.$color-saffron;
+    color: vars.$color-dark;
+  }
+
+  &--green {
+    background: vars.$color-green;
+  }
+}
+
+.contact-showcase-reveal {
+  position: absolute;
+  bottom: vars.$spacing-lg;
+  left: vars.$spacing-lg;
+  right: vars.$spacing-lg;
+  pointer-events: none;
+}
+
+.contact-showcase-reveal-text {
+  font-size: vars.$font-size-xs;
+  font-weight: vars.$font-weight-semibold;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+}
+
+.contact-showcase-body {
+  padding: vars.$spacing-lg;
+}
+
+.contact-showcase-title {
+  font-size: vars.$font-size-lg;
+  font-weight: $weight-black;
+  color: vars.$text-primary;
+  transition: color vars.$transition-base;
+
+  .contact-showcase-card:hover & {
+    color: vars.$color-red;
+  }
+}
+
+.contact-showcase-desc {
+  margin-top: vars.$spacing-sm;
+  font-size: vars.$font-size-xs;
+  color: vars.$text-secondary;
+  line-height: 1.6;
+}
+
+// ================================ FAQ ==================================
+
+.cp-faq-section {
+  padding: vars.$spacing-3xl + 1rem vars.$spacing-lg;
+  background: #ffffff;
+
+  @include mixins.lg {
+    padding-left: vars.$spacing-2xl;
+    padding-right: vars.$spacing-2xl;
+  }
+}
+
+.cp-faq-inner {
+  @extend %cp-wrap;
+  display: grid;
+  gap: vars.$spacing-3xl;
+
+  @include mixins.lg {
+    grid-template-columns: 0.45fr 0.55fr;
+    align-items: start;
+    gap: vars.$spacing-3xl + 1rem;
+  }
+}
+
+.cp-faq-left {
+  @include mixins.lg {
+    position: sticky;
+    top: vars.$spacing-xl;
+  }
+}
+
+.cp-faq-title {
+  margin-top: vars.$spacing-md;
+  font-weight: $weight-black;
+  line-height: 1.07;
+  letter-spacing: -0.022em;
+  color: vars.$text-primary;
+  font-size: clamp(1.75rem, 3.5vw, 2.6rem);
+}
+
+.cp-faq-desc {
+  margin-top: vars.$spacing-lg;
+  font-size: vars.$font-size-sm;
+  line-height: 1.8;
+  color: vars.$text-secondary;
+  max-width: 24rem;
+}
+
+.cp-faq-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: vars.$spacing-lg;
+  font-size: vars.$font-size-sm;
+  font-weight: vars.$font-weight-bold;
+  color: vars.$color-red;
+  text-decoration: none;
+  transition: color vars.$transition-fast;
+
+  &:hover {
+    color: color.adjust(vars.$color-red, $lightness: -10%);
+  }
+}
+
+.cp-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cp-faq-item {
+  border-radius: vars.$border-radius-lg;
+  border: 1.5px solid rgba(18, 24, 20, 0.08);
+  background: vars.$color-light;
+  overflow: hidden;
+  transition: border-color vars.$transition-fast, box-shadow vars.$transition-fast;
+
+  &:hover {
+    border-color: rgba(217, 138, 0, 0.4);
+    box-shadow: vars.$shadow-sm;
+  }
+
+  &--open {
+    border-color: rgba(217, 138, 0, 0.5);
+    box-shadow: vars.$shadow-md;
+  }
+}
+
+.cp-faq-btn {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: vars.$spacing-md;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: vars.$spacing-lg vars.$spacing-xl;
+  text-align: left;
+  font-size: vars.$font-size-base;
+  font-weight: vars.$font-weight-bold;
+  color: vars.$text-primary;
+  line-height: 1.4;
+}
+
+.cp-faq-icon {
+  flex-shrink: 0;
+  font-size: vars.$font-size-2xl;
+  line-height: 1;
+  color: vars.$color-red;
+  display: inline-block;
+  margin-top: -0.1rem;
+}
+
+.cp-faq-answer-wrap {
+  overflow: hidden;
+  padding: 0 vars.$spacing-xl;
+}
+
+.cp-faq-answer {
+  padding-bottom: vars.$spacing-lg;
+  font-size: vars.$font-size-sm;
+  line-height: 1.8;
+  color: vars.$text-secondary;
+}
+
+// ================================ CTA ==================================
+
+.cp-cta-section {
+  position: relative;
+  overflow: hidden;
+  padding: vars.$spacing-3xl + 2rem vars.$spacing-lg;
+  background: vars.$gradient-hero;
+
+  @include mixins.lg {
+    padding-left: vars.$spacing-2xl;
+    padding-right: vars.$spacing-2xl;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 4px;
+    background: vars.$gradient-brand-tricolor;
+  }
+}
+
+.cp-cta-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.cp-cta-inner {
+  position: relative;
+  z-index: 2;
+  margin: 0 auto;
+  max-width: 48rem;
+  text-align: center;
+}
+
+.cp-cta-eyebrow {
+  font-size: vars.$font-size-xs;
+  font-weight: vars.$font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: vars.$color-saffron;
+}
+
+.cp-cta-title {
+  margin-top: vars.$spacing-md;
+  font-weight: $weight-black;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  font-size: clamp(2rem, 5.5vw, 4rem);
+  text-shadow: 0 2px 40px rgba(0, 0, 0, 0.4);
+}
+
+.cp-cta-sub {
+  margin: vars.$spacing-lg auto 0;
+  max-width: 28rem;
+  font-size: vars.$font-size-base;
+  line-height: 1.9;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.cp-cta-actions {
+  margin-top: vars.$spacing-xl;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: vars.$spacing-md;
+}
+
+// ─── Reduced Motion ──────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+  .contact-hero-bg-shard {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .contact-hero-content {
+    transition: none !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .contact-hero-title-line-inner,
+  .contact-hero-word {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .contact-channel-card,
+  .contact-showcase-card,
+  .cp-stat-card {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+// ─── Mobile ──────────────────────────────────────────────────────────
+@include mixins.mobile {
+  .contact-hero-actions,
+  .cp-cta-actions {
+    flex-direction: column;
+    width: 100%;
+
+    .contact-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .contact-hero-content {
+    padding: vars.$spacing-xl vars.$spacing-lg;
+  }
+
+  .cp-stats-inner {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cp-stat-card {
+    flex-direction: column;
+    text-align: center;
+    padding: vars.$spacing-md;
+  }
+
+  .cp-info-card {
+    padding: vars.$spacing-lg;
+  }
+
+  .contact-showcase-image-wrap {
+    height: 14rem;
+  }
+}
+
+// ─── Tablet ───────────────────────────────────────────────────────────
+@include mixins.tablet {
+  .contact-hero-title {
+    font-size: clamp(3rem, 8vw, 5rem);
+  }
+}
