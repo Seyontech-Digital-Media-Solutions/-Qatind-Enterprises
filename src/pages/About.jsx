@@ -4,7 +4,6 @@ import {
   useScroll,
   useTransform,
   useInView,
-  AnimatePresence,
 } from 'framer-motion'
 
 import {
@@ -113,15 +112,15 @@ const pillars = [
 ]
 
 const visionFeatures = [
-  { icon: Leaf,       label: 'Fresh Ingredients'     },
-  { icon: HandHeart,  label: 'Trusted By Families'   },
-  { icon: ShieldCheck,label: '100% Transparent'      },
+  { icon: Leaf,        label: 'Fresh Ingredients'   },
+  { icon: HandHeart,   label: 'Trusted By Families' },
+  { icon: ShieldCheck, label: '100% Transparent'    },
 ]
 
 const missionFeatures = [
-  { icon: HandHeart,  label: 'Support Local Livelihoods' },
-  { icon: Sprout,     label: 'Chemical-Free Food'        },
-  { icon: Heart,      label: 'Community First'           },
+  { icon: HandHeart, label: 'Support Local Livelihoods' },
+  { icon: Sprout,    label: 'Chemical-Free Food'        },
+  { icon: Heart,     label: 'Community First'           },
 ]
 
 const milestones = [
@@ -156,12 +155,12 @@ const milestones = [
 ]
 
 const partners = [
-  { name: 'Aptiv',              logo: 'aptiv.png'   },
-  { name: 'DLF',                logo: 'DLF.jpg'     },
-  { name: 'Keppel Corporation', logo: 'keppel.png'  },
-  { name: 'L&T',                logo: 'L&T.jpg'     },
-  { name: 'RMZ',                logo: 'RMZ.png'     },
-  { name: 'Propel',             logo: 'propel.png'  },
+  { name: 'Aptiv',              logo: 'aptiv.png'  },
+  { name: 'DLF',                logo: 'DLF.jpg'    },
+  { name: 'Keppel Corporation', logo: 'keppel.png' },
+  { name: 'L&T',                logo: 'L&T.jpg'    },
+  { name: 'RMZ',                logo: 'RMZ.png'    },
+  { name: 'Propel',             logo: 'propel.png' },
 ]
 
 // ─── Stat counter card ───────────────────────────────────────────────────────
@@ -195,7 +194,7 @@ export default function AboutPage() {
     offset: ['start start', 'end start'],
   })
 
-  const heroTextY  = useTransform(scrollYProgress, [0, 1], [0, 90])
+  const heroTextY   = useTransform(scrollYProgress, [0, 1], [0, 90])
   const heroOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0])
   const blobScale   = useTransform(scrollYProgress, [0, 1], [1, 1.08])
   const blobY       = useTransform(scrollYProgress, [0, 1], [0, 40])
@@ -252,9 +251,9 @@ export default function AboutPage() {
 
           {/* stat cards */}
           <div className="about-hero__meta">
-            <StatCard value="500+"  label="families served"  delay={0.30} />
-            <StatCard value="50+"   label="trusted vendors"  delay={0.38} />
-            <StatCard value="92%"   label="repeat orders"    delay={0.46} />
+            <StatCard value="500+" label="families served" delay={0.30} />
+            <StatCard value="50+"  label="trusted vendors" delay={0.38} />
+            <StatCard value="92%"  label="repeat orders"   delay={0.46} />
           </div>
         </motion.div>
 
@@ -446,17 +445,20 @@ export default function AboutPage() {
               </motion.div>
             </motion.article>
 
-            {/* ── CENTER BADGE ── */}
-            <motion.div
-              className="values-center-badge"
-              aria-hidden="true"
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-            >
+            {/* ── CENTER BADGE ──
+                Plain div does the centering (CSS transform); only the
+                inner ring rotates, so framer-motion never overwrites the
+                centering transform and the Home icon stays upright. */}
+            <div className="values-center-badge" aria-hidden="true">
+              <motion.span
+                className="values-center-badge__ring"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+              />
               <div className="values-center-badge__inner">
                 <Home size={30} />
               </div>
-            </motion.div>
+            </div>
 
             {/* ── MISSION ── */}
             <motion.article
@@ -685,6 +687,7 @@ export default function AboutPage() {
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.6, delay: index * 0.08, ease: EASE }}
               >
+                {/* framer owns the float + scale; CSS owns the colour change */}
                 <motion.img
                   src={img(`About/${partner.logo}`)}
                   alt={partner.name}
@@ -695,7 +698,7 @@ export default function AboutPage() {
                     ease: 'easeInOut',
                     delay: index * 0.25,
                   }}
-                  whileHover={{ scale: 1.1, filter: 'grayscale(0) opacity(1)' }}
+                  whileHover={{ scale: 1.1 }}
                 />
               </motion.div>
 

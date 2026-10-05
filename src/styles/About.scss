@@ -763,6 +763,9 @@
 }
 
 // ── centre badge ──────────────────────────────────────────────
+// Centred with a CSS transform on a plain div. Do NOT animate this
+// element with framer-motion (it would overwrite the transform).
+// Only the inner ring rotates.
 .values-center-badge {
   position:  absolute;
   z-index:   10;
@@ -779,7 +782,16 @@
   @include mobile { display: none; }
 }
 
+.values-center-badge__ring {
+  position:       absolute;
+  inset:          0;
+  border-radius:  50%;
+  border:         2px dashed rgba($color-primary, 0.35);
+  pointer-events: none;
+}
+
 .values-center-badge__inner {
+  position:        relative;
   width:           100%;
   height:          100%;
   display:         flex;
@@ -1044,19 +1056,27 @@
   @include mobile { gap: 1.5rem; padding: 1.5rem 0.5rem; }
 }
 
+// framer-motion owns the float + scale (transform) on the img.
+// CSS only handles the colour change, triggered from the parent so the
+// hover stays steady while the logo floats.
 .partner-item {
   display:         flex;
   align-items:     center;
   justify-content: center;
 
   img {
-    height:      112px;
-    width:       auto;
-    max-width:   150px;
-    object-fit:  contain;
-    filter:      grayscale(1) opacity(0.55);
-    transition:  filter $transition-base, transform $transition-base;
-    cursor:      default;
+    height:          112px;
+    width:           auto;
+    max-width:       150px;
+    object-fit:      contain;
+    filter:          grayscale(1) opacity(0.75);
+    mix-blend-mode:  multiply;            // hides white boxes on JPG logos
+    transition:      filter $transition-base;
+    cursor:          default;
+  }
+
+  &:hover img {
+    filter: grayscale(0) opacity(1);      // full colour on hover
   }
 
   @include tablet { img { height: 72px; max-width: 120px; } }
