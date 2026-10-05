@@ -1138,7 +1138,7 @@
 .brand-panel__visual {
   min-height: 420px;
   background: linear-gradient(135deg, rgba($color-primary,.1), rgba($color-secondary,.08)),
-              url('./public/About/Qatindpromise.jpg') center / cover no-repeat;
+              url('/About/Qatindpromise.jpg') center / cover no-repeat;
   border-left: 1px solid rgba($color-primary,.08);
 
   @include tablet {

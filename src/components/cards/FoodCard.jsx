@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion'
 import { FiShoppingCart, FiHeart } from 'react-icons/fi'
+import { formatINR } from '../../utils/formatINR'
 import '../styles/FoodCard.scss'
 
 // Import all images from src/assets/menu
-const menuImages = import.meta.glob('../../assets/menu/*.{png,jpg,jpeg,png,webp}', {
+const menuImages = import.meta.glob('../../assets/menu/*.{png,jpg,jpeg,webp}', {
   eager: true,
   import: 'default'
 })
@@ -51,7 +52,7 @@ export default function FoodCard({ item }) {
 
         <div className="food-card__footer">
           <span className="food-card__price">
-            ${item.price.toFixed(2)}
+            {formatINR(item.price)}
           </span>
 
           <button className="food-card__add-btn">
