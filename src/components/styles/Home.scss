@@ -443,6 +443,14 @@ $font-script: 'Caveat', 'Segoe Script', cursive;
     align-items: center;
     justify-content: center;
     padding: $spacing-2xl $spacing-2xl $spacing-2xl;
+
+    // On phones the label sits in normal flow ABOVE the photo (column
+    // layout), so it can never overlap the image.
+    @include mobile {
+      flex-direction: column;
+      padding: 0;
+      gap: $spacing-sm;
+    }
   }
 
   &__made {
@@ -454,6 +462,7 @@ $font-script: 'Caveat', 'Segoe Script', cursive;
     display: flex;
     align-items: center;
     gap: $spacing-xs;
+    white-space: nowrap; // never wrap "Made with / Love"
     font-family: $font-script;
     font-weight: 700;
     font-size: $font-size-2xl;
@@ -461,20 +470,19 @@ $font-script: 'Caveat', 'Segoe Script', cursive;
     transform: rotate(6deg);
 
     @include mobile {
-      left: 50%;
-      right: auto;
-      transform: translateX(-50%) rotate(4deg);
+      position: static;
+      transform: rotate(-3deg);
+      font-size: $font-size-xl;
     }
   }
 
-  // Organic freeform crop instead of a plain rectangle (or the old
-  // border-radius blob fake). Clipped to an exact irregular path via
-  // the <clipPath id="whyQatindBlob"> defined once in Home.jsx.
+  // Organic freeform crop, clipped via <clipPath id="whyQatindBlob">
+  // defined once in Home.jsx.
   &__img {
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width:620px;
+    max-width: 620px;
     height: 480px;
     object-fit: cover;
     border: none;
@@ -509,8 +517,7 @@ $font-script: 'Caveat', 'Segoe Script', cursive;
     }
   }
 
-  // Thin hand-drawn accent lines flanking the blob, like the reference.
-
+  // Thin hand-drawn accent lines flanking the blob.
   &__accent {
     position: absolute;
     z-index: 0;
@@ -598,7 +605,7 @@ $font-script: 'Caveat', 'Segoe Script', cursive;
   &__underline {
     position: absolute;
     bottom: $spacing-md;
-    top:85%;
+    top: 85%;
     left: 50%;
     transform: translateX(-50%);
     width: 28px;
@@ -655,245 +662,7 @@ $font-script: 'Caveat', 'Segoe Script', cursive;
 }
 
 // ============================
-// What Makes Our Food Different? (process / kitchen journey)
-// ============================
-.process {
-  position: relative;
-  padding: $spacing-3xl $spacing-md;
-  background-color: rgba($color-saffron, 0.30);
-  overflow: hidden;
-
-  @include mobile {
-    padding: $spacing-2xl $spacing-md;
-  }
-
-  .container {
-    position: relative;
-    z-index: 1;
-  }
-
-  &__header {
-    display: grid;
-    grid-template-columns: 0.85fr 1.15fr;
-    align-items: center;
-    gap: $spacing-2xl;
-    margin-bottom: $spacing-2xl;
-
-    @include mobile {
-      grid-template-columns: 1fr;
-      gap: $spacing-xl;
-    }
-  }
-
-  &__eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: $spacing-xs;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: $color-primary;
-    margin-bottom: $spacing-sm;
-  }
-
-  &__title {
-    font-size: $font-size-4xl;
-    font-weight: $font-weight-bold;
-    line-height: $line-height-tight;
-    color: $text-primary;
-    margin-bottom: $spacing-sm;
-
-    span {
-      color: $color-primary;
-    }
-
-    @include mobile {
-      font-size: $font-size-2xl;
-    }
-  }
-
-  &__text {
-    @include body-text;
-    max-width: 40ch;
-    margin: 0 0 $spacing-lg;
-  }
-
-  &__link {
-    @include button-primary;
-    background-color: darken($color-primary, 6%);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: $spacing-sm;
-    border-radius: $border-radius-full;
-    white-space: nowrap;
-  }
-
-  // ----------------------------
-  // Pyramid layout: 3 icons on the first row, 2 centered underneath.
-  // Flex-wrap centers each line independently, so an incomplete last
-  // row (the 2 leftover icons) sits centered under the row of 3.
-  // ----------------------------
-  &__steps {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-content: flex-start;
-    gap: $spacing-xl $spacing-lg;
-    max-width: 320px;
-    margin: 0 auto;
-
-    @include mobile {
-      max-width: 230px;
-      gap: $spacing-lg $spacing-md;
-    }
-  }
-
-  &__step {
-    flex: 0 0 auto;
-    width: 88px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: $spacing-xs;
-
-    @include mobile {
-      width: 64px;
-    }
-  }
-
-  &__step-badge {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    background-color: rgba($color-green, 0.1);
-    color: $color-primary;
-    font-size: 1.4rem;
-    flex-direction: column;
-
-    @include mobile {
-      width: 56px;
-      height: 56px;
-      font-size: 1.1rem;
-    }
-  }
-
-  &__step-number {
-    position: absolute;
-    top: -6px;
-    right: -4px;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background-color: $color-dark;
-    color: $color-light;
-    font-size: 0.65rem;
-    font-weight: $font-weight-bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__step-label {
-    width: 84px;
-    text-align: center;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    color: $text-primary;
-    margin: $spacing-sm 0 0;
-    align-self: flex-start;
-  }
-
-  &__chevron {
-    color: $color-gray-400;
-    font-size: $font-size-lg;
-    margin: $spacing-xl $spacing-xs 0;
-
-    @include mobile {
-      display: none;
-    }
-  }
-
-  &__gallery {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: $spacing-md;
-
-    @include mobile {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    @include tablet {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  &__photo {
-    position: relative;
-    height: 190px;
-    border-radius: $border-radius-lg;
-    overflow: hidden;
-    box-shadow: $shadow-md;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform $transition-slow;
-    }
-
-    &:hover img {
-      transform: scale(1.06);
-    }
-  }
-
-  &__photo-caption {
-    position: absolute;
-    left: $spacing-sm;
-    bottom: $spacing-sm;
-    right: $spacing-sm;
-    display: flex;
-    align-items: center;
-    gap: $spacing-xs;
-    padding: $spacing-xs $spacing-sm;
-    border-radius: $border-radius-md;
-    background-color: rgba($color-dark, 0.55);
-    backdrop-filter: blur(2px);
-    color: $color-light;
-    font-size: $font-size-xs;
-    font-weight: $font-weight-semibold;
-  }
-}
-
-// Bottom-right corner wave/blob
-.process__corner {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 220px;
-  height: 220px;
-  z-index: 0;
-  pointer-events: none;
-
-  path {
-    fill: $color-primary;
-    opacity: 0.95;
-  }
-
-  @include mobile {
-    width: 130px;
-    height: 130px;
-  }
-}
-
-// ============================
-// Featured / Signature Dishes — unchanged
+// Featured Dishes (now 6: three rows of range)
 // ============================
 .featured {
   padding: $spacing-3xl $spacing-md;
@@ -1103,7 +872,7 @@ $font-script: 'Caveat', 'Segoe Script', cursive;
   }
 }
 
-// Bottom-right decorative curve wave, requested for the Catering section
+// Bottom-right decorative curve wave for the Catering section
 .catering__corner {
   position: absolute;
   right: 0;
@@ -1121,225 +890,6 @@ $font-script: 'Caveat', 'Segoe Script', cursive;
   @include mobile {
     width: 140px;
     height: 140px;
-  }
-}
-
-// ============================
-// Reviews / Testimonials — staggered bento grid.
-// Four columns, each offset vertically so cards form a loose, organic
-// arrangement rather than a strict table (TestimonialMarquee.jsx).
-// Avatars are food-dish photos rather than customer headshots, with a
-// small star badge in the corner. Soft blurred glow blobs sit behind
-// the whole grid for the bento-card ambience from the reference.
-// ============================
-.reviews {
-  padding: $spacing-3xl 0;
-  background: linear-gradient(180deg, $bg-secondary 0%, $bg-primary 100%);
-
-  @include mobile {
-    padding: $spacing-2xl 0;
-  }
-
-  .container {
-    margin-bottom: $spacing-xl;
-  }
-
-  &__subtitle {
-    @include body-text;
-    text-align: center;
-    max-width: 46ch;
-    margin: calc(-1 * #{$spacing-2xl}) auto 0;
-    color: $text-secondary;
-
-    @include mobile {
-      margin-top: calc(-1 * #{$spacing-lg});
-      font-size: $font-size-sm;
-    }
-  }
-}
-
-.testimonial-bento {
-  position: relative;
-  padding: $spacing-2xl $spacing-md $spacing-3xl;
-  overflow: hidden;
-
-  @include mobile {
-    padding: $spacing-lg $spacing-md $spacing-2xl;
-  }
-
-  &__grid {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: $spacing-xl $spacing-lg;
-    max-width: 1320px;
-    margin: 0 auto;
-
-    @include tablet {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    @include mobile {
-      grid-template-columns: 1fr;
-      gap: $spacing-2xl;
-      max-width: 340px;
-    }
-  }
-
-  &__column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: $spacing-3xl;
-
-    @include tablet {
-      margin-top: 0 !important;
-    }
-
-    @include mobile {
-      margin-top: 0 !important;
-      gap: $spacing-2xl;
-    }
-
-    // Vertical stagger per column, matching the reference: column 3
-    // sits highest, then 2, then 4, then 1.
-    &--1 {
-      margin-top: 7rem;
-    }
-
-    &--2 {
-      margin-top: 2rem;
-    }
-
-    &--3 {
-      margin-top: 0;
-    }
-
-    &--4 {
-      margin-top: 3rem;
-    }
-  }
-}
-
-// Decorative blurred color blobs behind the grid.
-.testimonial-glow {
-  position: absolute;
-  z-index: 0;
-  width: 280px;
-  height: 280px;
-  border-radius: 50%;
-  filter: blur(70px);
-  pointer-events: none;
-
-  @include mobile {
-    display: none;
-  }
-
-  &--pink {
-    background: rgba($color-red, 0.35);
-  }
-
-  &--peach {
-    background: rgba($color-saffron, 0.4);
-  }
-
-  &--purple {
-    background: rgba(#7c3aed, 0.3);
-  }
-
-  &--blue {
-    background: rgba(#2563eb, 0.3);
-  }
-}
-
-.bento-card {
-  position: relative;
-  width: 100%;
-  max-width: 280px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-
-  &__avatar-wrap {
-    position: relative;
-    width: 64px;
-    height: 64px;
-    margin-bottom: $spacing-sm;
-  }
-
-  &__avatar {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    display: block;
-    border: 3px solid $bg-primary;
-    box-shadow: $shadow-md;
-  }
-
-  &__badge {
-    position: absolute;
-    bottom: -2px;
-    right: -2px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #2563eb;
-    color: $color-light;
-    font-size: 0.55rem;
-    border: 2px solid $bg-primary;
-  }
-
-  &__name {
-    margin: 0;
-    font-size: $font-size-base;
-    font-weight: $font-weight-bold;
-    color: $text-primary;
-  }
-
-  &__role {
-    display: block;
-    margin: 2px 0 $spacing-md;
-    font-size: 0.65rem;
-    font-weight: $font-weight-semibold;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: $text-secondary;
-  }
-
-  &__quote {
-    position: relative;
-    width: 100%;
-    background-color: $bg-primary;
-    border-radius: $border-radius-lg;
-    box-shadow: $shadow-card-elevated;
-    padding: $spacing-md $spacing-lg;
-
-    p {
-      @include body-text;
-      font-size: $font-size-sm;
-      font-style: italic;
-      color: $text-primary;
-      margin: 0;
-    }
-  }
-
-  // Small connector tab linking the name/role above to the quote card,
-  // like a flag-peg rather than a speech-bubble triangle.
-  &__tab {
-    position: absolute;
-    top: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 14px;
-    height: 12px;
-    border-radius: 3px 3px 0 0;
-    background-color: $bg-primary;
   }
 }
 

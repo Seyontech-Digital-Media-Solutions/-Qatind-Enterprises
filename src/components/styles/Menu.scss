@@ -1,12 +1,67 @@
 ﻿@import '../../styles/variables';
 @import '../../styles/mixins';
 
+/* =========================================================
+   HERO
+   Brand colours (red, saffron, green) over the banner photo.
+   The overlay is strongest on the left, where the text sits,
+   and fades to the right so the food photo stays visible.
+   ========================================================= */
+
 .menu-hero {
   position: relative;
-  background: linear-gradient(135deg, $color-primary 0%, darken($color-primary, 12%) 100%);
+  // isolation keeps the overlay (z-index: -1) above this section's
+  // own photo but behind its text.
+  isolation: isolate;
+  background-color: darken($color-red, 25%); // shown if the photo fails to load
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: $color-light;
-  text-align: center;
-  padding: $spacing-3xl 0 $spacing-2xl;
+  text-align: left;
+  // --hero-offset is set by Menu.jsx: it equals how much a fixed header
+  // covers the top of this banner (0 if the header does not overlap).
+  padding: calc(#{$spacing-2xl} + var(--hero-offset, 0px)) 0 $spacing-2xl;
+
+  // Colour overlay: deep red -> warm saffron glow.
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    background:
+      linear-gradient(
+        100deg,
+        rgba(darken($color-red, 28%), 0.94) 0%,
+        rgba(darken($color-red, 16%), 0.82) 42%,
+        rgba(darken($color-saffron, 10%), 0.35) 100%
+      );
+  }
+
+  // Red / saffron / green strip along the top edge (same as Daily Menu).
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    z-index: 1;
+    background: linear-gradient(
+      90deg,
+      $color-red 0%, $color-red 33.33%,
+      $color-saffron 33.33%, $color-saffron 66.66%,
+      $color-primary 66.66%, $color-primary 100%
+    );
+  }
+
+  &__inner {
+    position: relative;
+    z-index: 1;
+  }
 
   &__eyebrow {
     display: inline-block;
@@ -14,14 +69,35 @@
     letter-spacing: 0.1em;
     font-size: $font-size-sm;
     font-weight: $font-weight-semibold;
-    color: $color-saffron;
-    margin-bottom: $spacing-sm;
+    color: lighten($color-saffron, 24%);
+    background: rgba($color-saffron, 0.3);
+    border: 1px solid rgba($color-saffron, 0.8);
+    border-radius: $border-radius-full;
+    padding: 4px $spacing-md;
+    margin-bottom: $spacing-md;
   }
 
   &__title {
     font-size: $font-size-5xl;
     font-weight: $font-weight-bold;
-    margin-bottom: $spacing-sm;
+    line-height: $line-height-tight;
+    margin-bottom: $spacing-md;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+
+    // Short saffron bar under the title.
+    &::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      margin-top: $spacing-sm;
+      border-radius: $border-radius-full;
+      background: linear-gradient(
+        90deg,
+        $color-saffron,
+        lighten($color-saffron, 18%)
+      );
+    }
 
     @include mobile {
       font-size: $font-size-3xl;
@@ -29,75 +105,58 @@
   }
 
   &__subtitle {
+    max-width: 520px;
     font-size: $font-size-lg;
-    opacity: 0.9;
+    opacity: 1; // faded text is harder to read on a photo
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
   }
 }
 
-.menu-tabs {
-  position: sticky;
-  top: 0;
-  z-index: $z-sticky - 1;
-  background-color: $bg-primary;
-  box-shadow: $shadow-sm;
-  padding: $spacing-md 0;
-
-  &__scroll {
-    display: flex;
-    gap: $spacing-sm;
-    overflow-x: auto;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-
-  &__pill {
-    display: inline-flex;
-    align-items: center;
-    gap: $spacing-xs;
-    white-space: nowrap;
-    flex-shrink: 0;
-    padding: $spacing-sm $spacing-lg;
-    border-radius: $border-radius-full;
-    border: 2px solid $color-gray-200;
-    background-color: transparent;
-    color: $text-primary;
-    font-weight: $font-weight-semibold;
-    font-size: $font-size-sm;
-    cursor: pointer;
-    transition: all $transition-base;
-
-    &:hover {
-      border-color: $color-primary;
-      color: $color-primary;
-    }
-
-    &--active {
-      background-color: $color-primary;
-      border-color: $color-primary;
-      color: $color-light;
-
-      &:hover {
-        color: $color-light;
-      }
-    }
-  }
-}
+/* =========================================================
+   LAYOUT: category sidebar (left) + dishes (right)
+   ========================================================= */
 
 .menu-items {
   position: relative;
-  overflow: hidden;
+  // NOT overflow: hidden. That would stop the sidebar from sticking.
+  overflow-x: clip;
   padding: $spacing-2xl 0 $spacing-3xl;
   background-color: $bg-secondary;
 
+  // minmax(0, 1fr) matters: a plain 1fr can never shrink below its
+  // content, so the wide row of category pills used to stretch the
+  // whole column past the screen edge on phones.
+  &__layout {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: $spacing-xl;
+    align-items: start;
+
+    @include tablet {
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: $spacing-lg;
+    }
+
+    @include mobile {
+      grid-template-columns: minmax(0, 1fr);
+      gap: $spacing-md;
+    }
+  }
+
+  &__content {
+    min-width: 0; // lets the grid shrink instead of overflowing
+  }
+
   &__title {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: $spacing-sm $spacing-md;
     font-size: $font-size-3xl;
     font-weight: $font-weight-bold;
     color: $color-primary;
     margin-bottom: $spacing-xl;
-    text-align: center;
+    text-align: left;
     position: relative;
     padding-bottom: $spacing-md;
 
@@ -105,31 +164,302 @@
       content: '';
       position: absolute;
       bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 0;
       width: 72px;
       height: 4px;
       border-radius: $border-radius-full;
       background: linear-gradient(90deg, $color-red 0%, $color-saffron 50%, $color-primary 100%);
     }
+
+    @include mobile {
+      font-size: $font-size-2xl;
+      margin-bottom: $spacing-lg;
+    }
+  }
+
+  &__count {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $text-secondary;
   }
 
   &__grid {
     position: relative;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
     gap: $spacing-lg;
 
-    @include tablet {
-      grid-template-columns: repeat(3, 1fr);
+    // Phones: always 2 equal columns that are allowed to shrink.
+    @include mobile {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: $spacing-sm;
+    }
+  }
+
+  @include mobile {
+    padding: $spacing-lg 0 $spacing-2xl;
+  }
+}
+
+/* =========================================================
+   CATEGORY SIDEBAR
+   Desktop / tablet: vertical list pinned to the left, below
+   the site header (Menu.jsx sets --header-height).
+   Mobile: turns into a horizontal row of pills.
+   ========================================================= */
+
+.menu-sidebar {
+  position: sticky;
+  min-width: 0; // lets the pill row scroll sideways instead of widening the page
+  top: calc(var(--header-height, 72px) + #{$spacing-md});
+  background-color: $bg-primary;
+  border-radius: $border-radius-lg;
+  border-top: 4px solid $color-saffron;
+  box-shadow: $shadow-md;
+  padding: $spacing-md;
+
+  &__heading {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    margin: 0 0 $spacing-sm;
+    padding: 0 $spacing-sm $spacing-sm;
+    border-bottom: 1px dashed $color-gray-200;
+  }
+
+  &__scroller {
+    position: relative;
+    min-width: 0;
+  }
+
+  // Arrows only exist for the phone row (shown in the mobile block below).
+  &__arrow {
+    display: none;
+  }
+
+  &__list {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    width: 100%;
+    padding: $spacing-sm;
+    border: 0;
+    border-radius: $border-radius-full;
+    background: transparent;
+    color: $text-primary;
+    font-family: $font-family-sans;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    text-align: left;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+      background: rgba($color-primary, 0.08);
+      color: $color-primary;
     }
 
-    @include mobile {
-      grid-template-columns: repeat(2, 1fr);
-      gap: $spacing-md;
+    &:focus-visible {
+      outline: 2px solid $color-saffron;
+      outline-offset: 2px;
+    }
+
+    &--active {
+      background: linear-gradient(
+        90deg,
+        $color-primary,
+        lighten($color-primary, 7%)
+      );
+      color: $color-light;
+      box-shadow: $shadow-sm;
+
+      &:hover {
+        background: linear-gradient(
+          90deg,
+          $color-primary,
+          lighten($color-primary, 7%)
+        );
+        color: $color-light;
+      }
+    }
+  }
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba($color-primary, 0.1);
+    color: $color-primary;
+    transition: all $transition-base;
+  }
+
+  &__item--active &__icon {
+    background: rgba($color-light, 0.22);
+    color: $color-light;
+  }
+
+  &__name {
+    flex: 1;
+    min-width: 0;
+    line-height: $line-height-tight;
+  }
+
+  &__count {
+    flex-shrink: 0;
+    min-width: 24px;
+    padding: 2px 8px;
+    border-radius: $border-radius-full;
+    background: rgba($color-primary, 0.1);
+    color: $color-primary;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    text-align: center;
+  }
+
+  &__item--active &__count {
+    background: $color-saffron;
+    color: $color-dark;
+  }
+
+  // ---------- Mobile: horizontal pills ----------
+  @include mobile {
+    top: var(--header-height, 72px);
+    z-index: $z-sticky - 1;
+    border-top: 0;
+    border-radius: $border-radius-lg;
+    padding: $spacing-sm;
+
+    // Page-coloured strip above the bar. It hides dishes that would
+    // otherwise show through the small gap between header and bar.
+    &::before {
+      content: '';
+      position: absolute;
+      top: -16px;
+      left: -$spacing-md;
+      right: -$spacing-md;
+      height: 16px;
+      background-color: $bg-secondary;
+      pointer-events: none;
+    }
+
+    &__heading {
+      display: none;
+    }
+
+    &__list {
+      flex-direction: row;
+      gap: $spacing-sm;
+      overflow-x: auto;
+      scrollbar-width: none;
+      // room at the end so the last pill is not hidden by the fade
+      padding: 2px 36px 2px 2px;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    // Soft fade on the edge(s) where more categories are hidden.
+    &__scroller {
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 48px;
+        z-index: 1;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity $transition-base;
+      }
+
+      &::before {
+        left: 0;
+        background: linear-gradient(90deg, $bg-primary 35%, rgba($color-light, 0));
+      }
+
+      &::after {
+        right: 0;
+        background: linear-gradient(270deg, $bg-primary 35%, rgba($color-light, 0));
+      }
+
+      &.has-left::before,
+      &.has-right::after {
+        opacity: 1;
+      }
+    }
+
+    // Small round arrows: tap to scroll the row.
+    &__arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: $color-primary;
+      color: $color-light;
+      box-shadow: $shadow-md;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity $transition-base;
+
+      &--left {
+        left: 2px;
+      }
+
+      &--right {
+        right: 2px;
+      }
+    }
+
+    &__scroller.has-left &__arrow--left,
+    &__scroller.has-right &__arrow--right {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    &__item {
+      width: auto;
+      flex-shrink: 0;
+      white-space: nowrap;
+      padding: $spacing-xs $spacing-md;
+      border: 2px solid $color-gray-200;
+    }
+
+    &__item--active {
+      border-color: $color-primary;
+    }
+
+    &__icon,
+    &__count {
+      display: none;
     }
   }
 }
+
+/* =========================================================
+   DISH CARDS (unchanged)
+   ========================================================= */
 
 .menu-item-card {
   background-color: $bg-primary;
@@ -159,6 +489,8 @@
       transition: transform $transition-slow;
     }
   }
+
+  min-width: 0;
 
   &:hover &__img-wrap img {
     transform: scale(1.1);
@@ -220,5 +552,27 @@
     }
 
     &:active { transform: scale(0.97); }
+  }
+
+  // Phones: two narrow columns, so tighten the card.
+  @include mobile {
+    &__name {
+      padding: $spacing-sm;
+      height: 3.2em;
+    }
+
+    &__footer {
+      flex-wrap: wrap;
+      gap: $spacing-xs;
+      padding: $spacing-xs $spacing-sm $spacing-sm;
+    }
+
+    &__price {
+      font-size: $font-size-sm;
+    }
+
+    &__add-btn {
+      padding: 4px $spacing-sm;
+    }
   }
 }

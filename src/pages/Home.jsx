@@ -8,9 +8,6 @@ import {
   FaShieldAlt,
   FaTruck,
   FaHeart,
-  FaFire,
-  FaAward,
-  FaBoxOpen,
   FaBirthdayCake,
   FaBriefcase,
   FaRing,
@@ -20,10 +17,9 @@ import {
   FaArrowRight
 } from 'react-icons/fa'
 import FoodCard from '../components/cards/FoodCard'
-import TestimonialMarquee from './Testimonial'
+import SocialProof from '../components/cards/Socialproof'
 import heroData from '../data/hero.json'
 import menuCategories from '../data/menuCategories.json'
-import testimonialsData from '../data/testimonials.json'
 import mainImg from '../assets/main-img.png'
 import img1 from '../assets/img-1.jpeg'
 import img2 from '../assets/img-2.jpeg'
@@ -31,35 +27,49 @@ import img3 from '../assets/img-snac.jpeg'
 import sectionImg from '../assets/imge-ab.png'
 import ctaImg from '../assets/img-cta.png'
 import '../components/styles/Home.scss'
-import fresh from '../assets/fresh.jpg'
-import cook from '../assets/cook.jpg'
-import quality from '../assets/quality.jpg'
-import packing from '../assets/packing.jpg'
-import delivery from '../assets/delivery.jpg'
 import catering from '../assets/catering.jpg'
 
 // ---------------------------------------------------------------------
-// Featured dishes shown on the Home page.
-// Ids come from src/data/menuCategories.json — change them to feature
-// any other dish.
+// Featured dishes: one starter, a breakfast item, a meal and a sweet.
+//
+// Each entry is either an exact dish `id` from menuCategories.json, or a
+// `match` regex. A regex is tried against category names first, then
+// against dish names, and uses the first dish found. When you know the
+// dish you want, replace the `match` line with `id: '...'`.
 // ---------------------------------------------------------------------
-const featuredIds = [
-  'biryani-chicken-biryani',
-  'veg-starters-paneer-tikka',
-  'non-veg-starters-chicken-65'
+const featuredSpec = [
+  { id: 'veg-starters-paneer-tikka' },
+  { match: /breakfast|tiffin/i },
+  { match: /meal|thali|lunch/i },
+  { match: /sweet|dessert|halwa|payasam|kesari|jamun|laddu|ladoo|jalebi|kheer|rasmalai|mysore pak/i }
 ]
 
 const allMenuItems = menuCategories.flatMap(cat =>
-  cat.items.map(item => ({ ...item, categoryId: cat.id }))
+  cat.items.map(item => ({
+    ...item,
+    categoryId: cat.id,
+    categoryName: cat.name || cat.title || ''
+  }))
 )
 
-const featuredItems = featuredIds
-  .map(id => allMenuItems.find(item => item.id === id))
+const resolveFeatured = spec => {
+  if (spec.id) return allMenuItems.find(item => item.id === spec.id)
+  const byCategory = allMenuItems.find(item =>
+    spec.match.test(`${item.categoryId} ${item.categoryName}`)
+  )
+  if (byCategory) return byCategory
+  return allMenuItems.find(item =>
+    spec.match.test(`${item.id} ${item.name || ''} ${item.title || ''}`)
+  )
+}
+
+const featuredItems = featuredSpec
+  .map(resolveFeatured)
   .filter(Boolean)
+  .filter((item, i, arr) => arr.findIndex(o => o.id === item.id) === i)
 
 // ---------------------------------------------------------------------
-// Static content for the new sections. Swap these for real data/JSON
-// whenever it's ready — shapes are kept flat and simple on purpose.
+// Static content for the sections below.
 // ---------------------------------------------------------------------
 const reasons = [
   { icon: <FaUtensils />, title: 'Home-Style Taste', text: 'Traditional recipes with a personal touch.', tint: 'saffron' },
@@ -67,16 +77,6 @@ const reasons = [
   { icon: <FaShieldAlt />, title: 'Hygienic Preparation', text: 'Clean kitchen, safe food.', tint: 'red' },
   { icon: <FaTruck />, title: 'On-Time Delivery', text: 'Because your time matters.', tint: 'blue' },
   { icon: <FaHeart />, title: 'Made With Care', text: 'Every meal cooked with love.', tint: 'saffron' }
-]
-
-// Each step doubles as the caption for the photo strip below it — swap
-// `img` for real kitchen-process photography whenever it's available.
-const processSteps = [
-  { icon: <FaLeaf />, title: 'Fresh Ingredients', img: fresh },
-  { icon: <FaFire />, title: 'Cooking with Care', img: cook },
-  { icon: <FaAward />, title: 'Quality Check', img: quality },
-  { icon: <FaBoxOpen />, title: 'Packing with Hygiene', img: packing },
-  { icon: <FaTruck />, title: 'On-time Delivery', img: delivery }
 ]
 
 const occasions = [
@@ -103,19 +103,12 @@ const reasonVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } }
 }
 
-// Food photos standing in for customer avatars, matched 1:1 to
-// testimonials.json in order. Reuses images already imported for the
-// hero and process sections, so no new assets are needed.
-const testimonialImages = [mainImg, img1, img2, img3, fresh, cook, quality]
-
 export default function Home() {
   const [whyImgFailed, setWhyImgFailed] = useState(false)
 
   return (
     <div className="home">
-      {/* Reusable organic blob mask for the "Why Qatind" photo — exact
-          irregular freeform shape (not an ellipse/border-radius fake),
-          defined once and referenced via clip-path: url(#whyQatindBlob) */}
+      {/* Reusable organic blob mask for the "Why Qatind" photo */}
       <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
         <defs>
           <clipPath id="whyQatindBlob" clipPathUnits="objectBoundingBox">
@@ -150,8 +143,8 @@ export default function Home() {
                 <Link to={heroData.ctaLink} className="hero__cta hero__cta--primary">
                   {heroData.cta}
                 </Link>
-                <Link to="/about" className="hero__cta hero__cta--outline">
-                  About Us
+                <Link to="/contact" className="hero__cta hero__cta--outline">
+                  Get Catering Quote
                 </Link>
               </div>
             </motion.div>
@@ -287,78 +280,7 @@ export default function Home() {
         </svg>
       </section>
 
-      {/* What Makes Our Food Different? */}
-      <section className="process">
-        <div className="container">
-          <div className="process__header">
-            <motion.div
-              className="process__copy"
-              initial={{ opacity: 0, x: -24 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
-            >
-              <span className="process__eyebrow">
-                <FaLeaf /> Our Kitchen Journey
-              </span>
-              <h2 className="process__title">
-                What Makes Our<br />
-                <span>Food Different?</span>
-              </h2>
-              <p className="process__text">
-                From farm-fresh ingredients to your doorstep, every step is
-                filled with care, tradition and love.
-              </p>
-              <Link to="/about" className="process__link">
-                Our Process <FaArrowRight />
-              </Link>
-            </motion.div>
-
-            {/* Pyramid: 3 icons wrap to a first row, the remaining 2
-                center themselves on the row below (see Home.scss). */}
-            <motion.div
-              className="process__steps"
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-            >
-              {processSteps.map((step, index) => (
-                <motion.div className="process__step" key={step.title} variants={itemVariants}>
-                  <span className="process__step-badge">
-                    <span className="process__step-number">{String(index + 1).padStart(2, '0')}</span>
-                    <span className="process__step-icon">{step.icon}</span>
-                  </span>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-
-          <motion.div
-            className="process__gallery"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-80px' }}
-          >
-            {processSteps.map(step => (
-              <motion.div className="process__photo" key={step.title} variants={itemVariants}>
-                <img src={step.img} alt={step.title} />
-                <span className="process__photo-caption">
-                  {step.icon}
-                  {step.title}
-                </span>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-
-        <svg className="process__corner" viewBox="0 0 260 260" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M260,260 L260,90 C170,110 100,180 80,260 Z" />
-        </svg>
-      </section>
-
-      {/* Signature Dishes */}
+      {/* Featured Dishes */}
       <section className="featured">
         <div className="container">
           <h2 className="section__title">Featured Dishes</h2>
@@ -438,29 +360,8 @@ export default function Home() {
         </svg>
       </section>
 
-      {/* Reviews / Testimonials — staggered bento grid. Each card pairs
-          a food-dish photo (standing in for the customer's avatar) with
-          a name, role and quote, arranged in an offset four-column grid
-          with soft glow blobs behind it (TestimonialMarquee.jsx). */}
-      <section className="reviews">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-          >
-            <h2 className="section__title">What Our Customers Say</h2>
-            <p className="reviews__subtitle">
-              Real stories from the people who taste the Qatind difference every week.
-            </p>
-          </motion.div>
-        </div>
-        <TestimonialMarquee
-          testimonials={testimonialsData.testimonials}
-          images={testimonialImages}
-        />
-      </section>
+      {/* Reviews + client logos, one section (components/SocialProof) */}
+      <SocialProof />
 
       {/* CTA Section — unchanged */}
       <section className="cta" style={{ backgroundImage: `url(${ctaImg})` }}>
@@ -475,7 +376,7 @@ export default function Home() {
             <h2>Ready to Taste Excellence?</h2>
             <p>Order now and experience premium food delivered fast</p>
             <Link to="/menu" className="cta__button">
-              Order Now
+              Choose Your Dish
             </Link>
           </motion.div>
         </div>

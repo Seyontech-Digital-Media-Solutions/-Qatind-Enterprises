@@ -25,7 +25,8 @@ import {
   RiHeart2Line,
   RiArrowDownLine,
 } from 'react-icons/ri'
-import { FiPhone, FiClock, FiUsers } from 'react-icons/fi'
+import { FaWhatsapp } from 'react-icons/fa'
+import { FiClock, FiUsers, FiPhone } from 'react-icons/fi'
 import { BsShieldCheck, BsPatchCheck } from 'react-icons/bs'
 import { LuChefHat, LuUtensilsCrossed } from 'react-icons/lu'
 import { MdDeliveryDining, MdOutlineRestaurantMenu } from 'react-icons/md'
@@ -37,15 +38,28 @@ import '../styles/ContactPage.scss'
 
 const img = (path) => `${import.meta.env.BASE_URL}${path}`
 
+// ─── Contact details: ONE place to change them ────────────────────────
+// Numbers are digits only, with the country code (no +, spaces or dashes).
+// Confirm with the client which number is for calls and which is for
+// WhatsApp, and swap these two values if needed.
+const CALL_NUMBER = '917305461104'
+const CALL_DISPLAY = '+91 73054 61104'
+const WHATSAPP_NUMBER = '917305401704'
+const WHATSAPP_DISPLAY = '+91 73054 01704'
+
+const callHref = `tel:+${CALL_NUMBER}`
+const whatsappHref = (text) =>
+  `https://wa.me/${WHATSAPP_NUMBER}${text ? `?text=${encodeURIComponent(text)}` : ''}`
+
 const contactChannels = [
   {
     id: 'call',
     label: 'Call Direct',
-    value: '+91 73054 61104',
+    value: CALL_DISPLAY,
     sub: 'Mon – Sun · 8 AM – 9 PM',
     badge: 'Instant',
     icon: RiPhoneLine,
-    href: 'tel:+917305461104',
+    href: callHref,
     accent: 'red',
   },
   {
@@ -55,7 +69,7 @@ const contactChannels = [
     sub: 'Fastest path to a custom quote',
     badge: '⚡ 15 min reply',
     icon: RiWhatsappLine,
-    href: 'https://wa.me/917305461104',
+    href: whatsappHref(),
     accent: 'green',
   },
   {
@@ -71,11 +85,12 @@ const contactChannels = [
   {
     id: 'visit',
     label: 'Visit & Taste',
-    value: 'Madambakkam, Tamil Nadu',
+    value: 'Ramapuram, Tamil Nadu',
     sub: 'Live tastings by appointment',
     badge: 'Live Tastings',
     icon: RiMapPin2Line,
-    href: 'https://maps.google.com/?q=Qatind+Enterprises+Vellore',
+    // Replace with the Google Business Profile share link once it exists.
+    href: 'https://maps.google.com/?q=Qatind+Enterprises+Ramapuram+Chennai',
     accent: 'red',
   },
 ]
@@ -92,14 +107,14 @@ const occasionOptions = [
 ]
 
 const stats = [
-  { label: 'Meals Daily', value: '10,000+', icon: MdDeliveryDining, accent: 'saffron' },
+  { label: 'Meals Daily', value: '10,000', icon: MdDeliveryDining, accent: 'saffron' },
   { label: 'On-Time Rate', value: '99.8%', icon: FiClock, accent: 'green' },
   { label: 'Satisfaction', value: '4.9 / 5', icon: RiStarFill, accent: 'red' },
   { label: 'Veg/Non-Veg Lines', value: '100%', icon: BsPatchCheck, accent: 'saffron' },
 ]
 
 const officeHours = [
-  { day: 'Monday – Friday', time: '8:00 AM – 9:00 PM', active: true },
+  { day: 'Monday – Friday', time: '7:00 AM – 9:00 PM', active: true },
   { day: 'Saturday', time: '8:00 AM – 9:00 PM', active: true },
   { day: 'Sunday', time: '9:00 AM – 6:00 PM', active: false },
 ]
@@ -334,10 +349,6 @@ function ChannelCard({ ch, i }) {
       <h3 className="contact-channel-title">{ch.label}</h3>
       <p className="contact-channel-value">{ch.value}</p>
       <p className="contact-channel-sub">{ch.sub}</p>
-      <div className="contact-channel-stat-row">
-        <span className={`contact-channel-stat contact-channel-stat--${ch.accent}`}>{ch.stat}</span>
-        <span className="contact-channel-stat-label">{ch.statLabel}</span>
-      </div>
       <div className="contact-channel-cta">
         <span>Connect</span>
         <motion.span
@@ -449,11 +460,7 @@ export default function ContactPage() {
       .filter(Boolean)
       .join('\n')
     window.setTimeout(() => {
-      window.open(
-        `https://wa.me/917305401704?text=${encodeURIComponent(lines)}`,
-        '_blank',
-        'noopener'
-      )
+      window.open(whatsappHref(lines), '_blank', 'noopener')
       setStatus('sent')
     }, 550)
   }
@@ -539,7 +546,7 @@ export default function ContactPage() {
             <motion.div variants={heroActionItem} className="contact-hero-action-item">
               <MagneticButton>
                 <a
-                  href="https://wa.me/917305401704"
+                  href={whatsappHref()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="contact-btn contact-btn--whatsapp"
@@ -552,9 +559,9 @@ export default function ContactPage() {
 
             <motion.div variants={heroActionItem} className="contact-hero-action-item">
               <MagneticButton>
-                <a href="tel:+917305401704" className="contact-btn contact-btn--call">
+                <a href={callHref} className="contact-btn contact-btn--call">
                   <FiPhone />
-                  +91 73054 01704
+                  {CALL_DISPLAY}
                 </a>
               </MagneticButton>
             </motion.div>
@@ -794,7 +801,7 @@ export default function ContactPage() {
               <h3 className="cp-info-title cp-info-title--mt">Kitchen & office</h3>
               <p className="cp-address">
                 <RiMapPin2Line aria-hidden="true" />
-                Qatind Enterprises, Main Road, Vellore, Tamil Nadu
+                Qatind Enterprises, Ramapuram, Chennai, Tamil Nadu
                 <br />
                 <span className="cp-address-note">Tastings available by appointment</span>
               </p>
@@ -813,7 +820,7 @@ export default function ContactPage() {
                 <span className="cp-social-label">Follow Qatind</span>
                 <div className="cp-social-icons">
                   {[
-                    { href: 'https://instagram.com', icon: RiInstagramLine, label: 'Instagram' },
+                    { href: 'https://www.instagram.com/qatindofficial?xtok=MTJuanNncXllM2FlNw==', icon: RiInstagramLine, label: 'Instagram' },
                     { href: 'https://facebook.com', icon: RiFacebookCircleLine, label: 'Facebook' },
                   ].map(({ href, icon: Icon, label }) => (
                     <motion.a
@@ -875,12 +882,18 @@ export default function ContactPage() {
               <p className="cp-eyebrow">Questions Answered</p>
               <h2 className="cp-faq-title">Everything you need to know before you reach out.</h2>
               <p className="cp-faq-desc">
-                Have a custom requirement or dietary need? Call our kitchen team directly.
+                Have a custom requirement or dietary need? Message our kitchen team directly.
               </p>
               <MagneticButton>
-                <a href="tel:+917305401704" className="cp-faq-phone">
-                  <FiPhone aria-hidden="true" />
-                  +91 73054 01704
+                <a
+                  href={whatsappHref('Hi Qatind, I have a question about my order.')}
+                  className="cp-faq-phone"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Chat with us on WhatsApp"
+                >
+                  <FaWhatsapp aria-hidden="true" />
+                  {WHATSAPP_DISPLAY}
                 </a>
               </MagneticButton>
             </motion.div>
@@ -954,14 +967,14 @@ export default function ContactPage() {
           </p>
           <div className="cp-cta-actions">
             <MagneticButton>
-              <a href="tel:+917305401704" className="contact-btn contact-btn--cta-primary">
+              <a href={callHref} className="contact-btn contact-btn--cta-primary">
                 Call Qatind Kitchen
                 <RiArrowRightLine />
               </a>
             </MagneticButton>
             <MagneticButton>
               <a
-                href="https://wa.me/917305401704"
+                href={whatsappHref()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="contact-btn contact-btn--cta-outline"

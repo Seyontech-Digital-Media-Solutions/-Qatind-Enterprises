@@ -1,17 +1,18 @@
 {
-  "siteName": "Qatind Cloud Kitchen",
+  "siteName": "Qatind Enterprises",
   "tagline": "Premium Food, Fast Delivery",
   "description": "Discover authentic and premium food from Qatind Cloud Kitchen. We deliver fresh, delicious meals right to your door.",
-  "phone": "+1 (555) 123-4567",
-  "email": "info@qatind.com",
-  "address": "123 Food Street, Culinary City, CC 12345",
+  "phone": "+91 73054 61104",
+  "email": "hello@qatind.com",
+  "address": "Qatind Enterprises, Ramapuram, Chennai, Tamil Nadu 600089",
   "socialMedia": {
     "facebook": "https://facebook.com/qatind",
-    "instagram": "https://instagram.com/qatind",
+    "instagram": "https://www.instagram.com/qatindofficial?xtok=MTJuanNncXllM2FlNw==",
     "twitter": "https://twitter.com/qatind"
   },
   "hours": {
-    "weekdays": "10:00 AM - 10:00 PM",
-    "weekends": "11:00 AM - 11:00 PM"
+    "Weekday": "7:00 AM - 9:00 PM",
+    "Saturday": "8:00 AM - 9:00 PM",
+    "Sunday": "9:00AM - 6:00PM"
   }
 }

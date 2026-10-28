@@ -1,0 +1,332 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+// ============================
+// Social proof: reviews carousel + client logos in one section
+// ============================
+.social-proof {
+  padding: $spacing-3xl 0;
+  background: linear-gradient(180deg, $bg-secondary 0%, $bg-primary 100%);
+
+  @include mobile {
+    padding: $spacing-2xl 0;
+  }
+
+  &__title {
+    position: relative;
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-bold;
+    text-align: center;
+    margin-bottom: $spacing-3xl;
+    color: $text-primary;
+    padding-bottom: $spacing-lg;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 72px;
+      height: 4px;
+      border-radius: $border-radius-full;
+      background: linear-gradient(90deg, $color-red 0%, $color-saffron 50%, $color-primary 100%);
+    }
+
+    @include mobile {
+      font-size: $font-size-2xl;
+      margin-bottom: $spacing-2xl;
+    }
+  }
+
+  &__subtitle {
+    @include body-text;
+    text-align: center;
+    max-width: 46ch;
+    margin: calc(-1 * #{$spacing-2xl}) auto $spacing-xl;
+    color: $text-secondary;
+
+    @include mobile {
+      margin-top: calc(-1 * #{$spacing-lg});
+      font-size: $font-size-sm;
+    }
+  }
+
+  // ---- client logos ----
+  &__partners {
+    margin-top: $spacing-2xl;
+    padding-top: $spacing-2xl;
+    border-top: 1px solid $color-gray-200;
+    text-align: center;
+  }
+
+  &__partners-title {
+    margin: 0 0 $spacing-lg;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    color: $text-primary;
+
+    @include mobile {
+      font-size: $font-size-base;
+    }
+  }
+
+  &__logos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-xl $spacing-3xl;
+
+    @include mobile {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: $spacing-md;
+      justify-items: center;
+    }
+  }
+
+  &__logo {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      height: 96px;
+      width: auto;
+      max-width: 200px;
+      transform: scale(var(--logo-scale, 1));
+      object-fit: contain;
+      filter: grayscale(1) opacity(0.8);
+      mix-blend-mode: multiply; // hides white boxes around JPG logos
+      transition: filter $transition-base;
+
+      @include tablet {
+        height: 76px;
+        max-width: 160px;
+      }
+
+      @include mobile {
+        height: 56px;
+        max-width: 110px;
+      }
+    }
+
+    &:hover img {
+      filter: none;
+    }
+  }
+}
+
+// ---- staggered bento testimonials (pages/Testimonial.jsx) ----
+.testimonial-bento {
+  position: relative;
+  padding: $spacing-2xl $spacing-md $spacing-3xl;
+  overflow: hidden;
+
+  @include mobile {
+    padding: $spacing-lg 0 $spacing-xl;
+  }
+
+  &__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: $spacing-xl $spacing-lg;
+    max-width: 1320px;
+    margin: 0 auto;
+
+    @include tablet {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    // Phones: one horizontal swipe row. Columns dissolve so every card
+    // becomes a slide.
+    @include mobile {
+      display: flex;
+      gap: $spacing-md;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: $spacing-sm $spacing-md $spacing-lg;
+      scroll-padding-left: $spacing-md;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-3xl;
+
+    @include tablet {
+      margin-top: 0 !important;
+    }
+
+    @include mobile {
+      display: contents;
+    }
+
+    // Vertical stagger per column: column 3 highest, then 2, 4, 1.
+    &--1 {
+      margin-top: 7rem;
+    }
+
+    &--2 {
+      margin-top: 2rem;
+    }
+
+    &--3 {
+      margin-top: 0;
+    }
+
+    &--4 {
+      margin-top: 3rem;
+    }
+  }
+
+  &__hint {
+    display: none;
+    margin: 0;
+    text-align: center;
+    font-size: $font-size-sm;
+    color: $text-secondary;
+
+    @include mobile {
+      display: block;
+    }
+  }
+}
+
+.testimonial-glow {
+  position: absolute;
+  z-index: 0;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+
+  @include mobile {
+    display: none;
+  }
+
+  &--pink { background: rgba($color-red, 0.35); }
+  &--peach { background: rgba($color-saffron, 0.4); }
+  &--purple { background: rgba(#7c3aed, 0.3); }
+  &--blue { background: rgba(#2563eb, 0.3); }
+}
+
+.bento-card {
+  position: relative;
+  width: 100%;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  @include mobile {
+    flex: 0 0 82%;
+    max-width: none;
+    scroll-snap-align: start;
+  }
+
+  &__avatar-wrap {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid $bg-primary;
+    box-shadow: $shadow-md;
+
+    &--initial {
+      background-color: $color-primary;
+      color: $color-light;
+      font-weight: $font-weight-bold;
+      font-size: $font-size-xl;
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2563eb;
+    color: $color-light;
+    font-size: 0.55rem;
+    border: 2px solid $bg-primary;
+  }
+
+  &__name {
+    margin: 0;
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+  }
+
+  &__role {
+    display: block;
+    margin: 2px 0 $spacing-md;
+    font-size: 0.65rem;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $text-secondary;
+  }
+
+  &__quote {
+    position: relative;
+    width: 100%;
+    background-color: $bg-primary;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-card-elevated;
+    padding: $spacing-md $spacing-lg;
+
+    p {
+      @include body-text;
+      font-size: $font-size-sm;
+      font-style: italic;
+      color: $text-primary;
+      margin: 0;
+    }
+  }
+
+  // Small connector tab linking the name/role to the quote card.
+  &__tab {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px;
+    height: 12px;
+    border-radius: 3px 3px 0 0;
+    background-color: $bg-primary;
+  }
+}

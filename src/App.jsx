@@ -12,6 +12,7 @@ import Gallery from './pages/Gallery'
 import Bakery from './pages/Bakery'
 import Cart from './pages/Cart'
 import ScrollToTop from './components/common/ScrollToTop'
+import QuickContact from './pages/Quickcontact'
 
 import './styles/main.scss'
 
@@ -43,6 +44,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
+      <QuickContact />
     </Router>
   )
 }

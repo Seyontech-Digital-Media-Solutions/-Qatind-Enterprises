@@ -1,105 +1,63 @@
-import { motion } from 'framer-motion'
 import { FaStar } from 'react-icons/fa'
 
-// Soft blurred color blobs behind the grid — purely decorative, echoes
-// the reference's pink/peach/purple/blue bento glow.
-const GLOWS = [
-  { className: 'testimonial-glow--pink', style: { top: '30%', left: '2%' } },
-  { className: 'testimonial-glow--peach', style: { top: '0%', left: '28%' } },
-  { className: 'testimonial-glow--purple', style: { top: '6%', right: '16%' } },
-  { className: 'testimonial-glow--blue', style: { bottom: '4%', right: '4%' } },
-]
+// ---------------------------------------------------------------------
+// Staggered bento testimonials (the original design).
+//  - Desktop: 4 offset columns with soft glow blobs behind.
+//  - Tablet: 2 columns.
+//  - Phones: one swipeable row (a card at a time) instead of a tall stack.
+//
+// Props:
+//   testimonials  [{ id, name, occasion, month, text, rating }]
+//   images        food photos used as avatars, matched to testimonials by order
+// ---------------------------------------------------------------------
 
-// Which column (1-4) each testimonial lands in, in order. Matches the
-// reference's staggered arrangement: col 3 sits highest, then col 2,
-// then col 4, then col 1 — each column holding 1-2 cards stacked with
-// a gap. Edit this alongside testimonials.json if the count changes.
-const COLUMNS = [3, 4, 2, 3, 1, 2, 4]
+const COLUMNS = 4
 
-function TestimonialCard({ testimonial, image, index }) {
-  return (
-    <motion.article
-      className="bento-card"
-      initial={{ opacity: 0, y: 30, scale: 0.94 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.55, ease: 'easeOut', delay: (index % 4) * 0.1 }}
-      whileHover={{ y: -6, scale: 1.03 }}
-    >
-      <div className="bento-card__avatar-wrap">
-        <img
-          src={image}
-          alt=""
-          aria-hidden="true"
-          className="bento-card__avatar"
-          loading="lazy"
-        />
-        <span className="bento-card__badge">
-          <FaStar aria-hidden="true" />
-        </span>
-      </div>
+export default function TestimonialMarquee({ testimonials = [], images = [] }) {
+  if (!testimonials.length) return null
 
-      <h3 className="bento-card__name">{testimonial.name}</h3>
-      <span className="bento-card__role">{testimonial.role}</span>
-
-      <div className="bento-card__quote">
-        <span className="bento-card__tab" aria-hidden="true" />
-        <p>&ldquo;{testimonial.text}&rdquo;</p>
-      </div>
-    </motion.article>
-  )
-}
-
-/**
- * Staggered bento-style testimonial grid. Cards are grouped into four
- * columns per COLUMNS, each column offset vertically via CSS so the
- * whole thing reads as one loose, organic grid rather than a strict
- * table — with food-dish photos standing in for customer avatars.
- *
- * @param {{ id: string, name: string, role: string, text: string, rating: number }[]} testimonials
- * @param {string[]} [images] - food photos, matched 1:1 to testimonials in order
- */
-export default function TestimonialMarquee({ testimonials, images = [] }) {
-  if (!testimonials?.length) return null
-
-  const columns = { 1: [], 2: [], 3: [], 4: [] }
-
-  testimonials.forEach((testimonial, index) => {
-    const column = COLUMNS[index % COLUMNS.length]
-    const image = images.length ? images[index % images.length] : undefined
-    columns[column].push({ testimonial, image, index })
-  })
+  // Deal the cards out round-robin: card 0 -> col 1, card 1 -> col 2, ...
+  const columns = Array.from({ length: COLUMNS }, () => [])
+  testimonials.forEach((t, i) => columns[i % COLUMNS].push({ ...t, image: images[i % images.length] }))
 
   return (
     <div className="testimonial-bento">
-      {GLOWS.map((glow, i) => (
-        <motion.span
-          key={i}
-          className={`testimonial-glow ${glow.className}`}
-          style={glow.style}
-          aria-hidden="true"
-          animate={{ opacity: [0.45, 0.7, 0.45], scale: [1, 1.08, 1] }}
-          transition={{ duration: 7 + i, repeat: Infinity, ease: 'easeInOut', delay: i * 0.6 }}
-        />
-      ))}
+      <span className="testimonial-glow testimonial-glow--pink" style={{ top: '6%', left: '4%' }} aria-hidden="true" />
+      <span className="testimonial-glow testimonial-glow--peach" style={{ top: '10%', right: '6%' }} aria-hidden="true" />
+      <span className="testimonial-glow testimonial-glow--purple" style={{ bottom: '8%', left: '28%' }} aria-hidden="true" />
+      <span className="testimonial-glow testimonial-glow--blue" style={{ bottom: '4%', right: '22%' }} aria-hidden="true" />
 
       <div className="testimonial-bento__grid">
-        {[1, 2, 3, 4].map((col) => (
-          <div
-            className={`testimonial-bento__column testimonial-bento__column--${col}`}
-            key={col}
-          >
-            {columns[col].map(({ testimonial, image, index }) => (
-              <TestimonialCard
-                key={testimonial.id}
-                testimonial={testimonial}
-                image={image}
-                index={index}
-              />
-            ))}
+        {columns.map((cards, colIndex) => (
+          <div className={`testimonial-bento__column testimonial-bento__column--${colIndex + 1}`} key={colIndex}>
+            {cards.map(t => {
+              const role = [t.occasion, t.month].filter(Boolean).join(', ')
+              return (
+                <article className="bento-card" key={t.id}>
+                  <div className="bento-card__avatar-wrap">
+                    {t.image ? (
+                      <img className="bento-card__avatar" src={t.image} alt="" />
+                    ) : (
+                      <span className="bento-card__avatar bento-card__avatar--initial">{t.name.charAt(0)}</span>
+                    )}
+                    <span className="bento-card__badge" aria-hidden="true">
+                      <FaStar />
+                    </span>
+                  </div>
+                  <h3 className="bento-card__name">{t.name}</h3>
+                  {role && <span className="bento-card__role">{role}</span>}
+                  <div className="bento-card__quote">
+                    <span className="bento-card__tab" aria-hidden="true" />
+                    <p>&ldquo;{t.text}&rdquo;</p>
+                  </div>
+                </article>
+              )
+            })}
           </div>
         ))}
       </div>
+
+      <p className="testimonial-bento__hint" aria-hidden="true">Swipe to read more &rarr;</p>
     </div>
   )
 }

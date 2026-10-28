@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import {
   motion,
   useScroll,
@@ -24,6 +24,7 @@ import {
   Utensils,
 } from 'lucide-react'
 
+import KitchenJourney from '../components/KitchenJourney'
 import aboutHeroImage from '../assets/image.jpeg'
 import '../styles/About.scss'
 
@@ -152,15 +153,6 @@ const milestones = [
     icon: Bike,
     dot: 'bottom',
   },
-]
-
-const partners = [
-  { name: 'Aptiv',              logo: 'aptiv.png'  },
-  { name: 'DLF',                logo: 'DLF.jpg'    },
-  { name: 'Keppel Corporation', logo: 'keppel.png' },
-  { name: 'L&T',                logo: 'L&T.jpg'    },
-  { name: 'RMZ',                logo: 'RMZ.png'    },
-  { name: 'Propel',             logo: 'propel.png' },
 ]
 
 // ─── Stat counter card ───────────────────────────────────────────────────────
@@ -445,10 +437,7 @@ export default function AboutPage() {
               </motion.div>
             </motion.article>
 
-            {/* ── CENTER BADGE ──
-                Plain div does the centering (CSS transform); only the
-                inner ring rotates, so framer-motion never overwrites the
-                centering transform and the Home icon stays upright. */}
+            {/* ── CENTER BADGE ── */}
             <div className="values-center-badge" aria-hidden="true">
               <motion.span
                 className="values-center-badge__ring"
@@ -658,58 +647,9 @@ export default function AboutPage() {
 
 
       {/* ================================================================
-          PARTNERS
+          KITCHEN JOURNEY  (shared with the Home page)
       ================================================================ */}
-      <section className="about-partners section-shell">
-
-        <div className="section-header">
-          <Reveal>
-            <span className="section-kicker accent">Who we work with</span>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <h2>Our partners</h2>
-          </Reveal>
-          <Reveal delay={0.12}>
-            <p className="partners-intro">
-              The farms, mills, and makers we've built lasting relationships
-              with along the way.
-            </p>
-          </Reveal>
-        </div>
-
-        <div className="partners-strip">
-          {partners.map((partner, index) => (
-            <React.Fragment key={partner.name}>
-              <motion.div
-                className="partner-item"
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.6, delay: index * 0.08, ease: EASE }}
-              >
-                {/* framer owns the float + scale; CSS owns the colour change */}
-                <motion.img
-                  src={img(`About/${partner.logo}`)}
-                  alt={partner.name}
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{
-                    duration: 3.4 + (index % 3) * 0.4,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                    delay: index * 0.25,
-                  }}
-                  whileHover={{ scale: 1.1 }}
-                />
-              </motion.div>
-
-              {index < partners.length - 1 && (
-                <span className="partner-divider" aria-hidden="true" />
-              )}
-            </React.Fragment>
-          ))}
-        </div>
-
-      </section>
+      <KitchenJourney showLink={false} />
 
 
       {/* ================================================================

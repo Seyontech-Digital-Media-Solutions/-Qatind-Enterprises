@@ -77,7 +77,7 @@
     "name": "Gravy Non-Veg",
     "icon": "FiCircle",
     "items": [
-      { "id": "gravy-non-veg-chicken-tikka-masala", "name": "Chicken Tikka Masala", "price": 240, "image": "chicken-tikka-masala.jpg", "description": "Chicken Tikka Masala" },
+      { "id": "gravy-non-veg-chicken-tikka-masala", "name": "Chicken Tikka Masala", "price": 240, "image": "ChickenTikkaMasala.jpg", "description": "Chicken Tikka Masala" },
       { "id": "gravy-non-veg-chicken-thokku", "name": "Chicken Thokku", "price": 230, "image": "chicken-thokku.jpg", "description": "Chicken Thokku" },
       { "id": "gravy-non-veg-mutton-curry", "name": "Mutton Curry", "price": 280, "image": "mutton-curry.jpg", "description": "Mutton Curry" },
       { "id": "gravy-non-veg-prawn-masala", "name": "Prawn Masala", "price": 300, "image": "prawn-masala.jpg", "description": "Prawn Masala" },

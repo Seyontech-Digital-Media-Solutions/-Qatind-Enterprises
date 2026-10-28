@@ -108,8 +108,9 @@ export default function Footer() {
 
             <motion.div className="col-md-3 footer__section" variants={itemVariants}>
               <Heading>Opening Hours</Heading>
-              <p><strong>Weekdays:</strong> {siteData.hours.weekdays}</p>
-              <p><strong>Weekends:</strong> {siteData.hours.weekends}</p>
+              <p><strong>Monday - Friday:</strong> {siteData.hours.Weekday}</p>
+              <p><strong>Saturday:</strong> {siteData.hours.Saturday}</p>
+              <p><strong>Sunday:</strong> {siteData.hours.Sunday}</p>
             </motion.div>
 
             <motion.div className="col-md-3 footer__section" variants={itemVariants}>

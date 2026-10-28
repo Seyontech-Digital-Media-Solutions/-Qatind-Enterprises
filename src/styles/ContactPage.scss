@@ -1261,6 +1261,11 @@ $weight-black: 900;
   }
 }
 
+.cp-faq-phone svg {
+  font-size: 1.15em;
+  color: #25d366; // WhatsApp green, optional
+}
+
 .cp-faq-list {
   display: flex;
   flex-direction: column;
