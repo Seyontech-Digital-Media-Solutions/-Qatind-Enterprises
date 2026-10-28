@@ -4,7 +4,6 @@ import {
   AnimatePresence,
   useScroll,
   useSpring,
-  useTransform,
   useMotionValue,
   useReducedMotion,
   useInView,
@@ -23,7 +22,6 @@ import {
   RiFacebookCircleLine,
   RiStarFill,
   RiHeart2Line,
-  RiArrowDownLine,
 } from 'react-icons/ri'
 import { FaWhatsapp } from 'react-icons/fa'
 import { FiClock, FiUsers, FiPhone } from 'react-icons/fi'
@@ -164,47 +162,29 @@ const faqs = [
 
 const signatureEase = [0.22, 1, 0.36, 1]
 
-// ─── Hero text motion variants ─────────────────────────────────────────
-// Headline lines wipe up from behind a mask (like the shard reveal),
-// the subhead builds word-by-word, and the actions pop in with a
-// spring — a livelier, more layered entrance than a plain fade-up.
-const heroTitleGroup = {
+// ─── Hero motion ───────────────────────────────────────────────────────
+// The copy column builds in one piece at a time (pill, headline, text,
+// buttons, facts); the photo frame scales in beside it.
+const heroStagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.18, delayChildren: 0.15 } },
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
 }
-const heroTitleLine = {
-  hidden: { y: '112%' },
-  visible: { y: '0%', transition: { duration: 0.95, ease: signatureEase } },
-}
-
-const heroWordGroup = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.045, delayChildren: 0.85 } },
-}
-const heroWord = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: signatureEase } },
-}
-
-const heroActionsGroup = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.12, delayChildren: 1.15 } },
-}
-const heroActionItem = {
-  hidden: { opacity: 0, y: 16, scale: 0.86 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { type: 'spring', stiffness: 260, damping: 20 },
-  },
+const heroFade = {
+  hidden: { opacity: 0, y: 22 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: signatureEase } },
 }
 
 const heroSubtitleText =
-  "Daily office lunches for 500 or grand wedding feasts for 3,000 — our kitchen is ready to plan, cook, and serve with care."
-const heroSubtitleWords = heroSubtitleText.split(' ')
+  'Daily office lunches for 500 or grand wedding feasts for 3,000 — our kitchen is ready to plan, cook, and serve with care.'
 
-// ─── Hero background images (cycled by the paper-tear transition) ────
+// Quick facts under the buttons (all already stated elsewhere on this page).
+const heroFacts = [
+  { icon: RiWhatsappLine, text: 'WhatsApp reply in about 15 min' },
+  { icon: BsShieldCheck, text: 'FSSAI certified kitchen' },
+  { icon: RiMapPin2Line, text: 'Tastings by appointment' },
+]
+
+// ─── Hero photos (soft crossfade slideshow) ────────────────────────────
 const heroImages = [
   img('Contact/contact-hero-bg.jpg'),
   img('Contact/Contact-hero-bg1.jpg'),
@@ -249,77 +229,24 @@ function AnimatedNumber({ value, duration = 1.4 }) {
   return <span ref={ref}>{display}</span>
 }
 
-// ─── Hero image cycle ──────────────────────────────────────────────────
-// Lifted out of the transition component so the hero copy can animate
-// in sync with the same "tearing" beat that drives the background.
-function useHeroImageCycle(count, { cycleMs = 5800, tearMs = 1150 } = {}) {
+// ─── Hero slideshow ────────────────────────────────────────────────────
+// Advances every few seconds. Picking a dot jumps to that photo and
+// restarts the timer. No auto-advance if the visitor prefers reduced motion.
+function useHeroSlides(count, intervalMs = 5200) {
   const prefersReducedMotion = useReducedMotion()
   const [index, setIndex] = useState(0)
-  const [tearing, setTearing] = useState(false)
 
   useEffect(() => {
-    if (prefersReducedMotion) return undefined
+    if (prefersReducedMotion || count < 2) return undefined
 
-    const cycle = window.setInterval(() => {
-      setTearing(true)
-      window.setTimeout(() => {
-        setIndex((i) => (i + 1) % count)
-        setTearing(false)
-      }, tearMs)
-    }, cycleMs)
+    const timer = window.setInterval(() => {
+      setIndex((i) => (i + 1) % count)
+    }, intervalMs)
 
-    return () => window.clearInterval(cycle)
-  }, [prefersReducedMotion, count, cycleMs, tearMs])
+    return () => window.clearInterval(timer)
+  }, [prefersReducedMotion, count, intervalMs, index])
 
-  return { index, nextIndex: (index + 1) % count, tearing, prefersReducedMotion }
-}
-
-// ─── Hero "Paper Tear" Background Transition ──────────────────────────
-// The current photo splits along a slanted seam into two shards. The
-// left shard translates away toward the top-left corner, the right
-// shard toward the bottom-right corner, fading as they go — revealing
-// the next photo already sitting underneath. Then the cycle repeats.
-function HeroTearTransition({ index, nextIndex, tearing, prefersReducedMotion }) {
-  const ref = useRef(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '22%'])
-
-  const shardTransition = { duration: 1.05, ease: signatureEase }
-
-  return (
-    <div ref={ref} className="contact-hero-bg-wrap">
-      <motion.div className="contact-hero-bg-reel" style={{ y }}>
-        {/* Next photo, always sitting full-bleed underneath the shards */}
-        <div
-          className="contact-hero-bg-img--base"
-          style={{ backgroundImage: `url(${heroImages[nextIndex]})` }}
-        />
-
-        {/* Current photo, torn into two slanted halves */}
-        <motion.div
-          className="contact-hero-bg-shard contact-hero-bg-shard--left"
-          style={{ backgroundImage: `url(${heroImages[index]})` }}
-          animate={
-            !prefersReducedMotion && tearing
-              ? { x: '-55%', y: '-38%', rotate: -10, opacity: 0 }
-              : { x: '0%', y: '0%', rotate: 0, opacity: 1 }
-          }
-          transition={shardTransition}
-        />
-        <motion.div
-          className="contact-hero-bg-shard contact-hero-bg-shard--right"
-          style={{ backgroundImage: `url(${heroImages[index]})` }}
-          animate={
-            !prefersReducedMotion && tearing
-              ? { x: '55%', y: '38%', rotate: 10, opacity: 0 }
-              : { x: '0%', y: '0%', rotate: 0, opacity: 1 }
-          }
-          transition={{ ...shardTransition, delay: 0.05 }}
-        />
-      </motion.div>
-      <div className="contact-hero-bg-vignette" />
-    </div>
-  )
+  return [index, setIndex]
 }
 
 // ─── Channel Card ─────────────────────────────────────────────────────
@@ -441,8 +368,7 @@ export default function ContactPage() {
   const { scrollYProgress: pageProgress } = useScroll()
   const progressBar = useSpring(pageProgress, { stiffness: 120, damping: 24 })
 
-  const { index: heroIndex, nextIndex: heroNextIndex, tearing: heroTearing, prefersReducedMotion } =
-    useHeroImageCycle(heroImages.length)
+  const [heroIndex, setHeroIndex] = useHeroSlides(heroImages.length)
 
   const handleChange = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }))
 
@@ -473,115 +399,95 @@ export default function ContactPage() {
       {/* <motion.div style={{ scaleX: progressBar }} className="cp-progress-bar" /> */}
 
       {/* ================================================================
-          1 — HERO: Light theme with paper-tear image transition
+          1 — HERO: text on a clean background, photo in an arch frame
       ================================================================ */}
       <section className="contact-hero">
-        <HeroTearTransition
-          index={heroIndex}
-          nextIndex={heroNextIndex}
-          tearing={heroTearing}
-          prefersReducedMotion={prefersReducedMotion}
-        />
+        <span className="contact-hero-shape contact-hero-shape--green" aria-hidden="true" />
+        <span className="contact-hero-shape contact-hero-shape--red" aria-hidden="true" />
 
-        <motion.div
-          className="contact-hero-content"
-          animate={
-            !prefersReducedMotion && heroTearing
-              ? { scale: 0.985, filter: 'blur(1.5px)' }
-              : { scale: 1, filter: 'blur(0px)' }
-          }
-          transition={{ duration: 0.6, ease: signatureEase }}
-        >
-          <motion.span
-            initial={{ opacity: 0, y: -14, scale: 0.85, rotate: -4 }}
-            animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 18, delay: 0.05 }}
-            className="contact-hero-pill"
-          >
-            <RiSparklingLine />
-            Direct Kitchen Concierge
-          </motion.span>
+        <div className="contact-hero-inner">
 
-          <motion.h1
-            className="contact-hero-title"
-            initial="hidden"
-            animate="visible"
-            variants={heroTitleGroup}
-          >
-            <span className="contact-hero-title-line">
-              <motion.span className="contact-hero-title-line-inner" variants={heroTitleLine}>
-                Good food,
-              </motion.span>
-            </span>
-            <span className="contact-hero-title-line">
-              <motion.span
-                className="contact-hero-title-line-inner contact-hero-title-em"
-                variants={heroTitleLine}
-              >
-                brought to your table.
-              </motion.span>
-            </span>
-          </motion.h1>
-
-          <motion.p
-            className="contact-hero-sub"
-            initial="hidden"
-            animate="visible"
-            variants={heroWordGroup}
-          >
-            {heroSubtitleWords.map((word, i) => (
-              <motion.span key={`${word}-${i}`} className="contact-hero-word" variants={heroWord}>
-                {word}
-                {'\u00A0'}
-              </motion.span>
-            ))}
-          </motion.p>
-
+          {/* ---------- Left: copy ---------- */}
           <motion.div
-            className="contact-hero-actions"
+            className="contact-hero-copy"
             initial="hidden"
             animate="visible"
-            variants={heroActionsGroup}
+            variants={heroStagger}
           >
-            <motion.div variants={heroActionItem} className="contact-hero-action-item">
-              <MagneticButton>
-                <a
-                  href={whatsappHref()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="contact-btn contact-btn--whatsapp"
-                >
-                  <RiWhatsappLine />
-                  Chat on WhatsApp
-                </a>
-              </MagneticButton>
-            </motion.div>
+            <motion.span variants={heroFade} className="contact-hero-pill">
+              <RiSparklingLine aria-hidden="true" />
+              Direct Kitchen Concierge
+            </motion.span>
 
-            <motion.div variants={heroActionItem} className="contact-hero-action-item">
-              <MagneticButton>
-                <a href={callHref} className="contact-btn contact-btn--call">
-                  <FiPhone />
-                  {CALL_DISPLAY}
-                </a>
-              </MagneticButton>
-            </motion.div>
+            <motion.h1 variants={heroFade} className="contact-hero-title">
+              <span className="contact-hero-title-line">Good food,</span>
+              <span className="contact-hero-title-line">
+                <span className="contact-hero-title-em">brought to your table.</span>
+              </span>
+            </motion.h1>
+
+            <motion.p variants={heroFade} className="contact-hero-sub">
+              {heroSubtitleText}
+            </motion.p>
+
+           
+
+            <motion.ul variants={heroFade} className="contact-hero-facts">
+              {heroFacts.map(({ icon: Icon, text }) => (
+                <li key={text}>
+                  <Icon aria-hidden="true" />
+                  <span>{text}</span>
+                </li>
+              ))}
+            </motion.ul>
           </motion.div>
 
+          {/* ---------- Right: photo ---------- */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.5 }}
-            className="contact-hero-scroll"
+            className="contact-hero-visual"
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.2, ease: signatureEase }}
           >
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <RiArrowDownLine />
-            </motion.div>
-            <span>Scroll to explore</span>
+            <div className="contact-hero-frame">
+              {heroImages.map((src, i) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt=""
+                  aria-hidden="true"
+                  className={`contact-hero-slide${i === heroIndex ? ' contact-hero-slide--active' : ''}`}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  draggable="false"
+                />
+              ))}
+
+              <div className="contact-hero-dots" role="group" aria-label="Choose a photo">
+                {heroImages.map((src, i) => (
+                  <button
+                    key={src}
+                    type="button"
+                    className={`contact-hero-dot${i === heroIndex ? ' contact-hero-dot--active' : ''}`}
+                    onClick={() => setHeroIndex(i)}
+                    aria-label={`Show photo ${i + 1} of ${heroImages.length}`}
+                    aria-pressed={i === heroIndex}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="contact-hero-badge">
+              <span className="contact-hero-badge-icon">
+                <RiMapPin2Line aria-hidden="true" />
+              </span>
+              <span className="contact-hero-badge-text">
+                <strong>Ramapuram, Chennai</strong>
+                <small>Cooked fresh in our own kitchen</small>
+              </span>
+            </div>
           </motion.div>
-        </motion.div>
+
+        </div>
       </section>
 
       {/* ================================================================
@@ -686,6 +592,7 @@ export default function ContactPage() {
                       type="button"
                       onClick={() => setForm((f) => ({ ...f, occasion: o.label }))}
                       className={`cp-chip ${form.occasion === o.label ? 'cp-chip--active' : ''}`}
+                      aria-pressed={form.occasion === o.label}
                     >
                       <o.icon aria-hidden="true" />
                       <span>{o.label.split(' ')[0]}</span>
@@ -801,9 +708,10 @@ export default function ContactPage() {
               <h3 className="cp-info-title cp-info-title--mt">Kitchen & office</h3>
               <p className="cp-address">
                 <RiMapPin2Line aria-hidden="true" />
-                Qatind Enterprises, Ramapuram, Chennai, Tamil Nadu
-                <br />
-                <span className="cp-address-note">Tastings available by appointment</span>
+                <span className="cp-address-text">
+                  Qatind Enterprises, Ramapuram, Chennai, Tamil Nadu
+                  <span className="cp-address-note">Tastings available by appointment</span>
+                </span>
               </p>
 
               <div className="cp-info-image-wrap">

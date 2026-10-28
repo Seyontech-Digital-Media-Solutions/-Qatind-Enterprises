@@ -12,7 +12,7 @@ import Gallery from './pages/Gallery'
 import Bakery from './pages/Bakery'
 import Cart from './pages/Cart'
 import ScrollToTop from './components/common/ScrollToTop'
-import QuickContact from './pages/Quickcontact'
+import QuickContact from './pages/QuickContact'
 
 import './styles/main.scss'
 

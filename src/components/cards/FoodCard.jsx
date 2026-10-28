@@ -35,7 +35,7 @@ export default function FoodCard({ item }) {
           src={image}
           alt={item.name}
           className="food-card__image"
-          loading="lazy"
+          loading="lazy" decoding="async"
         />
 
         <button className="food-card__wishlist">

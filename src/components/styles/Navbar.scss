@@ -167,7 +167,7 @@ $nav-bp   : 991px; // below this width the links collapse into a drawer
     }
   }
 
-  // ─── Link / button pill ─────────────────────────
+  // ─── Link pill ──────────────────────────────────
   &__pill {
     position: relative;
     display: inline-flex;
@@ -203,8 +203,7 @@ $nav-bp   : 991px; // below this width the links collapse into a drawer
       transition: transform $nav-dur $nav-ease;
     }
 
-    &:hover,
-    .site-nav__item--drop-open & {
+    &:hover {
       color: $color-primary;
       background-color: rgba($color-primary, 0.06);
     }
@@ -218,21 +217,6 @@ $nav-bp   : 991px; // below this width the links collapse into a drawer
     &:focus-visible {
       outline: 2px solid $color-secondary;
       outline-offset: 2px;
-    }
-
-    &-chevron {
-      width: 7px;
-      height: 7px;
-      margin-top: -3px;
-      border-right: 1.6px solid currentColor;
-      border-bottom: 1.6px solid currentColor;
-      transform: rotate(45deg);
-      transition: transform $nav-dur $nav-ease;
-
-      .site-nav__item--drop-open & {
-        margin-top: 3px;
-        transform: rotate(225deg);
-      }
     }
 
     @include nav-collapse {
@@ -249,130 +233,30 @@ $nav-bp   : 991px; // below this width the links collapse into a drawer
     }
   }
 
-  // ═══════════════════════════════════════════════
-  //  DROPDOWN
-  //  .drop-panel  = invisible wrapper whose top padding bridges the
-  //                 gap between button and card, so the pointer never
-  //                 "leaves" the menu on the way down.
-  //  .drop-list   = the visible card.
-  // ═══════════════════════════════════════════════
-  &__item {
-    position: relative;
-
-    @include nav-collapse {
-      width: 100%;
-    }
-  }
-
-  &__drop-panel {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    min-width: 200px;
-    padding-top: 12px;
-    transform: translateX(-50%) translateY(6px);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition:
-      opacity    $nav-dur $nav-ease,
-      transform  $nav-dur $nav-ease,
-      visibility $nav-dur $nav-ease;
-
-    .site-nav__item--drop-open & {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-      transform: translateX(-50%) translateY(0);
+  // 8 links is a lot on a small laptop or a tablet held sideways
+  // (992px to 1180px). Tighten the pills so the row never runs into
+  // the logo or the Cart button.
+  @media (min-width: #{$nav-bp + 1}) and (max-width: 1180px) {
+    &__container {
+      gap: $spacing-md;
     }
 
-    // mobile: simple accordion inside the drawer
-    @include nav-collapse {
-      position: static;
-      min-width: 0;
-      padding-top: 0;
-      transform: none;
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height $nav-dur $nav-ease;
+    &__links {
+      gap: 0;
+    }
 
-      .site-nav__item--drop-open & {
-        transform: none;
-        max-height: 220px;
+    &__pill {
+      padding: 10px 9px;
+      font-size: 13px;
+
+      &::after {
+        left: 9px;
+        right: 9px;
       }
     }
-  }
 
-  &__drop-list {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 6px;
-    background: #ffffff;
-    border: 1px solid rgba($color-gray-200, 0.8);
-    border-radius: $border-radius-lg;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
-
-    // little arrow
-    &::before {
-      content: '';
-      position: absolute;
-      top: -7px;
-      left: 50%;
-      width: 12px;
-      height: 12px;
-      background: #ffffff;
-      border-left: 1px solid rgba($color-gray-200, 0.8);
-      border-top: 1px solid rgba($color-gray-200, 0.8);
-      border-radius: 2px 0 0 0;
-      transform: translateX(-50%) rotate(45deg);
-    }
-
-    @include nav-collapse {
-      padding: 2px 0 6px $spacing-md;
-      background: transparent;
-      border: none;
-      border-radius: 0;
-      box-shadow: none;
-
-      &::before { display: none; }
-    }
-  }
-
-  &__drop-item {
-    display: flex;
-    align-items: center;
-    padding: 10px 14px;
-    border-radius: $border-radius-md;
-    color: $text-primary;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    text-decoration: none;
-    white-space: nowrap;
-    transition:
-      background-color $nav-dur $nav-ease,
-      color            $nav-dur $nav-ease;
-
-    &:hover,
-    &:focus-visible {
-      background: rgba($color-primary, 0.08);
-      color: $color-primary;
-      outline: none;
-    }
-
-    &--active {
-      background: rgba($color-primary, 0.1);
-      color: $color-primary;
-      font-weight: $font-weight-bold;
-    }
-
-    @include nav-collapse {
-      padding: 11px 12px;
-      font-size: $font-size-base;
+    &__cart {
+      padding: 10px 16px;
     }
   }
 
