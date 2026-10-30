@@ -1,5 +1,5 @@
 // =====================================================================
-// ContactPage.scss — Qatind Enterprises (v6 — split hero + readable form)
+// ContactPage.scss — Qatind Enterprises (v7 — split hero + delivery areas)
 // Full-width, high-end, responsive — uses shared variables & mixins
 // =====================================================================
 @use 'sass:color';
@@ -1212,9 +1212,9 @@ $nav-clearance: 78px;
   }
 }
 
-// ============================= SHOWCASE ================================
+// ========================= DELIVERY LOCATIONS ==========================
 
-.cp-showcase-section {
+.cp-delivery-section {
   padding: vars.$spacing-3xl + 1rem vars.$spacing-lg;
   background: vars.$color-light;
 
@@ -1224,134 +1224,110 @@ $nav-clearance: 78px;
   }
 }
 
-.cp-showcase-inner {
+.cp-delivery-inner {
   @extend %cp-wrap;
+  // narrower than other sections so the chips wrap into balanced rows
+  max-width: 62rem;
 }
 
-.cp-showcase-grid {
-  display: grid;
-  gap: vars.$spacing-lg;
-  grid-template-columns: 1fr;
-
-  @include mixins.sm {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include mixins.lg {
-    grid-template-columns: repeat(3, 1fr);
-  }
+// Centered wrapping rows, so the last row never looks lopsided.
+.cp-delivery-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
 }
 
-.contact-showcase-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: vars.$border-radius-xl;
-  background: #ffffff;
-  border: 1px solid rgba(18, 24, 20, 0.08);
-  box-shadow: vars.$shadow-card-elevated;
-  cursor: pointer;
-  transition: box-shadow vars.$transition-base, transform vars.$transition-base;
-
-  &:hover {
-    box-shadow: vars.$shadow-card-hover;
-    transform: translateY(-5px);
-  }
-}
-
-.contact-showcase-image-wrap {
-  position: relative;
-  height: 18rem;
-  overflow: hidden;
-}
-
-.contact-showcase-image {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  will-change: transform;
-}
-
-// Cinematic base shade
-.contact-showcase-shade-base {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(5, 10, 7, 0.92) 0%, rgba(5, 10, 7, 0.2) 55%, transparent 100%);
-  pointer-events: none;
-  will-change: opacity;
-}
-
-// Color-tinted overshade
-.contact-showcase-shade-color {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  will-change: opacity;
-}
-
-.contact-showcase-tag {
-  position: absolute;
-  top: vars.$spacing-md;
-  left: vars.$spacing-md;
-  padding: 0.2rem 0.7rem;
+.cp-delivery-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
   border-radius: vars.$border-radius-full;
-  font-size: 0.65rem;
-  font-weight: vars.$font-weight-extrabold;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: #ffffff;
-  backdrop-filter: blur(12px);
-
-  &--red {
-    background: vars.$color-red;
-  }
-
-  &--saffron {
-    background: vars.$color-saffron;
-    color: vars.$color-dark;
-  }
-
-  &--green {
-    background: vars.$color-green;
-  }
-}
-
-.contact-showcase-reveal {
-  position: absolute;
-  bottom: vars.$spacing-lg;
-  left: vars.$spacing-lg;
-  right: vars.$spacing-lg;
-  pointer-events: none;
-}
-
-.contact-showcase-reveal-text {
-  font-size: vars.$font-size-xs;
+  border: 1.5px solid rgba(18, 24, 20, 0.1);
+  background: #ffffff;
+  box-shadow: vars.$shadow-sm;
+  font-size: vars.$font-size-base;
   font-weight: vars.$font-weight-semibold;
-  color: rgba(255, 255, 255, 0.85);
-  line-height: 1.5;
-}
-
-.contact-showcase-body {
-  padding: vars.$spacing-lg;
-}
-
-.contact-showcase-title {
-  font-size: vars.$font-size-lg;
-  font-weight: $weight-black;
   color: vars.$text-primary;
-  transition: color vars.$transition-base;
+  transition:
+    border-color vars.$transition-fast,
+    box-shadow vars.$transition-fast,
+    transform vars.$transition-fast;
 
-  .contact-showcase-card:hover & {
+  svg {
+    flex-shrink: 0;
+    font-size: 1.15rem;
     color: vars.$color-red;
   }
+
+  &:hover {
+    border-color: vars.$color-saffron;
+    box-shadow: vars.$shadow-md;
+    transform: translateY(-2px);
+  }
+
+  // The kitchen's own area stands out from the rest.
+  &--home {
+    border-color: vars.$color-green;
+    background: vars.$color-green-light;
+
+    svg {
+      color: vars.$color-green;
+    }
+  }
 }
 
-.contact-showcase-desc {
-  margin-top: vars.$spacing-sm;
+.cp-delivery-tag {
+  padding: 0.15rem 0.55rem;
+  border-radius: vars.$border-radius-full;
+  background: vars.$color-green;
   font-size: vars.$font-size-xs;
-  color: vars.$text-secondary;
-  line-height: 1.6;
+  font-weight: vars.$font-weight-bold;
+  color: #ffffff;
+}
+
+.cp-delivery-note {
+  margin-top: vars.$spacing-2xl;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: vars.$spacing-md;
+  text-align: center;
+
+  p {
+    font-size: vars.$font-size-base;
+    color: vars.$text-secondary;
+  }
+}
+
+.cp-delivery-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: vars.$font-size-sm;
+  font-weight: vars.$font-weight-bold;
+  color: vars.$color-red;
+  text-decoration: none;
+  transition: color vars.$transition-fast;
+
+  svg:first-child {
+    font-size: 1.2rem;
+    color: #25d366;
+  }
+
+  &:hover {
+    color: color.adjust(vars.$color-red, $lightness: -10%);
+  }
+
+  &:focus-visible {
+    outline: 2px solid vars.$color-saffron;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
 }
 
 // ================================ FAQ ==================================
@@ -1566,7 +1542,7 @@ $nav-clearance: 78px;
   }
 
   .contact-channel-card,
-  .contact-showcase-card,
+  .cp-delivery-chip,
   .cp-stat-card {
     transition: none !important;
     transform: none !important;
@@ -1613,7 +1589,8 @@ $nav-clearance: 78px;
     padding: vars.$spacing-lg;
   }
 
-  .contact-showcase-image-wrap {
-    height: 14rem;
+  .cp-delivery-chip {
+    padding: 0.65rem 1rem;
+    font-size: vars.$font-size-sm;
   }
 }

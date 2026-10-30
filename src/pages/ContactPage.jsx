@@ -117,28 +117,24 @@ const officeHours = [
   { day: 'Sunday', time: '9:00 AM – 6:00 PM', active: false },
 ]
 
-const showcaseCards = [
-  {
-    title: 'Corporate & Office Feasts',
-    tag: 'Daily Delivery',
-    img: img('Services/CorporateEvents.png'),
-    accent: 'red',
-    desc: 'Hot, hygienic, on-time — every day for 500 to 5,000 employees.',
-  },
-  {
-    title: 'Weddings & Grand Celebrations',
-    tag: 'Grand Feasts',
-    img: img('Services/WeddingCatering.png'),
-    accent: 'saffron',
-    desc: 'Live counters, elaborate spreads, curated menus for life\'s biggest moments.',
-  },
-  {
-    title: 'Freshly Prepared & Sealed',
-    tag: 'Hygiene First',
-    img: img('Services/prepareFood.webp'),
-    accent: 'green',
-    desc: 'FSSAI certified prep lines — separate veg / non-veg from source to serving.',
-  },
+// ─── Delivery locations ───────────────────────────────────────────────
+// Add or remove areas here. `home: true` marks the kitchen's own area.
+const deliveryAreas = [
+  { name: 'Ramapuram', home: true },
+  { name: 'Porur' },
+  { name: 'Valasaravakkam' },
+  { name: 'Manapakkam' },
+  { name: 'Guindy' },
+  { name: 'Alandur' },
+  { name: 'Adambakkam' },
+  { name: 'Nandambakkam' },
+  { name: 'Nesapakkam' },
+  { name: 'Ashok Nagar' },
+  { name: 'KK Nagar' },
+  { name: 'Kolapakkam' },
+  { name: 'Mugalivakkam' },
+  { name: 'Moulivakkam' },
+  { name: 'Saligramam' },
 ]
 
 const faqs = [
@@ -172,6 +168,16 @@ const heroStagger = {
 const heroFade = {
   hidden: { opacity: 0, y: 22 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: signatureEase } },
+}
+
+// ─── Delivery chips motion ─────────────────────────────────────────────
+const deliveryListVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.04 } },
+}
+const deliveryChipVariants = {
+  hidden: { opacity: 0, y: 14 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: signatureEase } },
 }
 
 const heroSubtitleText =
@@ -290,67 +296,6 @@ function ChannelCard({ ch, i }) {
   )
 }
 
-// ─── Showcase with Overshading ────────────────────────────────────────
-function ShowcaseCard({ sc, i }) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-8%' })
-  const [hovered, setHovered] = useState(false)
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay: i * 0.12, ease: signatureEase }}
-      className="contact-showcase-card"
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
-    >
-      <div className="contact-showcase-image-wrap">
-        <motion.img
-          src={sc.img}
-          alt={sc.title}
-          className="contact-showcase-image"
-          animate={{ scale: hovered ? 1.08 : 1 }}
-          transition={{ duration: 0.7, ease: signatureEase }}
-        />
-        {/* Cinematic overshading layers */}
-        <motion.div
-          className="contact-showcase-shade-base"
-          animate={{ opacity: hovered ? 0.55 : 0.72 }}
-          transition={{ duration: 0.5 }}
-        />
-        <motion.div
-          className="contact-showcase-shade-color"
-          animate={{ opacity: hovered ? 0.3 : 0 }}
-          transition={{ duration: 0.5 }}
-          style={{
-            background:
-              sc.accent === 'red'
-                ? 'linear-gradient(135deg, rgba(193,39,45,0.6) 0%, transparent 70%)'
-                : sc.accent === 'saffron'
-                ? 'linear-gradient(135deg, rgba(255,153,51,0.5) 0%, transparent 70%)'
-                : 'linear-gradient(135deg, rgba(20,108,54,0.5) 0%, transparent 70%)',
-          }}
-        />
-        <span className={`contact-showcase-tag contact-showcase-tag--${sc.accent}`}>{sc.tag}</span>
-        <motion.div
-          className="contact-showcase-reveal"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 12 }}
-          transition={{ duration: 0.4, ease: signatureEase }}
-        >
-          
-        </motion.div>
-      </div>
-      <div className="contact-showcase-body">
-        <h3 className="contact-showcase-title">{sc.title}</h3>
-        <p className="contact-showcase-desc">{sc.desc}</p>
-      </div>
-    </motion.div>
-  )
-}
-
 /* =====================================================================
    MAIN PAGE
 ===================================================================== */
@@ -429,8 +374,6 @@ export default function ContactPage() {
             <motion.p variants={heroFade} className="contact-hero-sub">
               {heroSubtitleText}
             </motion.p>
-
-           
 
             <motion.ul variants={heroFade} className="contact-hero-facts">
               {heroFacts.map(({ icon: Icon, text }) => (
@@ -752,10 +695,10 @@ export default function ContactPage() {
       </section>
 
       {/* ================================================================
-          5 — SHOWCASE with cinematic overshading
+          5 — DELIVERY LOCATIONS
       ================================================================ */}
-      <section className="cp-showcase-section">
-        <div className="cp-showcase-inner">
+      <section className="cp-delivery-section">
+        <div className="cp-delivery-inner">
           <motion.div
             className="cp-section-header"
             initial={{ opacity: 0, y: 24 }}
@@ -763,15 +706,49 @@ export default function ContactPage() {
             viewport={{ once: true, margin: '-12%' }}
             transition={{ duration: 0.65, ease: signatureEase }}
           >
-            <p className="cp-eyebrow">What We Cater</p>
-            <h2 className="cp-section-title">Food created for every scale and style.</h2>
+            <p className="cp-eyebrow">Delivery Locations</p>
+            <h2 className="cp-section-title">We deliver across these areas in Chennai.</h2>
           </motion.div>
 
-          <div className="cp-showcase-grid">
-            {showcaseCards.map((sc, i) => (
-              <ShowcaseCard key={sc.title} sc={sc} i={i} />
+          <motion.ul
+            className="cp-delivery-grid"
+            variants={deliveryListVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-8%' }}
+          >
+            {deliveryAreas.map((area) => (
+              <motion.li
+                key={area.name}
+                variants={deliveryChipVariants}
+                className={`cp-delivery-chip${area.home ? ' cp-delivery-chip--home' : ''}`}
+              >
+                <RiMapPin2Line aria-hidden="true" />
+                <span className="cp-delivery-name">{area.name}</span>
+                {area.home && <small className="cp-delivery-tag">Our kitchen</small>}
+              </motion.li>
             ))}
-          </div>
+          </motion.ul>
+
+          <motion.div
+            className="cp-delivery-note"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-8%' }}
+            transition={{ duration: 0.55, ease: signatureEase }}
+          >
+            <p>Don&apos;t see your area? Message us and we&apos;ll confirm if we can reach you.</p>
+            <a
+              href={whatsappHref('Hi Qatind, do you deliver to my area?')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cp-delivery-link"
+            >
+              <RiWhatsappLine aria-hidden="true" />
+              Check my area on WhatsApp
+              <RiArrowRightLine aria-hidden="true" />
+            </a>
+          </motion.div>
         </div>
       </section>
 
