@@ -1,0 +1,92 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+// Floating buttons, fixed to the bottom-right on every page.
+.quick-contact {
+  position: fixed;
+  right: $spacing-md;
+  bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom, 0px));
+  z-index: $z-modal-backdrop;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+
+  &__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    color: $color-light;
+    font-size: 1.3rem;
+    box-shadow: $shadow-lg;
+    transition: transform $transition-base, box-shadow $transition-base;
+
+    &:hover,
+    &:focus-visible {
+      color: $color-light;
+      transform: translateY(-2px) scale(1.06);
+      box-shadow: $shadow-xl;
+    }
+
+    &:focus-visible {
+      outline: 3px solid $color-dark;
+      outline-offset: 2px;
+    }
+
+    &--whatsapp {
+      background-color: #25d366;
+      font-size: 1.6rem;
+    }
+
+    &--call {
+      background-color: $color-primary;
+    }
+  }
+
+  @include mobile {
+    right: $spacing-sm;
+  }
+}
+
+// Labelled buttons for the phone menu.
+.quick-contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-top: $spacing-lg;
+  padding-top: $spacing-lg;
+  border-top: 1px solid $color-gray-200;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    padding: $spacing-md;
+    border-radius: $border-radius-full;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-light;
+    text-decoration: none;
+
+    &:hover {
+      color: $color-light;
+    }
+
+    &--whatsapp {
+      background-color: #25d366;
+    }
+
+    &--call {
+      background-color: $color-primary;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quick-contact__btn {
+    transition: none;
+  }
+}

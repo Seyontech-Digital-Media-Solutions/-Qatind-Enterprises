@@ -1,0 +1,10 @@
+{
+  "partners": [
+    { "name": "Aptiv", "logo": "aptiv.png", "scale": 1.3 },
+    { "name": "DLF", "logo": "DLF.jpg" },
+    { "name": "Keppel Corporation", "logo": "keppel.png", "scale": 1.8 },
+    { "name": "L&T", "logo": "L&T.jpg" },
+    { "name": "RMZ", "logo": "RMZ.png" },
+    { "name": "Propel", "logo": "propel.png" }
+  ]
+}

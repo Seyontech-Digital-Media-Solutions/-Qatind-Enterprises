@@ -1,115 +1,411 @@
 @import '../../styles/variables';
 @import '../../styles/mixins';
 
-.navbar {
-  background-color: $bg-primary;
-  box-shadow: $shadow-md;
-  position: sticky;
-  top: 0;
-  z-index: $z-sticky;
+$nav-ease : cubic-bezier(0.4, 0, 0.2, 1);
+$nav-dur  : 240ms;
+$nav-bp   : 991px; // below this width the links collapse into a drawer
 
-  &__container {
-    @include container;
-    @include flex-between;
-    height: 70px;
-    padding-top: $spacing-md;
-    padding-bottom: $spacing-md;
+@mixin nav-collapse {
+  @media (max-width: $nav-bp) {
+    @content;
+  }
+}
+
+// ═══════════════════════════════════════════════════
+//  SHELL
+//  The white / blurred background lives on ::before so that
+//  backdrop-filter never sits on .site-nav itself (it would turn
+//  the nav into the containing block for the fixed mobile drawer).
+// ═══════════════════════════════════════════════════
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: $z-sticky;
+  border-bottom: 1px solid rgba($color-gray-200, 0.7);
+  transition:
+    box-shadow   $nav-dur $nav-ease,
+    border-color $nav-dur $nav-ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: #ffffff;
+    transition: background-color $nav-dur $nav-ease;
   }
 
-  &__logo {
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-bold;
-    color: $color-primary;
-    text-decoration: none;
-    transition: color $transition-base;
+  &--scrolled {
+    border-bottom-color: transparent;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
 
-    &:hover {
-      color: $color-accent;
+    &::before {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
     }
   }
 
-  &__menu {
-    @include flex-start;
+  &__container {
+    @include container;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
     gap: $spacing-lg;
+    height: 78px;
+
+    @include nav-collapse {
+      grid-template-columns: 1fr auto auto;
+      gap: $spacing-sm;
+    }
 
     @include mobile {
-      position: absolute;
-      top: 70px;
-      left: 0;
-      right: 0;
-      flex-direction: column;
-      background-color: $bg-primary;
-      padding: $spacing-lg;
-      box-shadow: $shadow-lg;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height $transition-base;
+      height: 64px;
+    }
+  }
 
-      &--active {
-        max-height: 400px;
+  // ═══════════════════════════════════════════════
+  //  LOGO
+  // ═══════════════════════════════════════════════
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    flex-shrink: 0;
+
+    &:focus-visible {
+      outline: 2px solid $color-secondary;
+      outline-offset: 4px;
+      border-radius: $border-radius-sm;
+    }
+  }
+
+  &__logo-ring {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    @include mobile {
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  &__logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  &__logo-copy {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+
+    @media (max-width: 380px) {
+      display: none;
+    }
+  }
+
+  &__logo-name {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    letter-spacing: -0.025em;
+  }
+
+  &__logo-tagline {
+    font-size: 10px;
+    font-weight: $font-weight-semibold;
+    color: $text-secondary;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  // ═══════════════════════════════════════════════
+  //  LINKS  (desktop row → mobile drawer)
+  // ═══════════════════════════════════════════════
+  &__links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    @include nav-collapse {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(320px, 86vw);
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 2px;
+      padding: 84px $spacing-md $spacing-xl;
+      background: #ffffff;
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.16);
+      transform: translateX(105%);
+      visibility: hidden;
+      transition:
+        transform  $nav-dur $nav-ease,
+        visibility $nav-dur $nav-ease;
+      z-index: $z-modal;
+      overflow-y: auto;
+
+      &--open {
+        transform: translateX(0);
+        visibility: visible;
       }
     }
   }
 
-  &__link {
+  // ─── Link pill ──────────────────────────────────
+  &__pill {
     position: relative;
-    color: $text-primary;
-    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border: none;
+    border-radius: $border-radius-md;
+    background: transparent;
+    color: $text-secondary;
+    font-family: $font-family-sans;
+    font-size: $font-size-sm;
     font-weight: $font-weight-semibold;
-    transition: color $transition-base;
+    text-decoration: none;
     white-space: nowrap;
+    cursor: pointer;
+    transition:
+      color            $nav-dur $nav-ease,
+      background-color $nav-dur $nav-ease;
 
+    // underline indicator
     &::after {
       content: '';
       position: absolute;
-      left: 0;
-      bottom: -4px;
-      width: 0;
+      left: 14px;
+      right: 14px;
+      bottom: 4px;
       height: 2px;
-      background-color: $color-secondary;
-      transition: width $transition-base;
+      border-radius: 2px;
+      background: $color-primary;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform $nav-dur $nav-ease;
     }
 
     &:hover {
       color: $color-primary;
+      background-color: rgba($color-primary, 0.06);
+    }
+
+    &--active {
+      color: $color-primary;
+
+      &::after { transform: scaleX(1); }
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-secondary;
+      outline-offset: 2px;
+    }
+
+    @include nav-collapse {
+      width: 100%;
+      justify-content: space-between;
+      padding: 12px 14px;
+      font-size: $font-size-base;
+
+      &::after { display: none; }
+
+      &--active {
+        background-color: rgba($color-primary, 0.1);
+      }
+    }
+  }
+
+  // 8 links is a lot on a small laptop or a tablet held sideways
+  // (992px to 1180px). Tighten the pills so the row never runs into
+  // the logo or the Cart button.
+  @media (min-width: #{$nav-bp + 1}) and (max-width: 1180px) {
+    &__container {
+      gap: $spacing-md;
+    }
+
+    &__links {
+      gap: 0;
+    }
+
+    &__pill {
+      padding: 10px 9px;
+      font-size: 13px;
 
       &::after {
-        width: 100%;
+        left: 9px;
+        right: 9px;
       }
     }
 
-    @include mobile {
-      width: 100%;
-      padding: $spacing-sm 0;
+    &__cart {
+      padding: 10px 16px;
     }
   }
 
-  &__cta {
-    @include button-primary;
-    gap: $spacing-sm;
+  // ═══════════════════════════════════════════════
+  //  CART  (pill on desktop, round icon button when collapsed)
+  // ═══════════════════════════════════════════════
+  &__cart {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: $border-radius-full;
+    background: $color-saffron;
+    color: #ffffff;
+    font-family: $font-family-sans;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition:
+      background-color $nav-dur $nav-ease,
+      transform        $nav-dur $nav-ease,
+      box-shadow       $nav-dur $nav-ease;
 
-    @include mobile {
-      width: 100%;
-      justify-content: center;
+    &:hover {
+      background: $color-accent;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px -8px rgba($color-accent, 0.55);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-secondary;
+      outline-offset: 3px;
+    }
+
+    @include nav-collapse {
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      gap: 0;
     }
   }
 
-  &__icon {
-    width: 20px;
+  &__cart-label {
+    @include nav-collapse {
+      display: none;
+    }
+  }
+
+  &__cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    box-sizing: border-box;
+    min-width: 20px;
     height: 20px;
+    padding: 0 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ffffff;
+    border-radius: $border-radius-full;
+    background: $color-red;
+    color: #ffffff;
+    font-family: $font-family-sans;
+    font-size: 11px;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0;
+    line-height: 1;
+    pointer-events: none;
   }
 
-  &__toggle {
+  // ═══════════════════════════════════════════════
+  //  BURGER  (collapsed layout only)
+  // ═══════════════════════════════════════════════
+  &__burger {
     display: none;
-    background: none;
+    position: relative;
+    z-index: $z-modal + 1; // stays above the drawer so it can close it
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
     border: none;
+    border-radius: $border-radius-md;
+    background: none;
     cursor: pointer;
-    color: $text-primary;
+    flex-shrink: 0;
+    transition: background-color $nav-dur $nav-ease;
 
-    @include mobile {
+    span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      border-radius: 2px;
+      background: $color-primary;
+      transform-origin: center;
+      transition:
+        transform $nav-dur $nav-ease,
+        opacity   $nav-dur $nav-ease;
+    }
+
+    &--open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    &--open span:nth-child(2) { opacity: 0; }
+    &--open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    &:hover { background: rgba($color-primary, 0.07); }
+
+    &:focus-visible {
+      outline: 2px solid $color-secondary;
+      outline-offset: 2px;
+    }
+
+    @include nav-collapse {
       display: flex;
-      align-items: center;
-      justify-content: center;
     }
   }
+
+  // ═══════════════════════════════════════════════
+  //  BACKDROP  (behind the mobile drawer)
+  // ═══════════════════════════════════════════════
+  &__backdrop {
+    display: none;
+
+    @include nav-collapse {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: $z-modal - 1;
+      animation: navFadeIn $nav-dur $nav-ease;
+    }
+  }
+}
+
+@keyframes navFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }

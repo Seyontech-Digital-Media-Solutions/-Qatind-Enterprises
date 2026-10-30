@@ -1,0 +1,236 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+// ============================
+// What Makes Our Food Different? (process / kitchen journey)
+// ============================
+.process {
+  position: relative;
+  padding: $spacing-3xl $spacing-md;
+  background-color: rgba($color-saffron, 0.30);
+  overflow: hidden;
+
+  @include mobile {
+    padding: $spacing-2xl $spacing-md;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__header {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    align-items: center;
+    gap: $spacing-2xl;
+    margin-bottom: $spacing-2xl;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $spacing-xl;
+    }
+  }
+
+  &__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $color-primary;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__title {
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-bold;
+    line-height: $line-height-tight;
+    color: $text-primary;
+    margin-bottom: $spacing-sm;
+
+    span {
+      color: $color-primary;
+    }
+
+    @include mobile {
+      font-size: $font-size-2xl;
+    }
+  }
+
+  &__text {
+    @include body-text;
+    max-width: 40ch;
+    margin: 0 0 $spacing-lg;
+  }
+
+  &__link {
+    @include button-primary;
+    background-color: darken($color-primary, 6%);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
+    border-radius: $border-radius-full;
+    white-space: nowrap;
+  }
+
+  // ----------------------------
+  // Pyramid layout: 3 steps on the first row, 2 centred underneath.
+  // Every step now has a visible label under its icon.
+  // ----------------------------
+  &__steps {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    gap: $spacing-xl $spacing-md;
+    max-width: 380px;
+    margin: 0 auto;
+
+    @include mobile {
+      max-width: 320px;
+      gap: $spacing-lg $spacing-sm;
+    }
+  }
+
+  &__step {
+    flex: 0 0 auto;
+    width: 112px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-sm;
+
+    @include mobile {
+      width: 96px;
+    }
+  }
+
+  &__step-badge {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background-color: rgba($color-green, 0.1);
+    color: $color-primary;
+    font-size: 1.4rem;
+    flex-direction: column;
+
+    @include mobile {
+      width: 56px;
+      height: 56px;
+      font-size: 1.1rem;
+    }
+  }
+
+  &__step-number {
+    position: absolute;
+    top: -6px;
+    right: -4px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: $color-dark;
+    color: $color-light;
+    font-size: 0.65rem;
+    font-weight: $font-weight-bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__step-label {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    line-height: $line-height-tight;
+    color: $text-primary;
+
+    @include mobile {
+      font-size: $font-size-xs;
+    }
+  }
+
+  &__gallery {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: $spacing-md;
+
+    @include mobile {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include tablet {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &__photo {
+    position: relative;
+    height: 190px;
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    box-shadow: $shadow-md;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform $transition-slow;
+    }
+
+    &:hover img {
+      transform: scale(1.06);
+    }
+  }
+
+  &__photo-caption {
+    position: absolute;
+    left: $spacing-sm;
+    bottom: $spacing-sm;
+    right: $spacing-sm;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $border-radius-md;
+    background-color: rgba($color-dark, 0.55);
+    backdrop-filter: blur(2px);
+    color: $color-light;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+// Bottom-right corner wave/blob
+.process__corner {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 220px;
+  height: 220px;
+  z-index: 0;
+  pointer-events: none;
+
+  path {
+    fill: $color-primary;
+    opacity: 0.95;
+  }
+
+  @include mobile {
+    width: 130px;
+    height: 130px;
+  }
+}

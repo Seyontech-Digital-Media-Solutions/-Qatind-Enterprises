@@ -2,11 +2,58 @@
 @import '../../styles/mixins';
 
 .footer {
-  background-color: $color-primary;
+  position: relative;
+  overflow: hidden;
   color: $color-light;
   margin-top: $spacing-3xl;
+  background-color: darken($color-green, 22%); // fallback under the banner, matches banner's green
 
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    z-index: 4;
+    background: linear-gradient(
+      90deg,
+      $color-red 0%, $color-red 33.33%,
+      $color-saffron 33.33%, $color-saffron 66.66%,
+      $color-primary 66.66%, $color-primary 100%
+    );
+    background-size: 200% 100%;
+    animation: footerStripeShimmer 6s linear infinite;
+  }
+
+  // ── Banner background ──────────────────────────────────
+  &__banner {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.55;
+  }
+
+  // ── Dark overlay so content stays readable over the banner ──
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      160deg,
+      rgba(darken($color-green, 32%), 0.92) 0%,
+      rgba($color-green, 0.55) 45%,
+      rgba(darken($color-green, 32%), 0.9) 100%
+    );
+  }
+
+  // ── Foreground content ─────────────────────────────────
   &__content {
+    position: relative;
+    z-index: 3;
     padding: $spacing-3xl $spacing-md;
 
     @include md {
@@ -14,32 +61,61 @@
     }
   }
 
-  &__section {
-    margin-bottom: $spacing-2xl;
+  &__row {
+    row-gap: $spacing-xl;
+  }
 
-    @include md {
-      margin-bottom: 0;
+  &__section {
+    margin-bottom: 0;
+    padding: 0 $spacing-lg;
+    border-left: 1px solid rgba($color-light, 0.14);
+
+    &:first-child {
+      border-left: none;
+      padding-left: 0;
+    }
+
+    @include mobile {
+      border-left: none;
+      padding: 0 0 $spacing-xl;
+      border-bottom: 1px solid rgba($color-light, 0.14);
+
+      &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
     }
   }
 
-  &__title {
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-bold;
-    color: $color-secondary;
+  &__logo {
+    height: 76px;
+    width: auto;
     margin-bottom: $spacing-md;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
   }
 
   &__heading {
     font-size: $font-size-lg;
     font-weight: $font-weight-bold;
     margin-bottom: $spacing-md;
+    position: relative;
+    padding-bottom: $spacing-sm;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  }
+
+  &__heading-underline {
+    display: block;
+    height: 3px;
+    border-radius: $border-radius-full;
+    background-color: $color-secondary;
   }
 
   &__description {
     font-size: $font-size-sm;
     line-height: $line-height-relaxed;
     margin-bottom: $spacing-md;
-    opacity: 0.9;
+    opacity: 0.92;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
   }
 
   &__social {
@@ -48,12 +124,20 @@
   }
 
   &__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: rgba($color-light, 0.1);
     color: $color-secondary;
-    transition: color $transition-base, transform $transition-base;
+    transition: background-color $transition-base, color $transition-base, box-shadow $transition-base;
 
     &:hover {
-      color: $color-red;
-      transform: translateY(-2px);
+      background-color: $color-red;
+      color: $color-light;
+      box-shadow: 0 0 0 6px rgba($color-red, 0.2);
     }
   }
 
@@ -66,11 +150,33 @@
       margin-bottom: $spacing-sm;
 
       a {
+        position: relative;
         color: $color-light;
-        transition: color $transition-base;
+        opacity: 0.88;
+        text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+        transition: all $transition-base;
+        padding-left: 0;
+
+        &::before {
+          content: '';
+          display: inline-block;
+          width: 0;
+          height: 2px;
+          background-color: $color-secondary;
+          vertical-align: middle;
+          margin-right: 0;
+          transition: all $transition-base;
+        }
 
         &:hover {
+          opacity: 1;
           color: $color-secondary;
+          padding-left: $spacing-xs;
+
+          &::before {
+            width: 10px;
+            margin-right: $spacing-xs;
+          }
         }
       }
     }
@@ -86,22 +192,66 @@
     @include flex-start;
     gap: $spacing-sm;
     font-size: $font-size-sm;
+    align-items: flex-start;
 
-    a {
+    svg {
+      margin-top: 2px;
+      color: $color-secondary;
+      flex-shrink: 0;
+    }
+
+    a,
+    span {
       color: $color-light;
-      transition: color $transition-base;
+      opacity: 0.92;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+      transition: all $transition-base;
+    }
 
-      &:hover {
-        color: $color-secondary;
-      }
+    a:hover {
+      opacity: 1;
+      color: $color-secondary;
     }
   }
 
   &__bottom {
-    background-color: darken($color-primary, 8%);
+    position: relative;
+    z-index: 3;
+    background: linear-gradient(
+      180deg,
+      rgba(darken($color-green, 18%), 0) 0%,
+      rgba(darken($color-green, 22%), 0.9) 35%,
+      rgba(darken($color-green, 26%), 0.98) 100%
+    );
     padding: $spacing-lg;
     text-align: center;
     font-size: $font-size-sm;
-    opacity: 0.8;
+    opacity: 0.95;
+
+    p {
+      margin: 0;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+    }
+  }
+}
+
+
+.footer-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  opacity: 0.35;
+  pointer-events: auto;
+  mix-blend-mode: screen;
+}
+
+@keyframes footerStripeShimmer {
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }

@@ -1,0 +1,41 @@
+{
+  "todaysSpecial": {
+    "name": "Chicken Chettinad Combo",
+    "description": "Fiery Chettinad chicken curry served with ghee rice, raita and a side salad — our chef's pick of the day.",
+    "image": "https://placehold.co/600x500/C1272D/FFFFFF?text=Today%27s+Special",
+    "price": "₹259",
+    "time": "11:00 AM – 9:00 PM"
+  },
+  "slots": [
+    {
+      "id": "breakfast",
+      "label": "Breakfast",
+      "time": "7:00 AM – 10:30 AM",
+      "items": [
+        { "name": "Masala Dosa with Chutney", "price": "₹90" },
+        { "name": "Idli Sambar (4 pcs)", "price": "₹70" },
+        { "name": "Pongal", "price": "₹80" }
+      ]
+    },
+    {
+      "id": "lunch",
+      "label": "Lunch",
+      "time": "12:00 PM – 3:30 PM",
+      "items": [
+        { "name": "Veg Thali", "price": "₹150" },
+        { "name": "Chicken Biryani", "price": "₹220" },
+        { "name": "Fish Curry Meals", "price": "₹190" }
+      ]
+    },
+    {
+      "id": "dinner",
+      "label": "Dinner",
+      "time": "7:00 PM – 10:30 PM",
+      "items": [
+        { "name": "Butter Chicken with Naan", "price": "₹260" },
+        { "name": "Paneer Butter Masala Meals", "price": "₹200" },
+        { "name": "Mutton Curry with Parotta", "price": "₹280" }
+      ]
+    }
+  ]
+}
